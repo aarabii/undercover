@@ -1,0 +1,10 @@
+node_modules
+dist
+
+.astro
+.wrangler
+.env
+.dev.vars
+
+_local
+_agent

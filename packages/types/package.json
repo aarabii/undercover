@@ -1,0 +1,17 @@
+{
+  "name": "@game/types",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./enums": "./src/enums/index.ts",
+    "./models": "./src/models/index.ts",
+    "./views": "./src/views/index.ts",
+    "./messages": "./src/messages/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p ."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "undercover-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-18",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [{ "pattern": "ws.aarab.me", "custom_domain": true }],
+  "durable_objects": {
+    "bindings": [{ "name": "Room", "class_name": "Room" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+  "vars": {
+    "ALLOWED_ORIGINS": "https://undercover.aarab.me, http://localhost:4321",
+  },
+  "observability": { "enabled": true },
+}

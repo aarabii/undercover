@@ -1,0 +1,50 @@
+---
+import "../styles/global.css";
+import Container from "../components/Container";
+import BrandLogo from "../components/BrandLogo";
+import GameApp from "../components/GameApp";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="noindex, follow" />
+    <title>Play Undercover — Real-Time Deduction</title>
+  </head>
+  <body class="bg-[#fdfbf7] text-[#121212] min-h-screen flex flex-col justify-between font-para selection:bg-yellow-300 selection:text-black">
+    <header class="border-b-[3px] border-black bg-white">
+      <Container id="play-header" className="py-3 flex justify-between items-center">
+        <a href="/" class="hover:opacity-90 transition-opacity">
+          <BrandLogo size="sm" showTagline={false} />
+        </a>
+        <div class="flex items-center gap-3">
+          <a
+            href="/"
+            class="text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-base border-2 border-black bg-white shadow-brutal-sm hover:bg-yellow-200 transition-colors"
+          >
+            Exit to Home
+          </a>
+        </div>
+      </Container>
+    </header>
+
+    <main class="my-auto py-4">
+      <Container id="play-main">
+        <GameApp client:only="react" />
+      </Container>
+    </main>
+
+    <footer class="border-t-[3px] border-black py-4 bg-white/50 text-center">
+      <Container id="play-footer">
+        <span class="text-xs font-bold text-gray-600 font-mono">
+          UNDERCOVER • Real-time Party Game • Zero Login
+        </span>
+      </Container>
+    </footer>
+  </body>
+</html>

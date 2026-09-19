@@ -1,0 +1,13 @@
+{
+  "name": "undercover",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "bun run --parallel --filter './apps/*' dev",
+    "test": "bun test packages",
+    "typecheck": "bun run --filter '*' typecheck"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2"
+  }
+}
