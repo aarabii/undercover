@@ -104,6 +104,31 @@ export function handleTick(
         },
       };
     }
+
+    if (currentRoom.phase === "MRWHITE_GUESS") {
+      // Guess timeout -> continue to win check (Spec §3.7)
+      const win = checkWinCondition(currentRoom);
+      if (win) {
+        return {
+          state: {
+            ...currentRoom,
+            phase: "GAME_OVER",
+            endsAt: null,
+            paused: null,
+          },
+        };
+      }
+
+      return {
+        state: {
+          ...currentRoom,
+          round: currentRoom.round + 1,
+          phase: "DISCUSSION",
+          endsAt: now + currentRoom.settings.discussionSeconds * 1000,
+          game: currentRoom.game ? { ...currentRoom.game, votes: {} } : undefined,
+        },
+      };
+    }
   }
 
   return { state: currentRoom };
