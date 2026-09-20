@@ -12,6 +12,14 @@ import {
   handleProfileUpdate,
   handleSettingsUpdate,
 } from "./rules/lobby";
+import { handleStart } from "./rules/start";
+import {
+  handleTick,
+  handlePause,
+  handleResume,
+  handleSkip,
+  handleEndGame,
+} from "./rules/phases";
 
 export function reduce(
   state: Room,
@@ -67,6 +75,36 @@ export function reduce(
 
     case "host.settings.update": {
       result = handleSettingsUpdate(state, action);
+      break;
+    }
+
+    case "host.start": {
+      result = handleStart(state, action, ctx);
+      break;
+    }
+
+    case "tick": {
+      result = handleTick(state, action, ctx);
+      break;
+    }
+
+    case "host.pause": {
+      result = handlePause(state, action, ctx);
+      break;
+    }
+
+    case "host.resume": {
+      result = handleResume(state, action, ctx);
+      break;
+    }
+
+    case "host.skip": {
+      result = handleSkip(state, action, ctx);
+      break;
+    }
+
+    case "host.endGame": {
+      result = handleEndGame(state, action, ctx);
       break;
     }
 
