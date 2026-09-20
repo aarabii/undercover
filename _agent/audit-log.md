@@ -1,0 +1,11 @@
+# Undercover Monorepo Audit Log
+
+Running log of audited items, official documentation consulted, findings, and actions taken.
+
+| Item | Docs Page Consulted | Finding | Action Taken |
+| :--- | :--- | :--- | :--- |
+| **Baseline: Tool Versions** | `bun.com/docs`, `nodejs.org` | Bun `1.3.14`, Node `v25.2.1`. Note: Node v25 is a non-LTS development release; production and CI should target Node 22 or 24 LTS. | Recorded in audit log. |
+| **Baseline: Dependencies** | `package.json` across workspaces | `astro@7.3.3`, `@astrojs/react@4.2.1`, `tailwindcss@3.4.17`, `@tailwindcss/vite` (not installed yet), `wrangler@4.135.0`, `partyserver@0.0.60`, `zod@3.23.8`, `shadcn` (components.json configured for default style with radix-ui). | Baseline recorded. |
+| **Phase 1: Node Engines** | `docs.astro.build/en/tutorial/1-setup/1/`, `vercel.com/docs/functions/runtimes/node-js` | Astro 7 requires even Node versions >=22.12.0. Vercel honors `package.json` `engines.node` and `.nvmrc`. Current local runtime is Node v25.2.1 (non-LTS); recommend 22 or 24 LTS for local dev and CI. | Added `"engines": { "node": ">=22" }` to root `package.json` and created `.nvmrc` pinned to `22`. |
+| **Phase 1: Bun Linker** | `bun.com/docs/install/bunfig#linker` | Bun's `linker = "hoisted"` in `bunfig.toml` provides a flat `node_modules` layout, which avoids symlink resolution issues across workspaces for Astro, Vite, and Wrangler. `bun.lock` is tracked and internal deps use `workspace:*`. | Verified `linker = "hoisted"` in `bunfig.toml`; no change needed. |
+
