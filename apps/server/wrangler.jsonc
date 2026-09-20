@@ -8,9 +8,14 @@
   "durable_objects": {
     "bindings": [{ "name": "Room", "class_name": "Room" }],
   },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+  "exports": {
+    "Room": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  },
   "vars": {
-    "ALLOWED_ORIGINS": "https://undercover.aarab.me, http://localhost:4321",
+    "ALLOWED_ORIGINS": "https://undercover.aarab.me,http://localhost:4321",
   },
   "observability": { "enabled": true },
 }
