@@ -95,11 +95,11 @@ undercover/
    └─ words/               # word bank (SERVER ONLY, never import from web)
 ```
 
-- [ ] Init monorepo with Bun workspaces
+- [x] Init monorepo with Bun workspaces
 - [ ] `engine` has zero dependencies on Cloudflare, DOM, or Bun
-- [ ] `web` must never import `words` (add a lint rule or dependency-boundary check)
+- [x] `web` must never import `words` (add a lint rule or dependency-boundary check)
 - [ ] Shared `tsconfig.base.json`, ESLint, Prettier
-- [ ] Root scripts: `dev` (web + server together), `test`, `typecheck`, `build`
+- [x] Root scripts: `dev` (web + server together), `test`, `typecheck`, `build`, `check:boundaries`
 
 ### 2.3 Engine design (keep transport-independent)
 
@@ -279,6 +279,7 @@ interface Player {
   presence: Presence
   joinedAt: number
   lastSeenAt: number
+  disconnectedAt?: number    // timestamp ms when disconnected
   role?: Role                // server-only during a game
   word?: string | null       // server-only (Mr. White = null)
   eliminated?: { reason: ElimReason; round: number }
