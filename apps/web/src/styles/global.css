@@ -1,6 +1,41 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-border: #000000;
+  --color-input: #000000;
+  --color-ring: #000000;
+  --color-background: #fdfbf7;
+  --color-foreground: #121212;
+  --color-main: #a3e635;
+
+  --color-primary: #facc15;
+  --color-primary-foreground: #000000;
+
+  --color-secondary: #38bdf8;
+  --color-secondary-foreground: #000000;
+
+  --color-destructive: #f87171;
+  --color-destructive-foreground: #000000;
+
+  --color-muted: #e5e7eb;
+  --color-muted-foreground: #4b5563;
+
+  --color-accent: #f472b6;
+  --color-accent-foreground: #000000;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #121212;
+
+  --radius-base: 6px;
+
+  --shadow-brutal: 4px 4px 0px 0px #000000;
+  --shadow-brutal-sm: 2px 2px 0px 0px #000000;
+  --shadow-brutal-lg: 6px 6px 0px 0px #000000;
+
+  --font-para: "Public Sans", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Cabinet Grotesk", Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
 @layer base {
   :root {
@@ -48,3 +83,4 @@
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px #000000;
 }
+
