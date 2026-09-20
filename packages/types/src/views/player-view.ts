@@ -1,6 +1,7 @@
 import type { AvatarConfig } from "../models/avatar";
 import type { PlayerStatus, Presence, ElimReason } from "../enums/status";
 import type { Role } from "../enums/role";
+import type { CardVariant } from "../enums/game";
 
 export interface PlayerPublicView {
   id: string;
@@ -17,7 +18,7 @@ export interface PlayerPublicView {
 }
 
 export interface CardView {
+  variant: CardVariant;
   word: string | null;
   role?: Role;
-  instruction?: string;
 }

@@ -1,5 +1,5 @@
 import type { Phase } from "../enums/phase";
-import type { Winner } from "../enums/game";
+import type { Winner, WinReason } from "../enums/game";
 import type { Role } from "../enums/role";
 import type { PlayerStatus } from "../enums/status";
 import type { Settings } from "../models/settings";
@@ -7,7 +7,7 @@ import type { PlayerPublicView, CardView } from "./player-view";
 
 export interface GameOverSummary {
   winner: Winner;
-  reason: string;
+  reason: WinReason;
   civilianWord: string;
   undercoverWord: string;
   playerRoles: Record<

@@ -6,6 +6,8 @@ export {
   Presence,
   ElimReason,
   Winner,
+  WinReason,
+  CardVariant,
   Difficulty,
   type Player,
   type Room,
