@@ -1,4 +1,8 @@
 export * from "./constants";
+export * from "./types";
+export { reduce } from "./reduce";
+export { createRoom, createDefaultSettings } from "./state/create-room";
+export { nextAlarm } from "./rules/alarm";
 export {
   Phase,
   Role,
@@ -19,7 +23,9 @@ export {
   type PlayerPublicView,
   type CardView,
   type EliminationResult,
+  type EliminationRecord,
   type GameOverSummary,
   type ClientMessage,
   type ServerMessage,
+  type EngineEffect,
 } from "@game/types";

@@ -12,5 +12,8 @@
   },
   "dependencies": {
     "@game/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@game/protocol": "workspace:*"
   }
 }
