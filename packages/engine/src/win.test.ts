@@ -75,6 +75,7 @@ function createMockRoomForWinTest(
     endsAt: 5000,
     paused: null,
     settings: {
+      maxPlayers: 10,
       undercoverCount: undercovers,
       mrWhiteCount: mrWhites,
       discussionSeconds: 180,
@@ -278,9 +279,9 @@ describe("Phase 5: Win check and game over", () => {
       expect(p0.role).toBeUndefined();
       expect(p0.word).toBeUndefined();
 
-      // Eliminated disconnected player becomes away
+      // Eliminated disconnected player becomes active with away presence
       const p1 = state.players.find((p) => p.id === baseRoom.players[1]!.id)!;
-      expect(p1.status).toBe("away");
+      expect(p1.status).toBe("active");
       expect(p1.presence).toBe("away");
 
       // Waiting connected player becomes active

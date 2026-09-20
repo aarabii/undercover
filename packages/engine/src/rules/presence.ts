@@ -73,11 +73,6 @@ export function handleConnect(
       presence: "online" as const,
       lastSeenAt: ctx.now,
       disconnectedAt: undefined,
-      // In lobby, away player becomes active again
-      status:
-        room.phase === "LOBBY" && p.status === "away"
-          ? ("active" as const)
-          : p.status,
     };
   });
 
@@ -112,11 +107,6 @@ export function handleDisconnect(
       ...p,
       presence: "away" as const,
       disconnectedAt: ctx.now,
-      // In lobby, active player becomes away
-      status:
-        room.phase === "LOBBY" && p.status === "active"
-          ? ("away" as const)
-          : p.status,
     };
   });
 
@@ -198,29 +188,37 @@ export function handleLeave(
     game: room.game ? { ...room.game, votes } : undefined,
   };
 
-  // Immediate win check
-  const win = checkWinCondition(roomAfterLeave);
-  if (win?.type === "win") {
-    const gameOver = createGameOverSummary(roomAfterLeave, win);
-    return {
-      state: {
-        ...roomAfterLeave,
-        phase: "GAME_OVER",
-        endsAt: null,
-        paused: null,
-        game: roomAfterLeave.game
-          ? { ...roomAfterLeave.game, gameOver }
-          : undefined,
-      },
-      effects,
-    };
-  }
+  // Immediate win check (unless in MRWHITE_GUESS and leaver is not the guessing Mr. White)
+  const isGuessingMrWhite =
+    roomAfterLeave.phase === "MRWHITE_GUESS" &&
+    roomAfterLeave.game?.lastElimination?.eliminations.some(
+      (e) => e.reason === "VOTED" && e.role === "MR_WHITE" && e.id === action.playerId
+    );
 
-  if (win?.type === "abort") {
-    return {
-      state: abortGameToLobby(roomAfterLeave),
-      effects,
-    };
+  if (roomAfterLeave.phase !== "MRWHITE_GUESS" || isGuessingMrWhite) {
+    const win = checkWinCondition(roomAfterLeave);
+    if (win?.type === "win") {
+      const gameOver = createGameOverSummary(roomAfterLeave, win);
+      return {
+        state: {
+          ...roomAfterLeave,
+          phase: "GAME_OVER",
+          endsAt: null,
+          paused: null,
+          game: roomAfterLeave.game
+            ? { ...roomAfterLeave.game, gameOver }
+            : undefined,
+        },
+        effects,
+      };
+    }
+
+    if (win?.type === "abort") {
+      return {
+        state: abortGameToLobby(roomAfterLeave),
+        effects,
+      };
+    }
   }
 
   // If in VOTING phase, check if all alive online players have now voted

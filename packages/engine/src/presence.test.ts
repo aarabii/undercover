@@ -67,6 +67,7 @@ function createPresenceTestRoom(phase: Room["phase"] = "DISCUSSION"): Room {
     endsAt: 50000,
     paused: null,
     settings: {
+      maxPlayers: 10,
       undercoverCount: 1,
       mrWhiteCount: 0,
       discussionSeconds: 180,
@@ -93,7 +94,6 @@ describe("Phase 6: Presence and host migration", () => {
     it("reconnects an away player in lobby: becomes active and clears disconnectedAt", () => {
       const room = createPresenceTestRoom("LOBBY");
       room.players[1]!.presence = "away";
-      room.players[1]!.status = "away";
       room.players[1]!.disconnectedAt = 5000;
       deepFreeze(room);
 
@@ -153,7 +153,7 @@ describe("Phase 6: Presence and host migration", () => {
   });
 
   describe("disconnect action", () => {
-    it("marks player away and status away in lobby", () => {
+    it("marks player away and keeps active status in lobby", () => {
       const room = createPresenceTestRoom("LOBBY");
       deepFreeze(room);
 
@@ -163,7 +163,7 @@ describe("Phase 6: Presence and host migration", () => {
       expect(result.error).toBeUndefined();
       const p2 = result.state.players.find((p) => p.id === "p2")!;
       expect(p2.presence).toBe("away");
-      expect(p2.status).toBe("away");
+      expect(p2.status).toBe("active");
       expect(p2.disconnectedAt).toBe(15000);
     });
 

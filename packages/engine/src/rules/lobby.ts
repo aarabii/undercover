@@ -271,26 +271,35 @@ export function handleKick(
     game: room.game ? { ...room.game, votes } : undefined,
   };
 
-  const win = checkWinCondition(roomAfterKick);
-  if (win?.type === "win") {
-    const gameOver = createGameOverSummary(roomAfterKick, win);
-    return {
-      state: {
-        ...roomAfterKick,
-        phase: "GAME_OVER",
-        endsAt: null,
-        paused: null,
-        game: roomAfterKick.game ? { ...roomAfterKick.game, gameOver } : undefined,
-      },
-      effects,
-    };
-  }
+  // Immediate win check (unless in MRWHITE_GUESS and kicked player is not the guessing Mr. White)
+  const isGuessingMrWhite =
+    roomAfterKick.phase === "MRWHITE_GUESS" &&
+    roomAfterKick.game?.lastElimination?.eliminations.some(
+      (e) => e.reason === "VOTED" && e.role === "MR_WHITE" && e.id === target.id
+    );
 
-  if (win?.type === "abort") {
-    return {
-      state: abortGameToLobby(roomAfterKick),
-      effects,
-    };
+  if (roomAfterKick.phase !== "MRWHITE_GUESS" || isGuessingMrWhite) {
+    const win = checkWinCondition(roomAfterKick);
+    if (win?.type === "win") {
+      const gameOver = createGameOverSummary(roomAfterKick, win);
+      return {
+        state: {
+          ...roomAfterKick,
+          phase: "GAME_OVER",
+          endsAt: null,
+          paused: null,
+          game: roomAfterKick.game ? { ...roomAfterKick.game, gameOver } : undefined,
+        },
+        effects,
+      };
+    }
+
+    if (win?.type === "abort") {
+      return {
+        state: abortGameToLobby(roomAfterKick),
+        effects,
+      };
+    }
   }
 
   if (roomAfterKick.phase === "VOTING") {

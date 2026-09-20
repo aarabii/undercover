@@ -21,6 +21,17 @@ export function handleStart(
     };
   }
 
+  const admittedPlayers = room.players.filter((p) => p.status !== "pending");
+  if (admittedPlayers.some((p) => p.presence === "away")) {
+    return {
+      state: room,
+      error: {
+        code: "PLAYER_AWAY",
+        message: "Cannot start while an active player is away",
+      },
+    };
+  }
+
   const activePlayers = room.players.filter((p) => p.status === "active");
   const n = activePlayers.length;
 
@@ -30,16 +41,6 @@ export function handleStart(
       error: {
         code: "NOT_ENOUGH_PLAYERS",
         message: `Need at least ${MIN_PLAYERS} active players to start (currently ${n})`,
-      },
-    };
-  }
-
-  if (activePlayers.some((p) => p.presence === "away")) {
-    return {
-      state: room,
-      error: {
-        code: "PLAYER_AWAY",
-        message: "Cannot start while an active player is away",
       },
     };
   }

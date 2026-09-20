@@ -121,6 +121,7 @@ function createViewTestRoom(showRoles = true, phase: Room["phase"] = "DISCUSSION
     endsAt: 50000,
     paused: null,
     settings: {
+      maxPlayers: 10,
       undercoverCount: 1,
       mrWhiteCount: 1,
       discussionSeconds: 180,
