@@ -2,6 +2,12 @@ import type { Room, Player } from "@game/types";
 import type { Action, EngineContext, ReduceResult, EngineEffect } from "../types";
 import { generateUniqueName } from "../state/sanitize";
 import { validateSettingsPatch } from "./settings";
+import {
+  checkWinCondition,
+  createGameOverSummary,
+  abortGameToLobby,
+} from "./win";
+import { closeVotingAndEliminate } from "./elimination";
 
 export function handleHello(
   room: Room,
@@ -185,7 +191,8 @@ export function handleDecline(
 
 export function handleKick(
   room: Room,
-  action: Extract<Action, { type: "host.kick" }>
+  action: Extract<Action, { type: "host.kick" }>,
+  ctx: EngineContext
 ): ReduceResult {
   if (action.playerId !== room.hostId) {
     return {
@@ -220,6 +227,8 @@ export function handleKick(
         ? {
             ...p,
             status: "eliminated" as const,
+            presence: "away" as const,
+            disconnectedAt: ctx.now,
             eliminated: {
               reason: "KICKED" as const,
               round: room.round,
@@ -235,12 +244,70 @@ export function handleKick(
     { type: "close", playerId: target.id, reason: "kicked" },
   ];
 
+  if (room.phase === "LOBBY") {
+    return {
+      state: {
+        ...room,
+        bannedTokenHashes,
+        players: updatedPlayers,
+      },
+      effects,
+    };
+  }
+
+  // In-game kick: void votes and run win check (Spec §10.2)
+  const votes = { ...(room.game?.votes ?? {}) };
+  delete votes[target.id];
+  for (const [voter, tgt] of Object.entries(votes)) {
+    if (tgt === target.id) {
+      delete votes[voter];
+    }
+  }
+
+  const roomAfterKick: Room = {
+    ...room,
+    bannedTokenHashes,
+    players: updatedPlayers,
+    game: room.game ? { ...room.game, votes } : undefined,
+  };
+
+  const win = checkWinCondition(roomAfterKick);
+  if (win?.type === "win") {
+    const gameOver = createGameOverSummary(roomAfterKick, win);
+    return {
+      state: {
+        ...roomAfterKick,
+        phase: "GAME_OVER",
+        endsAt: null,
+        paused: null,
+        game: roomAfterKick.game ? { ...roomAfterKick.game, gameOver } : undefined,
+      },
+      effects,
+    };
+  }
+
+  if (win?.type === "abort") {
+    return {
+      state: abortGameToLobby(roomAfterKick),
+      effects,
+    };
+  }
+
+  if (roomAfterKick.phase === "VOTING") {
+    const alivePlayers = roomAfterKick.players.filter((p) => p.status === "active");
+    const allVoted =
+      alivePlayers.every((p) => p.id in votes) &&
+      !alivePlayers.some((p) => p.presence === "away");
+    if (allVoted && alivePlayers.length > 0) {
+      return {
+        state: closeVotingAndEliminate(roomAfterKick, ctx.now),
+        effects,
+      };
+    }
+  }
+
   return {
-    state: {
-      ...room,
-      bannedTokenHashes,
-      players: updatedPlayers,
-    },
+    state: roomAfterKick,
     effects,
   };
 }

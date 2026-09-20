@@ -23,6 +23,11 @@ import {
 import { handleVoteCast, handleEndVoting } from "./rules/voting";
 import { handleMrWhiteGuess } from "./rules/mrwhite";
 import { handlePlayAgain } from "./rules/win";
+import {
+  handleConnect,
+  handleDisconnect,
+  handleLeave,
+} from "./rules/presence";
 
 export function reduce(
   state: Room,
@@ -61,8 +66,23 @@ export function reduce(
       break;
     }
 
+    case "connect": {
+      result = handleConnect(state, action, ctx);
+      break;
+    }
+
+    case "disconnect": {
+      result = handleDisconnect(state, action, ctx);
+      break;
+    }
+
+    case "leave": {
+      result = handleLeave(state, action, ctx);
+      break;
+    }
+
     case "host.kick": {
-      result = handleKick(state, action);
+      result = handleKick(state, action, ctx);
       break;
     }
 
