@@ -86,7 +86,7 @@ export function abortGameToLobby(room: Room): Room {
       }
       return {
         ...p,
-        status: p.presence === "connected" ? "active" : "away",
+        status: p.presence === "online" ? "active" : "away",
         role: undefined,
         word: undefined,
       };

@@ -17,13 +17,17 @@ function createMockRoomForWinTest(
   const players: Player[] = [];
   let idCounter = 1;
 
+  const avatar = { style: "bottts", seed: "test" };
   for (let i = 0; i < civilians; i++) {
     players.push({
       id: `p_civ_${idCounter++}`,
       name: `Civ ${i + 1}`,
       tokenHash: `hash_civ_${i}`,
       status: "active",
-      presence: "connected",
+      presence: "online",
+      avatar,
+      joinedAt: i + 1,
+      lastSeenAt: i + 1,
       role: "CIVILIAN",
       word: "coffee",
     });
@@ -36,7 +40,10 @@ function createMockRoomForWinTest(
       name: `Undercover ${i + 1}`,
       tokenHash: `hash_und_${i}`,
       status: "active",
-      presence: "connected",
+      presence: "online",
+      avatar,
+      joinedAt: idCounter,
+      lastSeenAt: idCounter,
       role: "UNDERCOVER",
       word: "tea",
     });
@@ -48,7 +55,10 @@ function createMockRoomForWinTest(
       name: `MrWhite ${i + 1}`,
       tokenHash: `hash_mw_${i}`,
       status: "active",
-      presence: "connected",
+      presence: "online",
+      avatar,
+      joinedAt: idCounter,
+      lastSeenAt: idCounter,
       role: "MR_WHITE",
       word: undefined,
     });
@@ -108,7 +118,10 @@ describe("Phase 5: Win check and game over", () => {
                   name: `Dead Civ ${deadC}`,
                   tokenHash: `hash_dc_${deadC}`,
                   status: "eliminated",
-                  presence: "connected",
+                  presence: "online",
+                  avatar: { style: "bottts", seed: "test" },
+                  joinedAt: 100,
+                  lastSeenAt: 100,
                   role: "CIVILIAN",
                   word: "coffee",
                 });
@@ -119,7 +132,10 @@ describe("Phase 5: Win check and game over", () => {
                   name: `Dead Inf ${deadI}`,
                   tokenHash: `hash_di_${deadI}`,
                   status: "eliminated",
-                  presence: "connected",
+                  presence: "online",
+                  avatar: { style: "bottts", seed: "test" },
+                  joinedAt: 100,
+                  lastSeenAt: 100,
                   role: "UNDERCOVER",
                   word: "tea",
                 });
@@ -201,18 +217,24 @@ describe("Phase 5: Win check and game over", () => {
         name: "Waiting Player",
         tokenHash: "hash_wait",
         status: "waiting",
-        presence: "connected",
+        presence: "online",
+        avatar: { style: "bottts", seed: "test" },
+        joinedAt: 20,
+        lastSeenAt: 20,
       });
       baseRoom.players.push({
         id: "p_pend",
         name: "Pending Player",
         tokenHash: "hash_pend",
         status: "pending",
-        presence: "connected",
+        presence: "online",
+        avatar: { style: "bottts", seed: "test" },
+        joinedAt: 21,
+        lastSeenAt: 21,
       });
       // Mark one civilian eliminated and disconnected
       baseRoom.players[1]!.status = "eliminated";
-      baseRoom.players[1]!.presence = "disconnected";
+      baseRoom.players[1]!.presence = "away";
       baseRoom.players[1]!.disconnectedAt = 1000;
 
       const gameOverRoom: Room = {
@@ -259,7 +281,7 @@ describe("Phase 5: Win check and game over", () => {
       // Eliminated disconnected player becomes away
       const p1 = state.players.find((p) => p.id === baseRoom.players[1]!.id)!;
       expect(p1.status).toBe("away");
-      expect(p1.presence).toBe("disconnected");
+      expect(p1.presence).toBe("away");
 
       // Waiting connected player becomes active
       const pWait = state.players.find((p) => p.id === "p_wait")!;
@@ -313,14 +335,20 @@ describe("Phase 5: Win check and game over", () => {
           name: "P1",
           tokenHash: "h1",
           status: "eliminated",
-          presence: "connected",
+          presence: "online",
+          avatar: { style: "bottts", seed: "test" },
+          joinedAt: 1,
+          lastSeenAt: 1,
         },
         {
           id: "p2",
           name: "P2",
           tokenHash: "h2",
           status: "eliminated",
-          presence: "connected",
+          presence: "online",
+          avatar: { style: "bottts", seed: "test" },
+          joinedAt: 2,
+          lastSeenAt: 2,
         },
       ];
       deepFreeze(room);
