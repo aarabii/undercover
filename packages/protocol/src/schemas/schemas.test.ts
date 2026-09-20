@@ -426,6 +426,31 @@ describe("EliminationResultSchema (Spec §3.6, §9.6)", () => {
     };
     expect(EliminationResultSchema.parse(tieResult)).toEqual(tieResult as any);
   });
+
+  test("validates multiple round eliminations (disconnect + vote elimination in one round per Spec §3.6)", () => {
+    const multiResult = {
+      eliminations: [
+        {
+          id: "p3",
+          role: "CIVILIAN" as const,
+          reason: "DISCONNECTED" as const,
+        },
+        {
+          id: "p2",
+          role: "UNDERCOVER" as const,
+          reason: "VOTED" as const,
+          voteCounts: { p1: 1, p2: 4 },
+        },
+      ],
+      isTie: false,
+      voteCounts: { p1: 1, p2: 4 },
+    };
+    const parsed = EliminationResultSchema.parse(multiResult);
+    expect(parsed.eliminations).toBeDefined();
+    expect(parsed.eliminations).toHaveLength(2);
+    expect(parsed.eliminations?.[0].reason).toBe("DISCONNECTED");
+    expect(parsed.eliminations?.[1].reason).toBe("VOTED");
+  });
 });
 
 describe("Pending and Waiting Status Handling (Spec §5.1, §9.3, §9.5)", () => {

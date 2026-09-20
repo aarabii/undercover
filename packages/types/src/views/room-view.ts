@@ -5,12 +5,20 @@ import type { PlayerStatus, ElimReason } from "../enums/status";
 import type { Settings } from "../models/settings";
 import type { PlayerPublicView, CardView } from "./player-view";
 
+export interface EliminationRecord {
+  id: string;
+  role?: Role;
+  reason: ElimReason;
+  voteCounts?: Record<string, number>;
+}
+
 export interface EliminationResult {
+  eliminations: EliminationRecord[];
+  isTie: boolean;
+  voteCounts?: Record<string, number>;
   eliminatedId?: string;
   role?: Role;
   reason?: ElimReason;
-  isTie: boolean;
-  voteCounts?: Record<string, number>;
 }
 
 export interface GameOverSummary {

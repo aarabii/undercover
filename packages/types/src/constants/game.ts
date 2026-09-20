@@ -10,4 +10,6 @@ export const DEFAULT_DISCUSSION_SECONDS = 180 as const;
 export const DEFAULT_VOTING_SECONDS = 60 as const;
 export const DEFAULT_MRWHITE_GUESS_SECONDS = 30 as const;
 export const DEFAULT_ROLE_REVEAL_SECONDS = 10 as const;
+export const DEFAULT_ELIMINATION_SECONDS = 6 as const;
 export const LOBBY_DISCONNECT_GRACE_SECONDS = 15 as const;
+export const HOST_DISCONNECT_GRACE_SECONDS = 15 as const;

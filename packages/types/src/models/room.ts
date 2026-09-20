@@ -2,6 +2,7 @@ import type { Settings } from "./settings";
 import type { Player } from "./player";
 import type { Phase } from "../enums/phase";
 import type { ElimReason } from "../enums/status";
+import type { EliminationResult } from "../views/room-view";
 
 export interface GameData {
   civilianWord: string;
@@ -13,6 +14,8 @@ export interface GameData {
     reason: ElimReason;
     isTie: boolean;
   };
+  lastElimination?: EliminationResult;
+  civilianAliases?: string[];
 }
 
 export interface Room {

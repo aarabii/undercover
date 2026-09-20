@@ -51,12 +51,20 @@ export const CardViewSchema = z
     }
   });
 
+export const EliminationRecordSchema = z.object({
+  id: z.string(),
+  role: RoleSchema.optional(),
+  reason: ElimReasonSchema,
+  voteCounts: z.record(z.string(), z.number()).optional(),
+});
+
 export const EliminationResultSchema = z.object({
+  eliminations: z.array(EliminationRecordSchema).optional(),
+  isTie: z.boolean(),
+  voteCounts: z.record(z.string(), z.number()).optional(),
   eliminatedId: z.string().optional(),
   role: RoleSchema.optional(),
   reason: ElimReasonSchema.optional(),
-  isTie: z.boolean(),
-  voteCounts: z.record(z.string(), z.number()).optional(),
 });
 
 export const GameOverSummarySchema = z.object({
