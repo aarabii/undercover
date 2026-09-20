@@ -31,6 +31,7 @@ export const GameOverSummarySchema = z.object({
   civilianWord: z.string(),
   undercoverWord: z.string(),
   playerRoles: z.record(
+    z.string(),
     z.object({
       role: RoleSchema,
       word: z.string().nullable(),

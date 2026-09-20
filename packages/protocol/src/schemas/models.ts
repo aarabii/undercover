@@ -5,7 +5,7 @@ import { DifficultySchema } from "./enums";
 export const AvatarConfigSchema = z.object({
   style: z.string(),
   seed: z.string(),
-  options: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+  options: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).optional(),
 });
 
 export const SettingsSchema = z.object({
