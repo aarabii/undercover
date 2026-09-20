@@ -2,6 +2,8 @@ import type { Room } from "@game/types";
 import type { Action, EngineContext, ReduceResult } from "../types";
 import { LOBBY_DISCONNECT_GRACE_SECONDS } from "../constants";
 import { checkHostMigration } from "./presence";
+import { closeVotingAndEliminate } from "./elimination";
+import { checkWinCondition } from "./win";
 
 export function handleTick(
   room: Room,
@@ -53,6 +55,51 @@ export function handleTick(
           ...currentRoom,
           phase: "VOTING",
           endsAt: now + currentRoom.settings.votingSeconds * 1000,
+          game: currentRoom.game ? { ...currentRoom.game, votes: {} } : undefined,
+        },
+      };
+    }
+
+    if (currentRoom.phase === "VOTING") {
+      return {
+        state: closeVotingAndEliminate(currentRoom, now),
+      };
+    }
+
+    if (currentRoom.phase === "ELIMINATION") {
+      const mrWhiteVotedOut = currentRoom.game?.lastElimination?.eliminations.some(
+        (e) => e.reason === "VOTED" && e.role === "MR_WHITE"
+      );
+
+      if (mrWhiteVotedOut) {
+        return {
+          state: {
+            ...currentRoom,
+            phase: "MRWHITE_GUESS",
+            endsAt: now + currentRoom.settings.mrWhiteGuessSeconds * 1000,
+          },
+        };
+      }
+
+      // Step 6: Win check runs after round eliminations (Spec §3.6)
+      const win = checkWinCondition(currentRoom);
+      if (win) {
+        return {
+          state: {
+            ...currentRoom,
+            phase: "GAME_OVER",
+            endsAt: null,
+            paused: null,
+          },
+        };
+      }
+
+      return {
+        state: {
+          ...currentRoom,
+          round: currentRoom.round + 1,
+          phase: "DISCUSSION",
+          endsAt: now + currentRoom.settings.discussionSeconds * 1000,
           game: currentRoom.game ? { ...currentRoom.game, votes: {} } : undefined,
         },
       };

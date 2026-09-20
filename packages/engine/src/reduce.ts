@@ -20,6 +20,7 @@ import {
   handleSkip,
   handleEndGame,
 } from "./rules/phases";
+import { handleVoteCast, handleEndVoting } from "./rules/voting";
 
 export function reduce(
   state: Room,
@@ -100,6 +101,16 @@ export function reduce(
 
     case "host.skip": {
       result = handleSkip(state, action, ctx);
+      break;
+    }
+
+    case "vote.cast": {
+      result = handleVoteCast(state, action, ctx);
+      break;
+    }
+
+    case "host.endVoting": {
+      result = handleEndVoting(state, action, ctx);
       break;
     }
 
