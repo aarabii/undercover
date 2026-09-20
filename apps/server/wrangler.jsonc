@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "undercover-server",
   "main": "src/index.ts",
-  "compatibility_date": "2025-07-18",
+  "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
   "routes": [{ "pattern": "ws.aarab.me", "custom_domain": true }],
   "durable_objects": {
