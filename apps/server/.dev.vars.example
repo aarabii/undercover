@@ -1,0 +1,2 @@
+ALLOWED_ORIGINS=https://undercover.aarab.me,http://localhost:4321
+TURNSTILE_SECRET=

@@ -5,7 +5,12 @@
   "scripts": {
     "dev": "bun run --parallel --filter './apps/*' dev",
     "test": "bun test packages",
-    "typecheck": "bun run --filter '*' typecheck"
+    "typecheck": "bun run --filter '*' typecheck",
+    "build": "bun run --filter @game/web build",
+    "check:boundaries": "bun run scripts/check-boundaries.ts"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "devDependencies": {
     "@types/bun": "^1.4.2"

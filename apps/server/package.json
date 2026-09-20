@@ -12,8 +12,8 @@
     "@game/protocol": "workspace:*",
     "@game/types": "workspace:*",
     "@game/words": "workspace:*",
-    "partyserver": "^0.0.60",
-    "zod": "^3.23.8"
+    "partyserver": "^0.5.10",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241022.0",

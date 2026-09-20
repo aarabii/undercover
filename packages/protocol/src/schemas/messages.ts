@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { MAX_NAME_LENGTH } from "@game/types";
-import { AvatarConfigSchema, SettingsSchema } from "./models";
+import { AvatarConfigSchema, SettingsSchema, SettingsPatchSchema } from "./models";
 import { RoomViewSchema } from "./views";
 
 // --- Client -> Server Message Schemas ---
@@ -34,7 +34,7 @@ export const ClientMessageSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("vote.cast"), payload: VoteCastPayloadSchema }),
   z.object({ type: z.literal("mrwhite.guess"), payload: MrWhiteGuessPayloadSchema }),
   z.object({ type: z.literal("leave") }),
-  z.object({ type: z.literal("host.settings.update"), payload: SettingsSchema.partial() }),
+  z.object({ type: z.literal("host.settings.update"), payload: SettingsPatchSchema }),
   z.object({ type: z.literal("host.approve"), payload: z.object({ playerId: z.string() }) }),
   z.object({ type: z.literal("host.decline"), payload: z.object({ playerId: z.string() }) }),
   z.object({ type: z.literal("host.kick"), payload: z.object({ playerId: z.string() }) }),

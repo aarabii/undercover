@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "@game/types": "workspace:*",
-    "zod": "^3.23.8"
+    "zod": "^4.6.5"
   }
 }

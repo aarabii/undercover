@@ -5,7 +5,20 @@ import { DifficultySchema } from "./enums";
 export const AvatarConfigSchema = z.object({
   style: z.string(),
   seed: z.string(),
-  options: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+  options: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).optional(),
+});
+
+export const RawSettingsSchema = z.object({
+  undercoverCount: z.number().int().min(1),
+  mrWhiteCount: z.number().int().min(0),
+  category: z.string(),
+  difficulty: DifficultySchema,
+  showRoles: z.boolean(),
+  discussionSeconds: z.number().int().min(10).max(600),
+  votingSeconds: z.number().int().min(10).max(300),
+  mrWhiteGuessSeconds: z.number().int().min(10).max(120),
+  requireApproval: z.boolean(),
+  maxPlayers: z.number().int().min(MIN_PLAYERS).max(MAX_PLAYERS),
 });
 
 export const SettingsSchema = z.object({
@@ -20,6 +33,8 @@ export const SettingsSchema = z.object({
   requireApproval: z.boolean().default(true),
   maxPlayers: z.number().int().min(MIN_PLAYERS).max(MAX_PLAYERS).default(DEFAULT_MAX_PLAYERS),
 });
+
+export const SettingsPatchSchema = RawSettingsSchema.partial();
 
 export const WordPairSchema = z.object({
   id: z.string(),

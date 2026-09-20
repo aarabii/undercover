@@ -1,6 +1,15 @@
 import { z } from "zod";
 import { MAX_NAME_LENGTH } from "@game/types";
-import { PhaseSchema, RoleSchema, PlayerStatusSchema, PresenceSchema, ElimReasonSchema, WinnerSchema } from "./enums";
+import {
+  PhaseSchema,
+  RoleSchema,
+  PlayerStatusSchema,
+  PresenceSchema,
+  ElimReasonSchema,
+  WinnerSchema,
+  WinReasonSchema,
+  CardVariantSchema,
+} from "./enums";
 import { AvatarConfigSchema, SettingsSchema } from "./models";
 
 export const PlayerPublicViewSchema = z.object({
@@ -19,18 +28,44 @@ export const PlayerPublicViewSchema = z.object({
     .optional(),
 });
 
-export const CardViewSchema = z.object({
-  word: z.string().nullable(),
+export const CardViewSchema = z
+  .object({
+    variant: CardVariantSchema,
+    word: z.string().nullable(),
+    role: RoleSchema.optional(),
+  })
+  .superRefine((val, ctx) => {
+    if (val.variant === "WORD_ONLY" && val.role !== undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Role must not be present when variant is WORD_ONLY",
+        path: ["role"],
+      });
+    }
+    if (val.variant === "MR_WHITE" && val.word !== null) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Word must be null when variant is MR_WHITE",
+        path: ["word"],
+      });
+    }
+  });
+
+export const EliminationResultSchema = z.object({
+  eliminatedId: z.string().optional(),
   role: RoleSchema.optional(),
-  instruction: z.string().optional(),
+  reason: ElimReasonSchema.optional(),
+  isTie: z.boolean(),
+  voteCounts: z.record(z.string(), z.number()).optional(),
 });
 
 export const GameOverSummarySchema = z.object({
   winner: WinnerSchema,
-  reason: z.string(),
+  reason: WinReasonSchema,
   civilianWord: z.string(),
   undercoverWord: z.string(),
   playerRoles: z.record(
+    z.string(),
     z.object({
       role: RoleSchema,
       word: z.string().nullable(),
@@ -60,6 +95,7 @@ export const RoomViewSchema = z.object({
   }),
   votedCount: z.number().optional(),
   totalVoters: z.number().optional(),
+  lastElimination: EliminationResultSchema.optional(),
   pendingRequests: z.array(PlayerPublicViewSchema).optional(),
   gameOver: GameOverSummarySchema.optional(),
 });
