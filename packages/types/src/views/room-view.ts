@@ -1,9 +1,17 @@
 import type { Phase } from "../enums/phase";
 import type { Winner, WinReason } from "../enums/game";
 import type { Role } from "../enums/role";
-import type { PlayerStatus } from "../enums/status";
+import type { PlayerStatus, ElimReason } from "../enums/status";
 import type { Settings } from "../models/settings";
 import type { PlayerPublicView, CardView } from "./player-view";
+
+export interface EliminationResult {
+  eliminatedId?: string;
+  role?: Role;
+  reason?: ElimReason;
+  isTie: boolean;
+  voteCounts?: Record<string, number>;
+}
 
 export interface GameOverSummary {
   winner: Winner;
@@ -37,6 +45,7 @@ export interface RoomView {
   };
   votedCount?: number;
   totalVoters?: number;
+  lastElimination?: EliminationResult;
   pendingRequests?: PlayerPublicView[];
   gameOver?: GameOverSummary;
 }

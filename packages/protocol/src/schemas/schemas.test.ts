@@ -4,10 +4,12 @@ import {
   ServerMessageSchema,
   CardViewSchema,
   GameOverSummarySchema,
+  EliminationResultSchema,
   RoomViewSchema,
   PhaseSchema,
   RoleSchema,
   PlayerStatusSchema,
+  ElimReasonSchema,
   WinnerSchema,
   WinReasonSchema,
   CardVariantSchema,
@@ -43,6 +45,15 @@ describe("Enum Schemas", () => {
     expect(PlayerStatusSchema.parse("active")).toBe("active");
     expect(PlayerStatusSchema.parse("eliminated")).toBe("eliminated");
     expect(() => PlayerStatusSchema.parse("spectator")).toThrow();
+  });
+
+  test("ElimReasonSchema validates all four elimination reasons (spec §3.6, §10)", () => {
+    const reasons = ["VOTED", "DISCONNECTED", "LEFT", "KICKED"] as const;
+    for (const reason of reasons) {
+      expect(ElimReasonSchema.parse(reason)).toBe(reason);
+    }
+    expect(() => ElimReasonSchema.parse("TIMEOUT")).toThrow();
+    expect(() => ElimReasonSchema.parse("QUIT")).toThrow();
   });
 
   test("WinnerSchema and WinReasonSchema validate standard win conditions", () => {
@@ -385,3 +396,117 @@ describe("GameOverSummarySchema", () => {
     expect(() => GameOverSummarySchema.parse(invalid)).toThrow();
   });
 });
+
+describe("EliminationResultSchema (Spec §3.6, §9.6)", () => {
+  test("validates voted elimination with votes breakdown and role reveal", () => {
+    const result = {
+      eliminatedId: "p2",
+      role: "UNDERCOVER",
+      reason: "VOTED",
+      isTie: false,
+      voteCounts: { p1: 1, p2: 4 },
+    };
+    expect(EliminationResultSchema.parse(result)).toEqual(result as any);
+  });
+
+  test("validates disconnected elimination (Spec §10.2)", () => {
+    const result = {
+      eliminatedId: "p3",
+      role: "CIVILIAN",
+      reason: "DISCONNECTED",
+      isTie: false,
+    };
+    expect(EliminationResultSchema.parse(result)).toEqual(result as any);
+  });
+
+  test("validates tie outcome where nobody is eliminated (Spec §3.5 L5)", () => {
+    const tieResult = {
+      isTie: true,
+      voteCounts: { p1: 3, p2: 3 },
+    };
+    expect(EliminationResultSchema.parse(tieResult)).toEqual(tieResult as any);
+  });
+});
+
+describe("Pending and Waiting Status Handling (Spec §5.1, §9.3, §9.5)", () => {
+  const avatarFixture = { style: "bottts", seed: "test" };
+
+  test("validates RoomView with pendingRequests for host and waiting players", () => {
+    const viewWithPendingAndWaiting = {
+      code: "ABCDEF",
+      phase: "DISCUSSION",
+      round: 1,
+      endsAt: 1710000180000,
+      paused: null,
+      locked: false,
+      serverNow: 1710000000000,
+      settings: {
+        undercoverCount: 1,
+        mrWhiteCount: 1,
+        category: "random",
+        difficulty: "medium",
+        showRoles: false,
+        discussionSeconds: 180,
+        votingSeconds: 60,
+        mrWhiteGuessSeconds: 30,
+        requireApproval: true,
+        maxPlayers: 12,
+      },
+      players: [
+        {
+          id: "p1",
+          name: "Alice",
+          avatar: avatarFixture,
+          status: "active",
+          presence: "online",
+          isHost: true,
+        },
+        {
+          id: "p2",
+          name: "LateJoiner",
+          avatar: avatarFixture,
+          status: "waiting", // Mid-game joiner waiting for next game (Spec §9.5)
+          presence: "online",
+          isHost: false,
+        },
+        {
+          id: "p3",
+          name: "EliminatedPlayer",
+          avatar: avatarFixture,
+          status: "eliminated",
+          presence: "online",
+          isHost: false,
+          eliminated: {
+            reason: "VOTED",
+            round: 1,
+            role: "UNDERCOVER",
+          },
+        },
+      ],
+      me: {
+        id: "p1",
+        status: "active",
+      },
+      pendingRequests: [
+        {
+          id: "p4",
+          name: "KnockingPlayer",
+          avatar: avatarFixture,
+          status: "pending", // Knocking in lobby waiting room (Spec §9.3)
+          presence: "online",
+          isHost: false,
+        },
+      ],
+      lastElimination: {
+        eliminatedId: "p3",
+        role: "UNDERCOVER",
+        reason: "VOTED",
+        isTie: false,
+        voteCounts: { p1: 1, p3: 3 },
+      },
+    };
+
+    expect(RoomViewSchema.parse(viewWithPendingAndWaiting)).toBeDefined();
+  });
+});
+

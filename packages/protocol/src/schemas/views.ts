@@ -51,6 +51,14 @@ export const CardViewSchema = z
     }
   });
 
+export const EliminationResultSchema = z.object({
+  eliminatedId: z.string().optional(),
+  role: RoleSchema.optional(),
+  reason: ElimReasonSchema.optional(),
+  isTie: z.boolean(),
+  voteCounts: z.record(z.string(), z.number()).optional(),
+});
+
 export const GameOverSummarySchema = z.object({
   winner: WinnerSchema,
   reason: WinReasonSchema,
@@ -87,6 +95,7 @@ export const RoomViewSchema = z.object({
   }),
   votedCount: z.number().optional(),
   totalVoters: z.number().optional(),
+  lastElimination: EliminationResultSchema.optional(),
   pendingRequests: z.array(PlayerPublicViewSchema).optional(),
   gameOver: GameOverSummarySchema.optional(),
 });

@@ -18,6 +18,7 @@ export {
   type RoomView,
   type PlayerPublicView,
   type CardView,
+  type EliminationResult,
   type GameOverSummary,
   type ClientMessage,
   type ServerMessage,
