@@ -3,7 +3,11 @@ import type { Action, EngineContext, ReduceResult } from "../types";
 import { LOBBY_DISCONNECT_GRACE_SECONDS } from "../constants";
 import { checkHostMigration } from "./presence";
 import { closeVotingAndEliminate } from "./elimination";
-import { checkWinCondition } from "./win";
+import {
+  checkWinCondition,
+  createGameOverSummary,
+  abortGameToLobby,
+} from "./win";
 
 export function handleTick(
   room: Room,
@@ -83,14 +87,23 @@ export function handleTick(
 
       // Step 6: Win check runs after round eliminations (Spec §3.6)
       const win = checkWinCondition(currentRoom);
-      if (win) {
+      if (win?.type === "win") {
+        const gameOver = createGameOverSummary(currentRoom, win);
         return {
           state: {
             ...currentRoom,
             phase: "GAME_OVER",
             endsAt: null,
             paused: null,
+            game: currentRoom.game
+              ? { ...currentRoom.game, gameOver }
+              : undefined,
           },
+        };
+      }
+      if (win?.type === "abort") {
+        return {
+          state: abortGameToLobby(currentRoom),
         };
       }
 
@@ -108,14 +121,23 @@ export function handleTick(
     if (currentRoom.phase === "MRWHITE_GUESS") {
       // Guess timeout -> continue to win check (Spec §3.7)
       const win = checkWinCondition(currentRoom);
-      if (win) {
+      if (win?.type === "win") {
+        const gameOver = createGameOverSummary(currentRoom, win);
         return {
           state: {
             ...currentRoom,
             phase: "GAME_OVER",
             endsAt: null,
             paused: null,
+            game: currentRoom.game
+              ? { ...currentRoom.game, gameOver }
+              : undefined,
           },
+        };
+      }
+      if (win?.type === "abort") {
+        return {
+          state: abortGameToLobby(currentRoom),
         };
       }
 

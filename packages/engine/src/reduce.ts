@@ -22,6 +22,7 @@ import {
 } from "./rules/phases";
 import { handleVoteCast, handleEndVoting } from "./rules/voting";
 import { handleMrWhiteGuess } from "./rules/mrwhite";
+import { handlePlayAgain } from "./rules/win";
 
 export function reduce(
   state: Room,
@@ -122,6 +123,11 @@ export function reduce(
 
     case "host.endGame": {
       result = handleEndGame(state, action, ctx);
+      break;
+    }
+
+    case "host.playAgain": {
+      result = handlePlayAgain(state, action, ctx);
       break;
     }
 

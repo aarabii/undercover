@@ -2,7 +2,7 @@ import type { Settings } from "./settings";
 import type { Player } from "./player";
 import type { Phase } from "../enums/phase";
 import type { ElimReason } from "../enums/status";
-import type { EliminationResult } from "../views/room-view";
+import type { EliminationResult, GameOverSummary } from "../views/room-view";
 
 export interface GameData {
   civilianWord: string;
@@ -16,6 +16,7 @@ export interface GameData {
   };
   lastElimination?: EliminationResult;
   civilianAliases?: string[];
+  gameOver?: GameOverSummary;
 }
 
 export interface Room {

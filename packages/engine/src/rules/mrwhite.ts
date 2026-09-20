@@ -1,6 +1,10 @@
 import type { Room } from "@game/types";
 import type { Action, EngineContext, ReduceResult } from "../types";
-import { checkWinCondition } from "./win";
+import {
+  checkWinCondition,
+  createGameOverSummary,
+  abortGameToLobby,
+} from "./win";
 
 export function normalizeText(text: string): string {
   let s = text.toLowerCase().trim();
@@ -155,26 +159,40 @@ export function handleMrWhiteGuess(
 
   if (isCorrect) {
     // Infiltrators win immediately on correct guess (Spec §3.7)
+    const win = {
+      winner: "INFILTRATORS" as const,
+      reason: "MR_WHITE_GUESSED" as const,
+    };
+    const gameOver = createGameOverSummary(room, win);
     return {
       state: {
         ...room,
         phase: "GAME_OVER",
         endsAt: null,
         paused: null,
+        game: room.game ? { ...room.game, gameOver } : undefined,
       },
     };
   }
 
   // Wrong guess: continue to win check (Spec §3.7)
   const win = checkWinCondition(room);
-  if (win) {
+  if (win?.type === "win") {
+    const gameOver = createGameOverSummary(room, win);
     return {
       state: {
         ...room,
         phase: "GAME_OVER",
         endsAt: null,
         paused: null,
+        game: room.game ? { ...room.game, gameOver } : undefined,
       },
+    };
+  }
+
+  if (win?.type === "abort") {
+    return {
+      state: abortGameToLobby(room),
     };
   }
 
