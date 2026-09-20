@@ -8,7 +8,7 @@
 
 ## 🕵️ The Game
 
-**Undercover** is a party game of deduction, deception, and bluffing for 3–20 players.
+**Undercover** is a party game of deduction, deception, and bluffing for 4–20 players.
 
 - **👥 Civilian (Majority)**: Everyone receives the same secret word. Give subtle clues to spot who doesn't belong without revealing the exact word to Mr. White.
 - **🎭 Undercover (Infiltrator)**: You receive a subtly different word (e.g. *Coffee* vs *Tea*). Blend in, deduce what the civilians have, and deflect suspicion.
