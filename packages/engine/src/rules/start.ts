@@ -146,7 +146,11 @@ export function handleStart(
     undercoverWord,
     pairId: pair.id,
     votes: {},
-    civilianAliases: pair.accept ?? [],
+    civilianAliases: pair.accept
+      ? Array.isArray(pair.accept)
+        ? pair.accept
+        : [pair.accept]
+      : [civilianWord],
   };
 
   return {

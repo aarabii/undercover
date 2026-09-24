@@ -4,12 +4,13 @@
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "bun run --parallel --filter './apps/*' dev",
-    "test": "bun test packages",
+    "test": "bun test tests/engine tests/protocol tests/words",
     "test:server": "bun run --cwd apps/server test",
     "typecheck": "bun run --filter '*' typecheck",
     "build": "bun run --filter @game/web build",
     "check:boundaries": "bun run scripts/check-boundaries.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:all": "bun run test && bun run test:server && bun run test:e2e"
   },
   "engines": {
     "node": ">=22"

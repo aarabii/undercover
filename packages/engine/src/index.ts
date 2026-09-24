@@ -5,6 +5,19 @@ export { viewFor } from "./view/view-for";
 export { createRoom, createDefaultSettings } from "./state/create-room";
 export { nextAlarm } from "./rules/alarm";
 export {
+  evaluateMrWhiteGuess,
+  normalizeText,
+  levenshteinDistance,
+  stemSimplePlural,
+  matchesTarget,
+} from "./rules/mrwhite";
+export {
+  checkWinCondition,
+  createGameOverSummary,
+  handlePlayAgain,
+  abortGameToLobby,
+} from "./rules/win";
+export {
   Phase,
   Role,
   PlayerStatus,

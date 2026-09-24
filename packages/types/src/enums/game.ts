@@ -32,8 +32,4 @@ export const Difficulty = {
 export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty];
 
 export type ConnectionStatus =
-  | "disconnected"
-  | "connecting"
-  | "connected"
-  | "reconnecting"
-  | "error";
+  "disconnected" | "connecting" | "connected" | "reconnecting" | "error";

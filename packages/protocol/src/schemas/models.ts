@@ -39,8 +39,9 @@ export const SettingsPatchSchema = RawSettingsSchema.partial();
 export const WordPairSchema = z.object({
   id: z.string(),
   category: z.string(),
-  difficulty: z.enum(["easy", "medium", "hard"]),
+  difficulty: DifficultySchema,
+  difficulties: z.array(DifficultySchema).optional(),
   a: z.string(),
   b: z.string(),
-  accept: z.array(z.string()).optional(),
+  accept: z.union([z.string(), z.array(z.string())]).optional(),
 });

@@ -4,7 +4,8 @@ export interface WordPair {
   id: string;
   category: string;
   difficulty: Difficulty;
+  difficulties?: Difficulty[];
   a: string;
   b: string;
-  accept?: string[];
+  accept?: string | string[];
 }

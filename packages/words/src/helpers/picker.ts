@@ -4,7 +4,8 @@ import { WORD_PAIRS } from "../data/words";
 export function getWordPair(
   category: string = "random",
   difficulty: Difficulty = "mixed",
-  usedPairIds: string[] = []
+  usedPairIds: string[] = [],
+  rng: () => number = Math.random
 ): WordPair {
   let candidates = WORD_PAIRS.filter((p) => !usedPairIds.includes(p.id));
 
@@ -23,12 +24,26 @@ export function getWordPair(
   }
 
   if (difficulty !== "mixed") {
-    const byDifficulty = candidates.filter((p) => p.difficulty === difficulty);
+    const byDifficulty = candidates.filter(
+      (p) => p.difficulty === difficulty || p.difficulties?.includes(difficulty)
+    );
     if (byDifficulty.length > 0) {
       candidates = byDifficulty;
     }
   }
 
-  const selectedIndex = Math.floor(Math.random() * candidates.length);
-  return candidates[selectedIndex];
+  const selectedIndex = Math.floor(rng() * candidates.length);
+  const selected = candidates[selectedIndex];
+
+  // 50/50 random coin flip so word1 and word2 have equal probability of being Civilian
+  const flip = rng() < 0.5;
+  const a = flip ? selected.a : selected.b;
+  const b = flip ? selected.b : selected.a;
+
+  return {
+    ...selected,
+    a,
+    b,
+    accept: a,
+  };
 }

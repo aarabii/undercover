@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { useGameStore } from "@/stores/gameStore";
-import CreateFlow from "@/components/CreateFlow";
-import JoinFlow from "@/components/JoinFlow";
-import PendingScreen from "@/components/PendingScreen";
-import StatusNoticeScreen from "@/components/StatusNoticeScreen";
-import LobbyScreen from "@/components/LobbyScreen";
-import WaitingScreen from "@/components/WaitingScreen";
-import InGameScreen from "@/components/InGameScreen";
+import CreateFlow from "@/components/room/CreateFlow";
+import JoinFlow from "@/components/room/JoinFlow";
+import PendingScreen from "@/components/screens/PendingScreen";
+import StatusNoticeScreen from "@/components/screens/StatusNoticeScreen";
+import LobbyScreen from "@/components/lobby/LobbyScreen";
+import WaitingScreen from "@/components/screens/WaitingScreen";
+import InGameScreen from "@/components/game/InGameScreen";
 import { ROOM_CODE_LENGTH } from "@game/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BrandLogo } from "@/components/BrandLogo";
+import { BrandLogo } from "@/components/common/BrandLogo";
 import { GiPadlock, GiEntryDoor } from "react-icons/gi";
 
 type FlowMode = "menu" | "create" | "join";

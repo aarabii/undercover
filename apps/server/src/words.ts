@@ -33,7 +33,9 @@ export class ServerWordBank implements WordBank {
 
     // 3. Filter by difficulty if specified and not 'mixed'
     if (difficulty && difficulty !== "mixed") {
-      const byDifficulty = candidates.filter((p) => p.difficulty === difficulty);
+      const byDifficulty = candidates.filter(
+        (p) => p.difficulty === difficulty || p.difficulties?.includes(difficulty)
+      );
       if (byDifficulty.length > 0) {
         candidates = byDifficulty;
       }
@@ -43,8 +45,18 @@ export class ServerWordBank implements WordBank {
       return null;
     }
 
-    // 4. Select pair using injected RNG
+    // 4. Select pair using injected RNG with 50/50 flip
     const index = Math.floor(rng() * candidates.length);
-    return candidates[index];
+    const selected = candidates[index];
+    const flip = rng() < 0.5;
+    const a = flip ? selected.a : selected.b;
+    const b = flip ? selected.b : selected.a;
+
+    return {
+      ...selected,
+      a,
+      b,
+      accept: a,
+    };
   }
 }
