@@ -37,5 +37,12 @@ Running log of audited items, official documentation consulted, findings, and ac
 | **Per-Round Multi-Eliminations** | User Amendment 3 | A round can have both disconnect elimination(s) and a vote elimination. | `lastElimination` replaced/extended with `eliminations: EliminationRecord[]` list per round, tracking `{ id, role, reason, voteCounts }` plus `isTie`. |
 | **Pause Deadlines vs Host Migration** | User Amendment 5 | Pausing freezes game phase timers only. Disconnected host must still trigger reassignment after 15s. | `paused` preserves `remainingMs` for phase `endsAt`, but `nextAlarm` continues checking `host.disconnectedAt + 15000` even while paused. |
 | **Win Check Ordering** | Spec §3.6, User Note | Premature win checks can miss valid Mr. White guesses or compound round outcomes. | Win check runs strictly once per round, after all round eliminations (disconnects and votes) and after any Mr. White final guess. |
-| **Test Co-location** | User Amendment 6 | Co-located tests ensure full coverage under `bun run typecheck`. | Tests placed as `src/**/*.test.ts` to be included in TypeScript compilation check. |
+## Server shell
+
+| Decision / Ambiguity | Spec Section | Rationale | Resolution |
+| :--- | :--- | :--- | :--- |
+| **Cloudflare Access & MCP** | Ground rules, §15.1 | Cloudflare MCP server check in active session. | No Cloudflare MCP server available; relying on Wrangler CLI and manual setup checklist for user dashboard actions and secret keys. |
+| **DO SQLite Persistence** | §2.1, §15.2, Phase 1 | Room state persistence in Durable Object SQLite via `this.ctx.storage.sql`. | Persist complete snapshot of `Room` state in `room_state` table (`id INTEGER PRIMARY KEY CHECK (id = 1), code TEXT, state TEXT, rng_seed INTEGER, updated_at INTEGER`) on every state change. |
+| **Context Injection (now, rng, words, newId)** | §2.3, Phase 1 | Engine requires injected `EngineContext` without ambient I/O or globals. | `ctx.now = Date.now()`; `ctx.rng` uses seeded Mulberry32 with persistent seed; `ctx.newId` produces collision-free 8-char IDs; `ctx.words` implemented via `ServerWordBank` backed by `@game/words` `WORD_PAIRS`. |
+| **WordBank Gap in @game/words** | Phase 0 | `@game/words` exports `WORD_PAIRS` and `getWordPair` without `rng` parameter or `WordBank` class interface. | Implemented `ServerWordBank` in `apps/server` adhering strictly to `@game/engine`'s `WordBank` interface, accepting `rng?: () => number` and querying `@game/words` `WORD_PAIRS`. |
 
