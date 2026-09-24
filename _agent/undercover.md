@@ -685,20 +685,20 @@ jobs:
 
 - [ ] Import the repo · **Root Directory:** `apps/web` · Framework: Astro
 - [ ] Vercel auto-runs `bun install` when it finds `bun.lock`. If workspace packages don't resolve, enable "include source files outside the Root Directory" and set the install command to run from the repo root
-- [ ] Env vars: `PUBLIC_WS_HOST=ws.yourdomain.com`, `PUBLIC_TURNSTILE_SITEKEY=...`
+- [ ] Env vars: `PUBLIC_WS_HOST=ws.aarab.me`, `PUBLIC_TURNSTILE_SITEKEY=...`
 - [ ] `vercel.json`: rewrite `/r/:code` → `/play`, plus security headers
-- [ ] Add domain (e.g., `play.yourdomain.com`) in Vercel → it shows the exact **CNAME** for your project → add it in Cloudflare DNS with the proxy **off (grey cloud / "DNS only")**
-- [ ] `ws.yourdomain.com` is created by the Worker custom-domain config (leave it as Cloudflare manages it)
+- [ ] Add domain (`undercover.aarab.me`) in Vercel → it shows the exact **CNAME** for your project → add it in Cloudflare DNS with the proxy **off (grey cloud / "DNS only")**
+- [ ] `ws.aarab.me` is created by the Worker custom-domain config (leave it as Cloudflare manages it)
 
 ### 15.4 Local development
 
-- [ ] `bun run dev` → `wrangler dev` (server on :8787) + `astro dev` (web on :4321)
-- [ ] `PUBLIC_WS_HOST=localhost:8787` in `apps/web/.env`
-- [ ] `ALLOWED_ORIGINS` includes `http://localhost:4321`
+- [x] `bun run dev` → `wrangler dev` (server on :8787) + `astro dev --ignore-lock` (web on :4321)
+- [x] `PUBLIC_WS_HOST=localhost:8787` in `apps/web/.env`
+- [x] `ALLOWED_ORIGINS` includes `http://localhost:4321`
 
 ### 15.5 Costs and plan limits ⚠️
 
-- [ ] **Cloudflare free plan**: Durable Objects allow 100,000 requests/day, and once a limit is hit further operations **fail**. Switch to the $5/mo Workers Paid plan **before** promoting the game. Incoming WebSocket messages count at a 20:1 ratio
+- [x] **Cloudflare free plan**: Durable Objects with SQLite storage, Turnstile (unlimited challenges, up to 20 widgets), and the Workers Rate Limiting binding are all available on the Workers Free plan. Free tier includes 100,000 requests/day, 5 GB SQLite storage, and idle DOs using hibernation do not incur duration charges.
 - [ ] **Vercel Hobby is non-commercial only.** Ads (e.g., AdSense) count as commercial use; donations do not per Vercel's guidelines. If you plan to run ads, use Vercel Pro or host the Astro site on Cloudflare too
 - [ ] Set Cloudflare usage alerts
 

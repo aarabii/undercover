@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { env, SELF, runInDurableObject, runDurableObjectAlarm, evictDurableObject } from "cloudflare:test";
-import { MAX_MESSAGE_BYTES, type Room } from "./index";
+import type { Room } from "./index";
+import { MAX_MESSAGE_BYTES } from "./constants";
 import { hashToken } from "./utils";
 import type { ServerMessage, ClientMessage } from "@game/protocol";
 

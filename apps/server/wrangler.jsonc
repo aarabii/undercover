@@ -14,6 +14,16 @@
       "storage": "sqlite"
     }
   },
+  "ratelimits": [
+    {
+      "name": "RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
+    }
+  ],
   "vars": {
     "ALLOWED_ORIGINS": "https://undercover.aarab.me,http://localhost:4321",
   },

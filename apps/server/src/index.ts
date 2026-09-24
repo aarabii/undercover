@@ -23,6 +23,11 @@ import { createMulberry32, generateSeed } from "./prng";
 import { initDatabase, loadRoom, saveRoom } from "./storage";
 import { generateRoomCode, generateShortId, hashToken } from "./utils";
 import { verifyTurnstile } from "./turnstile";
+import {
+  MAX_MESSAGE_BYTES,
+  IDLE_CLEANUP_MS,
+  RESERVED_CODE_EXPIRY_MS,
+} from "./constants";
 
 export type Env = Cloudflare.Env & {
   RATE_LIMITER?: RateLimit;
@@ -32,10 +37,6 @@ export type Env = Cloudflare.Env & {
 export interface ConnectionState {
   playerId: string;
 }
-
-export const MAX_MESSAGE_BYTES = 2048; // 2 KB size limit per Spec §6.3
-export const IDLE_CLEANUP_MS = 30 * 60 * 1000; // 30 min per Spec §4.1
-export const RESERVED_CODE_EXPIRY_MS = 10 * 60 * 1000; // 10 min per Spec §4.1
 
 export class Room extends Server<Env> {
   static options = {

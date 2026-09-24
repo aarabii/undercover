@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --ignore-lock",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
