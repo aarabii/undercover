@@ -109,7 +109,7 @@ reduce(state, action, ctx: { now: number; rng: () => number; words: WordBank })
 viewFor(state, playerId) → RoomView   // sanitized snapshot for ONE player
 ```
 
-- [ ] The Durable Object is a thin shell: parse message → `reduce` → apply effects
+- [x] The Durable Object is a thin shell: parse message → `reduce` → apply effects
 - [x] Time and randomness are injected, so tests are deterministic
 - [ ] If you ever leave Cloudflare, only `apps/server` is rewritten
 
@@ -145,7 +145,7 @@ viewFor(state, playerId) → RoomView   // sanitized snapshot for ONE player
 - [x] Each game randomly decides which of `a` / `b` is the Civilian word (so pair order never leaks)
 - [x] Track `usedPairIds` per room; don't repeat until the pool is exhausted
 - [ ] Host picks `category` (or Random) and `difficulty` (or Mixed)
-- [ ] Words live **only on the server**. Never ship the bank in the web bundle
+- [x] Words live **only on the server**. Never ship the bank in the web bundle
 - [ ] 💡 SEO pages show only a **sample** (30–50 pairs), not the full bank. A public full list lets players look up their word's partner
 
 ### 3.4 Win conditions (standard rules) 🔒
@@ -231,9 +231,9 @@ LOBBY ──host start (valid)──▶ ROLE_REVEAL (10s, host can skip)
    └──────────── host "Play again" ◀───────────┘
 ```
 
-- [ ] Every phase change stores `endsAt` (absolute server time) and persists a snapshot
+- [x] Every phase change stores `endsAt` (absolute server time) and persists a snapshot
 - [ ] 💡 `ROLE_REVEAL` (10 s) stops the discussion clock burning while people read their cards. Drop it if you dislike it
-- [ ] Phase guards: every incoming message is rejected unless valid for the current phase and sender
+- [x] Phase guards: every incoming message is rejected unless valid for the current phase and sender
 
 ### 4.1 Timers
 
@@ -249,11 +249,11 @@ LOBBY ──host start (valid)──▶ ROLE_REVEAL (10s, host can skip)
 | Empty-room cleanup                | 30 min after last socket closes | no                |
 | Reserved-code expiry              | 10 min if host never connects   | no                |
 
-- [ ] All timers use **absolute `endsAt` timestamps** from the server. Clients only render a countdown (sync offset using the `serverNow` in each snapshot)
-- [ ] Use **Durable Object alarms**, not `setTimeout` (timers must survive hibernation). One alarm per object, so keep a sorted timer list and set the alarm to the earliest
-- [ ] **Pause** (host): store `remainingMs`, cancel alarm, show "PAUSED" overlay to everyone. Resume sets `endsAt = now + remainingMs`
-- [ ] While paused: no votes accepted, no phase advancing; reconnects still work
-- [ ] **Skip** (host): Discussion → Voting immediately. Role reveal → Discussion
+- [x] All timers use **absolute `endsAt` timestamps** from the server. Clients only render a countdown (sync offset using the `serverNow` in each snapshot)
+- [x] Use **Durable Object alarms**, not `setTimeout` (timers must survive hibernation). One alarm per object, so keep a sorted timer list and set the alarm to the earliest
+- [x] **Pause** (host): store `remainingMs`, cancel alarm, show "PAUSED" overlay to everyone. Resume sets `endsAt = now + remainingMs`
+- [x] While paused: no votes accepted, no phase advancing; reconnects still work
+- [x] **Skip** (host): Discussion → Voting immediately. Role reveal → Discussion
 
 ---
 
@@ -359,10 +359,10 @@ interface Room {
 
 ### 6.3 Rules
 
-- [ ] Every message validated with Zod; unknown types rejected
-- [ ] Host-only messages check `sender.id === room.hostId` **on the server**
-- [ ] Max message size (~2 KB) and per-connection rate limit (e.g., 20 msgs / 5 s → close with code 1008)
-- [ ] Idempotent handlers (a double-tapped vote is harmless)
+- [x] Every message validated with Zod; unknown types rejected
+- [x] Host-only messages check `sender.id === room.hostId` **on the server**
+- [x] Max message size (~2 KB) and per-connection rate limit (e.g., 20 msgs / 5 s → close with code 1008)
+- [x] Idempotent handlers (a double-tapped vote is harmless)
 
 ---
 
@@ -396,8 +396,8 @@ The top-of-screen button toggles a card the player can show or hide. The **serve
 | `uc:room:{CODE}` | `{ playerId, token, savedAt }` (reconnect credentials) |
 
 - [ ] Wrap every read/write in try/catch. Private mode can throw. The app must work with empty storage
-- [ ] Server stores only a **hash** of the reconnect token
-- [ ] A second tab with the same credentials **replaces** the first (first gets `replaced`)
+- [x] Server stores only a **hash** of the reconnect token
+- [x] A second tab with the same credentials **replaces** the first (first gets `replaced`)
 - [ ] 💡 After the 15 s lobby removal, keep the token valid for ~10 min so returning players rejoin **without** re-approval (❓ D4)
 
 ### 8.2 Avatar (DiceBear)
@@ -514,23 +514,23 @@ Phones **suspend WebSockets** when the screen locks or the app is backgrounded, 
 
 ### 11.1 Anti-cheat
 
-- [ ] Server-authoritative. Clients send _intents_, never results
-- [ ] Per-player sanitized snapshot. Never broadcast roles/words
-- [ ] Words bank lives only in server code; not in web bundle, not in public JSON
-- [ ] Vote privacy until tally
-- [ ] Reveal roles only on elimination and game over
+- [x] Server-authoritative. Clients send _intents_, never results
+- [x] Per-player sanitized snapshot. Never broadcast roles/words
+- [x] Words bank lives only in server code; not in web bundle, not in public JSON
+- [x] Vote privacy until tally
+- [x] Reveal roles only on elimination and game over
 
 ### 11.2 Abuse
 
-- [ ] Origin check on WebSocket upgrade (allow your web domain + localhost in dev)
-- [ ] CORS on REST endpoints for the web domain only
-- [ ] Turnstile on `POST /rooms`
-- [ ] Rate limits: room creation per IP, join requests per IP/token, messages per connection
-- [ ] Room codes: random from the allowed alphabet, collision check, blocklist of offensive strings
-- [ ] Host approval is the real gate (guessing a code alone doesn't get you in)
-- [ ] Kick + ban token; lock room
-- [ ] Max players cap; max pending requests (e.g., 10) so a host isn't spammed
-- [ ] Idle-room cleanup deletes all storage for the room
+- [x] Origin check on WebSocket upgrade (allow your web domain + localhost in dev)
+- [x] CORS on REST endpoints for the web domain only
+- [x] Turnstile on `POST /rooms`
+- [x] Rate limits: room creation per IP, join requests per IP/token, messages per connection
+- [x] Room codes: random from the allowed alphabet, collision check, blocklist of offensive strings
+- [x] Host approval is the real gate (guessing a code alone doesn't get you in)
+- [x] Kick + ban token; lock room
+- [x] Max players cap; max pending requests (e.g., 10) so a host isn't spammed
+- [x] Idle-room cleanup deletes all storage for the room
 
 ### 11.3 Web security
 
@@ -719,10 +719,10 @@ jobs:
 
 ### 16.2 Server tests (Vitest in the Workers runtime)
 
-- [ ] Join → pending → approve/decline → waiting → next game
-- [ ] Reconnect with token; wrong token rejected; second tab replaces first
-- [ ] Alarm-driven phase changes survive hibernation / restart
-- [ ] Origin check, message validation, rate limit, oversized message
+- [x] Join → pending → approve/decline → waiting → next game
+- [x] Reconnect with token; wrong token rejected; second tab replaces first
+- [x] Alarm-driven phase changes survive hibernation / restart
+- [x] Origin check, message validation, rate limit, oversized message
 
 ### 16.3 E2E (Playwright, multiple browser contexts)
 

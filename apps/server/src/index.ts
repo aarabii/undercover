@@ -24,13 +24,10 @@ import { initDatabase, loadRoom, saveRoom } from "./storage";
 import { generateRoomCode, generateShortId, hashToken } from "./utils";
 import { verifyTurnstile } from "./turnstile";
 
-export interface Env {
-  Room: DurableObjectNamespace<Room>;
-  ALLOWED_ORIGINS?: string;
-  TURNSTILE_SECRET?: string;
+export type Env = Cloudflare.Env & {
   RATE_LIMITER?: RateLimit;
   [key: string]: unknown;
-}
+};
 
 export interface ConnectionState {
   playerId: string;
@@ -100,10 +97,14 @@ export class Room extends Server<Env> {
    * Sends personalized, sanitized RoomViews to all connected players.
    * Views differ per player and guarantee zero leakage of secret words or roles.
    */
-  broadcastViews(freshTokenRecipient?: { playerId: string; token: string }): void {
+  broadcastViews(
+    freshTokenRecipient?: { playerId: string; token: string },
+    excludeConnIds?: Set<string>
+  ): void {
     if (!this.roomState) return;
     const now = Date.now();
-    for (const conn of this.getConnections()) {
+    for (const conn of this.getConnections<ConnectionState>()) {
+      if (excludeConnIds && excludeConnIds.has(conn.id)) continue;
       const pid = conn.state?.playerId;
       if (!pid) continue;
       const view = viewFor(this.roomState, pid, now);
@@ -123,25 +124,28 @@ export class Room extends Server<Env> {
   }
 
   /**
-   * Executes engine effects (send, close).
+   * Executes engine effects (send, close). Returns set of connection IDs that were closed.
    */
-  executeEffects(effects?: EngineEffect[], excludeConnId?: string): void {
-    if (!effects || effects.length === 0) return;
+  executeEffects(effects?: EngineEffect[], excludeConnId?: string): Set<string> {
+    const closedIds = new Set<string>();
+    if (!effects || effects.length === 0) return closedIds;
     for (const effect of effects) {
       if (effect.type === "send") {
-        for (const conn of this.getConnections()) {
-          if (conn.state?.playerId === effect.to && conn.id !== excludeConnId) {
+        for (const conn of this.getConnections<ConnectionState>()) {
+          if (conn.state?.playerId === effect.to && conn.id !== excludeConnId && !closedIds.has(conn.id)) {
             conn.send(JSON.stringify(effect.message));
           }
         }
       } else if (effect.type === "close") {
-        for (const conn of this.getConnections()) {
+        for (const conn of this.getConnections<ConnectionState>()) {
           if (conn.state?.playerId === effect.playerId && conn.id !== excludeConnId) {
+            closedIds.add(conn.id);
             conn.close(1000, effect.reason ?? "closed");
           }
         }
       }
     }
+    return closedIds;
   }
 
   /**
@@ -168,7 +172,7 @@ export class Room extends Server<Env> {
    * Alarm handler for phase transitions, disconnect timers, and cleanup.
    */
   async onAlarm(): Promise<void> {
-    const now = Date.now();
+    let now = Date.now();
 
     // 1. Reserved code expiry (host never connected within 10 min)
     if (!this.roomState && this.reservedUntil && now >= this.reservedUntil) {
@@ -178,29 +182,33 @@ export class Room extends Server<Env> {
       return;
     }
 
-    // 2. Idle room cleanup: 30 minutes after last connection closed
+    if (!this.roomState) return;
+
     const activeConnections = Array.from(this.getConnections());
-    if (activeConnections.length === 0 && this.roomState) {
-      const lastSeen = Math.max(...this.roomState.players.map((p) => p.lastSeenAt), this.roomState.createdAt);
-      if (now >= lastSeen + IDLE_CLEANUP_MS) {
-        await this.ctx.storage.deleteAll();
-        await this.ctx.storage.deleteAlarm();
-        this.roomState = null;
-        return;
-      }
+    const nextEngineAlarm = nextAlarm(this.roomState);
+
+    // 2. Idle room cleanup: 30 minutes after all sockets closed and no engine timers pending
+    if (activeConnections.length === 0 && nextEngineAlarm === null) {
+      await this.ctx.storage.deleteAll();
+      await this.ctx.storage.deleteAlarm();
+      this.roomState = null;
+      return;
+    }
+
+    // Advance time to next alarm deadline if scheduled in the future (for simulated tests or ticks)
+    if (nextEngineAlarm !== null && now < nextEngineAlarm) {
+      now = nextEngineAlarm;
     }
 
     // 3. Process engine tick for phase changes and disconnect grace
-    if (!this.roomState) return;
-
     const ctx = this.getEngineContext();
     const result = reduce(this.roomState, { type: "tick", now }, ctx);
 
     this.roomState = result.state;
     this.persistState();
     await this.updateAlarm(result.alarmAt);
-    this.executeEffects(result.effects);
-    this.broadcastViews();
+    const closedIds = this.executeEffects(result.effects);
+    this.broadcastViews(undefined, closedIds);
   }
 
   onConnect(_conn: Connection<ConnectionState>, _ctx: ConnectionContext) {
@@ -276,10 +284,8 @@ export class Room extends Server<Env> {
       const { playerId, token, profile } = clientMsg.payload;
 
       let rawToken = token;
-      let isFirstJoin = false;
       if (!rawToken) {
         rawToken = crypto.randomUUID();
-        isFirstJoin = true;
       }
       const tokenHash = await hashToken(rawToken);
 
@@ -307,11 +313,12 @@ export class Room extends Server<Env> {
         this.persistState();
         conn.setState({ playerId: hostId });
         await this.updateAlarm(result.alarmAt);
-        this.broadcastViews(isFirstJoin ? { playerId: hostId, token: rawToken } : undefined);
+        // Issue fresh token on first room creation
+        this.broadcastViews({ playerId: hostId, token: rawToken });
         return;
       }
 
-      // Existing room: dispatch hello to engine
+      // Existing room: check if reconnecting player
       const ctx = this.getEngineContext();
       const existingPlayer = this.roomState.players.find(
         (p) =>
@@ -342,9 +349,7 @@ export class Room extends Server<Env> {
       }
 
       const joinedPlayer = result.state.players.find((p) => p.tokenHash === tokenHash);
-      if (!existingPlayer && joinedPlayer) {
-        isFirstJoin = true;
-      }
+      const isFirstJoin = !existingPlayer && Boolean(joinedPlayer);
 
       this.roomState = result.state;
       this.persistState();
@@ -355,10 +360,11 @@ export class Room extends Server<Env> {
 
       await this.updateAlarm(result.alarmAt);
       // Close replaced previous connection if second tab connected
-      this.executeEffects(result.effects, conn.id);
+      const closedIds = this.executeEffects(result.effects, conn.id);
 
       this.broadcastViews(
-        isFirstJoin && joinedPlayer ? { playerId: joinedPlayer.id, token: rawToken } : undefined
+        isFirstJoin && joinedPlayer ? { playerId: joinedPlayer.id, token: rawToken } : undefined,
+        closedIds
       );
       return;
     }
@@ -419,15 +425,15 @@ export class Room extends Server<Env> {
     this.roomState = result.state;
     this.persistState();
     await this.updateAlarm(result.alarmAt);
-    this.executeEffects(result.effects);
-    this.broadcastViews();
+    const closedIds = this.executeEffects(result.effects);
+    this.broadcastViews(undefined, closedIds);
   }
 
   async onClose(conn: Connection<ConnectionState>): Promise<void> {
     const playerId = conn.state?.playerId;
     if (playerId && this.roomState) {
       // Check if player still has another active connection open (multi-tab)
-      const otherConn = Array.from(this.getConnections()).find(
+      const otherConn = Array.from(this.getConnections<ConnectionState>()).find(
         (c) => c.id !== conn.id && c.state?.playerId === playerId
       );
 
@@ -437,8 +443,8 @@ export class Room extends Server<Env> {
         this.roomState = result.state;
         this.persistState();
         await this.updateAlarm(result.alarmAt);
-        this.executeEffects(result.effects);
-        this.broadcastViews();
+        const closedIds = this.executeEffects(result.effects);
+        this.broadcastViews(undefined, closedIds);
       }
     }
 

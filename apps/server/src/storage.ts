@@ -12,6 +12,7 @@ interface RoomSqlRow {
   rng_seed: number;
   reserved_until: number | null;
   updated_at: number;
+  [key: string]: SqlStorageValue;
 }
 
 /**
@@ -34,6 +35,7 @@ export function initDatabase(sql: SqlStorage): void {
  * Loads persisted room state and PRNG seed from SQLite storage.
  */
 export function loadRoom(sql: SqlStorage): PersistedRoomRecord | null {
+  initDatabase(sql);
   const cursor = sql.exec<RoomSqlRow>(
     "SELECT code, state, rng_seed, reserved_until, updated_at FROM room_state WHERE id = 1"
   );
@@ -60,6 +62,7 @@ export function saveRoom(
   rngSeed: number,
   reservedUntil?: number
 ): void {
+  initDatabase(sql);
   sql.exec(
     "INSERT OR REPLACE INTO room_state (id, code, state, rng_seed, reserved_until, updated_at) VALUES (1, ?, ?, ?, ?, ?)",
     code,
@@ -74,5 +77,6 @@ export function saveRoom(
  * Deletes room state from SQLite table.
  */
 export function clearRoom(sql: SqlStorage): void {
+  initDatabase(sql);
   sql.exec("DELETE FROM room_state WHERE id = 1");
 }

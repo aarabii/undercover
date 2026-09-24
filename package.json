@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "bun run --parallel --filter './apps/*' dev",
     "test": "bun test packages",
+    "test:server": "bun run --cwd apps/server test",
     "typecheck": "bun run --filter '*' typecheck",
     "build": "bun run --filter @game/web build",
     "check:boundaries": "bun run scripts/check-boundaries.ts"
