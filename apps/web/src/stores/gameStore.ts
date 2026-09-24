@@ -1,37 +1,108 @@
 import { create } from "zustand";
-import type { RoomView, AvatarConfig, ConnectionStatus } from "@game/types";
+import type { RoomView, ConnectionStatus } from "@game/types";
+import {
+  getStoredProfile,
+  setStoredProfile,
+  type StoredProfile,
+} from "@/lib/storage";
 
-interface GameState {
-  status: ConnectionStatus;
+export interface GameStoreState {
+  // Connection & Room state
+  connectionStatus: ConnectionStatus;
   roomView: RoomView | null;
-  error: string | null;
-  playerId: string | null;
-  reconnectToken: string | null;
-  profile: {
-    name: string;
-    avatar: AvatarConfig;
-  };
-  setStatus: (status: ConnectionStatus) => void;
+  myVote: string | null;
+
+  // Server notifications / lifecycle states
+  error: { code: string; message: string } | null;
+  declined: { isDeclined: boolean; reason?: string } | null;
+  kicked: boolean;
+  replaced: boolean;
+  roomClosed: boolean;
+
+  // Player identity & local preferences
+  profile: StoredProfile;
+
+  // Local UI toggles
+  isInfoCardVisible: boolean;
+
+  // Actions
+  setConnectionStatus: (status: ConnectionStatus) => void;
   setRoomView: (view: RoomView | null) => void;
-  setError: (error: string | null) => void;
-  setProfile: (profile: { name: string; avatar: AvatarConfig }) => void;
+  setMyVote: (vote: string | null) => void;
+  setError: (error: { code: string; message: string } | null) => void;
+  setDeclined: (declined: { isDeclined: boolean; reason?: string } | null) => void;
+  setKicked: (kicked: boolean) => void;
+  setReplaced: (replaced: boolean) => void;
+  setRoomClosed: (closed: boolean) => void;
+  setProfile: (profile: StoredProfile) => void;
+  toggleInfoCard: () => void;
+  setInfoCardVisible: (visible: boolean) => void;
+  resetGame: () => void;
 }
 
-export const useGameStore = create<GameState>((set) => ({
-  status: "disconnected",
-  roomView: null,
-  error: null,
-  playerId: null,
-  reconnectToken: null,
-  profile: {
-    name: "Player",
-    avatar: {
-      style: "bottts",
-      seed: "default-seed",
-    },
+const DEFAULT_PROFILE: StoredProfile = {
+  name: "Agent",
+  avatar: {
+    style: "bottts",
+    seed: "agent-1",
   },
-  setStatus: (status) => set({ status }),
-  setRoomView: (roomView) => set({ roomView }),
+};
+
+export const useGameStore = create<GameStoreState>((set) => ({
+  connectionStatus: "disconnected",
+  roomView: null,
+  myVote: null,
+
+  error: null,
+  declined: null,
+  kicked: false,
+  replaced: false,
+  roomClosed: false,
+
+  profile: getStoredProfile() ?? DEFAULT_PROFILE,
+
+  isInfoCardVisible: false,
+
+  setConnectionStatus: (connectionStatus) => set({ connectionStatus }),
+
+  setRoomView: (roomView) =>
+    set((state) => ({
+      roomView,
+      // Keep myVote synchronized with server view if provided
+      myVote: roomView?.me?.myVote !== undefined ? roomView.me.myVote : state.myVote,
+    })),
+
+  setMyVote: (myVote) => set({ myVote }),
+
   setError: (error) => set({ error }),
-  setProfile: (profile) => set({ profile }),
+
+  setDeclined: (declined) => set({ declined, connectionStatus: "disconnected" }),
+
+  setKicked: (kicked) => set({ kicked, connectionStatus: "disconnected" }),
+
+  setReplaced: (replaced) => set({ replaced, connectionStatus: "disconnected" }),
+
+  setRoomClosed: (roomClosed) => set({ roomClosed, connectionStatus: "disconnected" }),
+
+  setProfile: (profile) => {
+    setStoredProfile(profile);
+    set({ profile });
+  },
+
+  toggleInfoCard: () => set((state) => ({ isInfoCardVisible: !state.isInfoCardVisible })),
+
+  setInfoCardVisible: (isInfoCardVisible) => set({ isInfoCardVisible }),
+
+  resetGame: () =>
+    set({
+      connectionStatus: "disconnected",
+      roomView: null,
+      myVote: null,
+      error: null,
+      declined: null,
+      kicked: false,
+      replaced: false,
+      roomClosed: false,
+      isInfoCardVisible: false,
+    }),
 }));

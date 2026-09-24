@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useGameStore } from "@/stores/gameStore";
 import { MIN_PLAYERS, ROOM_CODE_LENGTH } from "@game/types";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { BrandLogo } from "@/components/BrandLogo";
 import { GiPadlock, GiEntryDoor, GiSpy } from "react-icons/gi";
 
 export default function GameApp() {
-  const { status, roomView, profile, setProfile } = useGameStore();
+  const { connectionStatus, roomView, profile, setProfile } = useGameStore();
   const [code, setCode] = useState("");
 
   useEffect(() => {
@@ -113,10 +113,10 @@ export default function GameApp() {
             <span className="flex items-center gap-1.5">
               <span
                 className={`size-2.5 rounded-full border border-black ${
-                  status === "connected" ? "bg-green-500" : "bg-gray-400"
+                  connectionStatus === "connected" ? "bg-green-500" : "bg-gray-400"
                 }`}
               />
-              {status}
+              {connectionStatus}
             </span>
           </div>
         </CardContent>
