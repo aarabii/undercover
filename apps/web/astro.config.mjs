@@ -3,7 +3,20 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-const siteUrl = process.env.PUBLIC_SITE_URL || 'https://undercover.aarab.me';
+const rawSiteUrl = process.env.PUBLIC_SITE_URL?.trim();
+let siteUrl = 'https://undercover.aarab.me';
+
+if (rawSiteUrl) {
+  try {
+    const formatted = rawSiteUrl.startsWith('http://') || rawSiteUrl.startsWith('https://')
+      ? rawSiteUrl
+      : `https://${rawSiteUrl}`;
+    const parsed = new URL(formatted);
+    siteUrl = parsed.origin;
+  } catch {
+    siteUrl = 'https://undercover.aarab.me';
+  }
+}
 
 // https://astro.build/config
 export default defineConfig({
