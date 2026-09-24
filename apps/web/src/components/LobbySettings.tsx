@@ -83,13 +83,14 @@ export default function LobbySettings({
         {/* Role Counts */}
         <div className="grid grid-cols-2 gap-3">
           {/* Undercover Stepper */}
-          <div className="p-3 bg-[#fdfbf7] border-2 border-black rounded-base space-y-1.5 shadow-[2px_2px_0px_#000]">
+          <div data-testid="undercover-stepper" className="p-3 bg-[#fdfbf7] border-2 border-black rounded-base space-y-1.5 shadow-[2px_2px_0px_#000]">
             <span className="block text-[11px] font-black uppercase text-black">
               Undercover
             </span>
             <div className="flex items-center justify-between">
               <button
                 type="button"
+                aria-label="Decrease Undercover count"
                 disabled={settings.undercoverCount <= 1}
                 onClick={() =>
                   handleUpdate({ undercoverCount: Math.max(1, settings.undercoverCount - 1) })
@@ -98,9 +99,10 @@ export default function LobbySettings({
               >
                 -
               </button>
-              <span className="font-mono text-xl font-black">{settings.undercoverCount}</span>
+              <span data-testid="undercover-count" className="font-mono text-xl font-black">{settings.undercoverCount}</span>
               <button
                 type="button"
+                aria-label="Increase Undercover count"
                 onClick={() =>
                   handleUpdate({ undercoverCount: settings.undercoverCount + 1 })
                 }
@@ -112,13 +114,14 @@ export default function LobbySettings({
           </div>
 
           {/* Mr. White Stepper */}
-          <div className="p-3 bg-[#fdfbf7] border-2 border-black rounded-base space-y-1.5 shadow-[2px_2px_0px_#000]">
+          <div data-testid="mr-white-stepper" className="p-3 bg-[#fdfbf7] border-2 border-black rounded-base space-y-1.5 shadow-[2px_2px_0px_#000]">
             <span className="block text-[11px] font-black uppercase text-black">
               Mr. White
             </span>
             <div className="flex items-center justify-between">
               <button
                 type="button"
+                aria-label="Decrease Mr. White count"
                 disabled={settings.mrWhiteCount <= 0}
                 onClick={() =>
                   handleUpdate({ mrWhiteCount: Math.max(0, settings.mrWhiteCount - 1) })
@@ -127,9 +130,10 @@ export default function LobbySettings({
               >
                 -
               </button>
-              <span className="font-mono text-xl font-black">{settings.mrWhiteCount}</span>
+              <span data-testid="mr-white-count" className="font-mono text-xl font-black">{settings.mrWhiteCount}</span>
               <button
                 type="button"
+                aria-label="Increase Mr. White count"
                 onClick={() =>
                   handleUpdate({ mrWhiteCount: settings.mrWhiteCount + 1 })
                 }

@@ -89,7 +89,7 @@ export default function RoleCard({ card }: RoleCardProps) {
         >
           <div className="flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-widest text-black">
             <ShieldAlert className="size-4 text-black" />
-            <span>{title}</span>
+            <span data-testid="role-card-title">{title}</span>
           </div>
 
           {/* Word Display (null for Mr. White) */}

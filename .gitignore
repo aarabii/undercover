@@ -10,3 +10,7 @@ _local
 _agent
 _agent/
 _agent.md
+
+test-results
+playwright-report
+

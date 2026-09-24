@@ -28,6 +28,7 @@ export default function PendingRequestsPanel({
         {pendingRequests.map((req) => (
           <div
             key={req.id}
+            data-testid={`pending-request-${req.name}`}
             className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-base shadow-[2px_2px_0px_#000]"
           >
             <div className="flex items-center gap-3">

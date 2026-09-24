@@ -8,12 +8,14 @@
     "test:server": "bun run --cwd apps/server test",
     "typecheck": "bun run --filter '*' typecheck",
     "build": "bun run --filter @game/web build",
-    "check:boundaries": "bun run scripts/check-boundaries.ts"
+    "check:boundaries": "bun run scripts/check-boundaries.ts",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/bun": "^1.4.2"
   }
 }

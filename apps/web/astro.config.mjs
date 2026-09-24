@@ -16,7 +16,28 @@ export default defineConfig({
     }),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      {
+        name: 'vite-rewrite-r-to-play',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url && /^\/r\/[a-zA-Z0-9]+/i.test(req.url)) {
+              req.url = '/play';
+            }
+            next();
+          });
+        },
+        configurePreviewServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url && /^\/r\/[a-zA-Z0-9]+/i.test(req.url)) {
+              req.url = '/play';
+            }
+            next();
+          });
+        },
+      },
+    ],
   },
 });
 
