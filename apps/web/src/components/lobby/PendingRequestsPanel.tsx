@@ -20,7 +20,7 @@ export default function PendingRequestsPanel({
           <UserPlus className="size-3.5 text-black" />
         </div>
         <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
-          Join Requests ({pendingRequests.length})
+          Waiting at the Door ({pendingRequests.length})
         </span>
       </div>
 

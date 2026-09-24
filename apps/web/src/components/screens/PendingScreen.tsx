@@ -21,7 +21,7 @@ export default function PendingScreen() {
               Waiting for the host...
             </span>
             <p className="text-xs font-bold text-gray-600">
-              The room host has been notified of your request to join.
+              You knocked on the door. Now we wait to see if the host trusts you.
             </p>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default function PendingScreen() {
           onClick={handleCancel}
           className="w-full bg-red-400 hover:bg-red-300 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-black flex items-center justify-center gap-2"
         >
-          <X className="size-4" /> Cancel Request
+          <X className="size-4" /> Cancel Join Request
         </Button>
       </div>
     </div>

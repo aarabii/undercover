@@ -18,7 +18,7 @@ export const LandingActions = () => {
             className="w-full text-base sm:text-lg font-black tracking-wide h-14 bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-brutal flex items-center justify-center gap-2.5 cursor-pointer active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
             <GiPadlock className="size-6 shrink-0" />
-            <span>Create Room</span>
+            <span>Host a Room</span>
           </Button>
         </a>
 
@@ -30,7 +30,7 @@ export const LandingActions = () => {
             className="w-full text-base sm:text-lg font-black tracking-wide h-14 bg-sky-300 hover:bg-sky-200 text-black border-[3px] border-black shadow-brutal flex items-center justify-center gap-2.5 cursor-pointer active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
             <GiEntryDoor className="size-6 shrink-0" />
-            <span>Join a Room</span>
+            <span>Enter Room Code</span>
           </Button>
         </a>
       </div>
@@ -45,7 +45,7 @@ export const LandingActions = () => {
           className="bg-white hover:bg-yellow-200 font-bold border-2 border-black shadow-brutal-sm flex items-center gap-2 text-sm cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
         >
           <GiSecretBook className="size-4 text-black" />
-          <span>How to Play & Rules</span>
+          <span>The Rules (Read These First)</span>
         </Button>
       </div>
 

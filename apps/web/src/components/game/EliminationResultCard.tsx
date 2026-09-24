@@ -25,7 +25,7 @@ export default function EliminationResultCard({
             TIE — Nobody Eliminated
           </span>
           <p className="text-xs font-bold text-gray-700">
-            The votes were split evenly. Discuss more and vote again in the next round!
+            A deadlock. Nobody could agree on who looked the shadiest. Everyone survives to lie another round.
           </p>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function EliminationResultCard({
       <div className="flex items-center justify-center gap-2">
         <Skull className="size-6 text-red-600" />
         <span className="font-heading font-black text-xl uppercase tracking-wider text-black">
-          Elimination Result
+          The Verdict
         </span>
       </div>
 
@@ -72,7 +72,7 @@ export default function EliminationResultCard({
       {/* Role Reveal Banner */}
       <div className="space-y-1">
         <span className="text-xs font-bold uppercase tracking-wider text-gray-600">
-          Secret Identity Revealed:
+          Actual Identity:
         </span>
         <div
           className={`py-2 px-4 rounded-base border-[3px] border-black font-heading font-black text-2xl uppercase tracking-wider text-black shadow-[3px_3px_0px_#000] inline-block ${roleColor}`}
@@ -83,7 +83,7 @@ export default function EliminationResultCard({
 
       {/* Elimination Reason */}
       <p className="text-xs font-bold text-gray-700">
-        Eliminated by {lastElimination.reason?.toLowerCase() || "vote"}.
+        Voted out. The jury has spoken, and the jury was ruthless.
       </p>
     </div>
   );

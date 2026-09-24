@@ -22,13 +22,13 @@ export const RolesSection: React.FC = () => {
       <div>
         <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
           <Badge variant="primary" className="shadow-brutal-sm px-3 py-0.5 text-[11px]">
-            THE IDENTITIES
+            THE USUAL SUSPECTS
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black uppercase">
-            3 Secret Roles. 1 Winner.
+            Three roles. Infinite paranoia.
           </h2>
           <p className="text-sm font-medium text-gray-700">
-            Assigned secretly at the start of each round. Nobody knows who is who.
+            Privately dealt at round start. Assume everyone is looking at you weird.
           </p>
         </div>
 
@@ -40,16 +40,16 @@ export const RolesSection: React.FC = () => {
                 <div className="size-12 rounded-base border-2 border-black bg-sky-200 flex items-center justify-center shadow-brutal-sm">
                   <GiSpy className="size-7 text-black" />
                 </div>
-                <Badge variant="secondary" className="font-black">Majority Team</Badge>
+                <Badge variant="secondary" className="font-black">The Clueless Majority</Badge>
               </div>
               <CardTitle className="text-2xl font-black text-black">Civilian</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3">
               <p className="text-sm font-medium text-gray-800 leading-relaxed">
-                You share the same secret word with the civilian majority. Give clever clues to help allies spot you, without handing the word to Mr. White!
+                You share the secret word with the majority. Give clues subtle enough to prove you belong, without handing the answer to Mr. White on a silver platter.
               </p>
               <div className="rounded-base border border-black/20 bg-sky-50 p-2.5 text-xs font-bold text-sky-900">
-                ⭐ Victory: Unmask and eliminate all Undercovers & Mr. White.
+                Victory: Vote out every impostor before your numbers dwindle.
               </div>
             </CardContent>
           </Card>
@@ -61,16 +61,16 @@ export const RolesSection: React.FC = () => {
                 <div className="size-12 rounded-base border-2 border-black bg-yellow-300 flex items-center justify-center shadow-brutal-sm">
                   <GiHoodedFigure className="size-7 text-black" />
                 </div>
-                <Badge variant="primary" className="font-black">The Infiltrator</Badge>
+                <Badge variant="primary" className="font-black">The Gaslighter</Badge>
               </div>
               <CardTitle className="text-2xl font-black text-black">Undercover</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3">
               <p className="text-sm font-medium text-gray-800 leading-relaxed">
-                You receive a word subtly different from the Civilians. Listen intently, blend in, and trick the group into voting out innocent civilians.
+                Your word is slightly off from everyone else's. Sweat quietly, echo what you hear, and aggressively accuse someone innocent.
               </p>
               <div className="rounded-base border border-black/20 bg-yellow-100 p-2.5 text-xs font-bold text-yellow-900">
-                ⭐ Victory: Survive until only 1 civilian is left alive.
+                Victory: Survive until the civilians panic and do your job for you.
               </div>
             </CardContent>
           </Card>
@@ -82,16 +82,16 @@ export const RolesSection: React.FC = () => {
                 <div className="size-12 rounded-base border-2 border-black bg-pink-300 flex items-center justify-center shadow-brutal-sm">
                   <GiGhost className="size-7 text-black" />
                 </div>
-                <Badge variant="destructive" className="font-black">The Wildcard</Badge>
+                <Badge variant="destructive" className="font-black">Completely Winging It</Badge>
               </div>
               <CardTitle className="text-2xl font-black text-black">Mr. White</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3">
               <p className="text-sm font-medium text-gray-800 leading-relaxed">
-                You get no word at all! You must deduce the topic on the fly, bluff like a master, and if caught, guess the civilian word for an instant steal!
+                You got no word. Zero. Nod along, drop the vaguest clue humanly possible, and if caught, guess their word to steal the win.
               </p>
               <div className="rounded-base border border-black/20 bg-pink-100 p-2.5 text-xs font-bold text-pink-900">
-                ⭐ Victory: Survive, or correctly guess the civilian word!
+                Victory: Stay alive, or steal the match with a lucky guess on your way out.
               </div>
             </CardContent>
           </Card>
@@ -103,10 +103,10 @@ export const RolesSection: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 border-b-2 border-black pb-4">
           <div>
             <h3 className="text-2xl font-black tracking-tight uppercase text-black">
-              How A Round Plays Out
+              Anatomy of a Betrayal
             </h3>
             <p className="text-xs sm:text-sm font-medium text-gray-700">
-              Simple 4-phase loop. Fast games lasting 5-10 minutes.
+              Four quick steps. 5-10 minutes per round. Weeks of trust issues.
             </p>
           </div>
           <Button
@@ -116,7 +116,7 @@ export const RolesSection: React.FC = () => {
             onClick={() => setRulesOpen(true)}
             className="border-2 border-black shadow-brutal-sm hover:bg-yellow-200 font-bold text-xs"
           >
-            <GiSecretBook className="mr-1.5 size-4" /> Full Rulebook
+            <GiSecretBook className="mr-1.5 size-4" /> Official Rulebook
           </Button>
         </div>
 
@@ -126,10 +126,10 @@ export const RolesSection: React.FC = () => {
               1
             </div>
             <h4 className="font-black text-base text-black mb-1 flex items-center gap-1.5">
-              <GiSecretBook className="size-4" /> Secret Word
+              <GiSecretBook className="size-4" /> Private Intel
             </h4>
             <p className="text-xs font-medium text-gray-700">
-              Each player sees their private role card on their device. Keep it secret!
+              Check your screen privately. Try not to make the 'oh no' face immediately.
             </p>
           </div>
 
@@ -138,10 +138,10 @@ export const RolesSection: React.FC = () => {
               2
             </div>
             <h4 className="font-black text-base text-black mb-1 flex items-center gap-1.5">
-              <GiDiscussion className="size-4" /> Clue Phase
+              <GiDiscussion className="size-4" /> Drop a Clue
             </h4>
             <p className="text-xs font-medium text-gray-700">
-              In turn, each player speaks one word or phrase. Be subtle but not too cryptic.
+              Say one word or short phrase. Too vague and you look guilty; too specific and Mr. White thanks you.
             </p>
           </div>
 
@@ -150,10 +150,10 @@ export const RolesSection: React.FC = () => {
               3
             </div>
             <h4 className="font-black text-base text-black mb-1 flex items-center gap-1.5">
-              <GiMagnifyingGlass className="size-4" /> Debate
+              <GiMagnifyingGlass className="size-4" /> Interrogation
             </h4>
             <p className="text-xs font-medium text-gray-700">
-              Cross-examine who hesitated or whose clue sounded slightly off.
+              Analyze who paused too long, who blinked weirdly, and who is defending the wrong person.
             </p>
           </div>
 
@@ -162,10 +162,10 @@ export const RolesSection: React.FC = () => {
               4
             </div>
             <h4 className="font-black text-base text-black mb-1 flex items-center gap-1.5">
-              <GiVote className="size-4" /> The Vote
+              <GiVote className="size-4" /> Cast Out
             </h4>
             <p className="text-xs font-medium text-gray-700">
-              Vote simultaneously. The top suspect is eliminated and reveals their identity.
+              Point fingers simultaneously. The player with the most votes gets eliminated. No refunds.
             </p>
           </div>
         </div>

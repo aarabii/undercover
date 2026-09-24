@@ -121,7 +121,7 @@ export default function GameApp() {
             <Badge variant="primary">No Login</Badge>
           </div>
           <CardDescription className="text-xs font-bold text-gray-700 uppercase tracking-wider mt-1">
-            Real-time social deduction word game
+            A game of trust, betrayal, and looking guilty for blinking.
           </CardDescription>
         </CardHeader>
 
@@ -134,7 +134,7 @@ export default function GameApp() {
             className="w-full h-14 text-base font-black bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
           >
             <GiPadlock className="size-5 shrink-0" />
-            <span>Create New Room</span>
+            <span>Host a Room</span>
           </Button>
 
           <Button
@@ -145,7 +145,7 @@ export default function GameApp() {
             className="w-full h-14 text-base font-black bg-sky-300 hover:bg-sky-200 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
           >
             <GiEntryDoor className="size-5 shrink-0" />
-            <span>Join Existing Room</span>
+            <span>Join Room by Code</span>
           </Button>
         </CardContent>
       </Card>

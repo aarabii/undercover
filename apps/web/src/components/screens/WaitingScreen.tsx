@@ -20,10 +20,10 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
 
         <div className="space-y-1">
           <span className="font-heading font-black text-2xl text-black">
-            Game in Progress
+            Round in Progress
           </span>
           <p className="text-xs font-bold text-gray-700">
-            You are in the waiting lounge. You will automatically join when the current game ends.
+            Grab some popcorn and watch the accusations fly. You'll jump in once this bloodbath ends.
           </p>
         </div>
 
@@ -36,7 +36,7 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
       {/* Public Roster */}
       <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-3">
         <span className="block text-xs font-black uppercase tracking-wider text-black text-left">
-          Current Players ({activePlayers.length})
+          Current Suspects ({activePlayers.length})
         </span>
 
         <div className="grid grid-cols-4 gap-2.5 justify-items-center">

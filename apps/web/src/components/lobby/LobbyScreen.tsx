@@ -30,13 +30,13 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
   // Compute disabled reason per spec 9.4
   let disabledReason: string | null = null;
   if (activePlayers.length < 4) {
-    disabledReason = `Need 4 players (${activePlayers.length}/4)`;
+    disabledReason = `Need 4 players minimum (${activePlayers.length}/4). You can't deceive yourself alone.`;
   } else if (activePlayers.some((p) => p.presence === "away")) {
-    disabledReason = "A player is away";
+    disabledReason = "Someone's AFK — no ghosts allowed";
   } else if (infiltrators < 1) {
-    disabledReason = "Need at least 1 infiltrator";
+    disabledReason = "Add at least 1 infiltrator — someone's gotta lie";
   } else if (infiltrators > maxInfiltrators || civilians < infiltrators + 1) {
-    disabledReason = `Too many infiltrators (max ${maxInfiltrators} for ${activePlayers.length} players)`;
+    disabledReason = `Too many infiltrators (max ${maxInfiltrators} for ${activePlayers.length} players). Civilians need a chance.`;
   }
 
   const handleStartGame = () => {
@@ -77,10 +77,10 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
               type="button"
               onClick={() => connection.hostLock(!roomView.locked)}
               className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-tight border-2 border-black bg-white hover:bg-yellow-200 cursor-pointer shadow-[1px_1px_0px_#000]"
-              title={roomView.locked ? "Unlock room" : "Lock room"}
+              title={roomView.locked ? "Let others in" : "Keep strangers out"}
             >
               {roomView.locked ? <Lock className="size-3.5 text-red-600" /> : <Unlock className="size-3.5 text-gray-700" />}
-              <span>{roomView.locked ? "Locked" : "Lock Room"}</span>
+              <span>{roomView.locked ? "Room Locked" : "Lock Room"}</span>
             </button>
           )}
         </div>
@@ -136,7 +136,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
           </>
         ) : (
           <div className="p-4 bg-sky-100 border-[3px] border-black rounded-base shadow-[2px_2px_0px_#000] text-sm font-bold text-black">
-            Waiting for host to start the game...
+            Waiting on the host. They hold all the power and they know it.
           </div>
         )}
       </div>
@@ -148,7 +148,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
           onClick={() => connection.leave()}
           className="text-xs font-black uppercase tracking-wider text-red-600 hover:text-red-700 flex items-center justify-center gap-1.5 mx-auto cursor-pointer"
         >
-          <LogOut className="size-3.5" /> Leave Room
+          <LogOut className="size-3.5" /> Bail Out of Room
         </button>
       </div>
 

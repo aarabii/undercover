@@ -31,7 +31,7 @@ export async function createRoom(turnstileToken?: string): Promise<{ code: strin
   });
 
   if (!res.ok) {
-    let errMessage = "Failed to create room";
+    let errMessage = "Couldn't start a room. The server might be taking a coffee break.";
     try {
       const data = await res.json();
       if (data?.error) errMessage = data.error;
@@ -48,18 +48,18 @@ export async function createRoom(turnstileToken?: string): Promise<{ code: strin
 export async function checkRoom(code: string): Promise<RoomStatus> {
   const cleanCode = code.trim().toUpperCase();
   if (cleanCode.length !== 6) {
-    return { exists: false, error: "Room code must be 6 characters" };
+    return { exists: false, error: "Room codes are exactly 6 letters. Count 'em up." };
   }
 
   const baseUrl = getApiBaseUrl();
   try {
     const res = await fetch(`${baseUrl}/rooms/${cleanCode}`);
     if (!res.ok) {
-      return { exists: false, error: "Failed to check room status" };
+      return { exists: false, error: "Couldn't verify that room. Double-check your code." };
     }
     const data = (await res.json()) as RoomStatus;
     return data;
   } catch (err) {
-    return { exists: false, error: "Network error checking room" };
+    return { exists: false, error: "Connection hiccup while checking the room. Try again in a second." };
   }
 }

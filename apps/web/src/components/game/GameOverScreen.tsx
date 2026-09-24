@@ -19,13 +19,13 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
   let winReasonText = "Victory achieved!";
   switch (summary.reason) {
     case "ALL_INFILTRATORS_ELIMINATED":
-      winReasonText = "All infiltrators were eliminated!";
+      winReasonText = "All infiltrators were eliminated! The undercover cracked under 4 minutes of peer pressure. Respect.";
       break;
     case "INFILTRATORS_EQUAL_OR_GREATER":
-      winReasonText = "Infiltrators survived to equal or outnumber the civilians!";
+      winReasonText = "Infiltrators survived to equal or outnumber the civilians! The undercover walked so calmly through that interrogation you'd think they were innocent. They were not.";
       break;
     case "MR_WHITE_GUESSED":
-      winReasonText = "Mr. White correctly guessed the civilian secret word!";
+      winReasonText = "Mr. White correctly guessed the civilian secret word! Absolute highway robbery on the final buzzer.";
       break;
   }
 
@@ -51,7 +51,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
       {/* 2. Word Pair Comparison Reveal */}
       <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-3">
         <span className="block text-xs font-black uppercase tracking-wider text-black">
-          The Secret Words
+          The Evidence
         </span>
 
         <div className="grid grid-cols-2 gap-3">
@@ -78,7 +78,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
       {/* 3. Everyone's Revealed Role and Word */}
       <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-4">
         <span className="block text-xs font-black uppercase tracking-wider text-black text-left">
-          All Players & Identities
+          Roster & True Roles
         </span>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -136,7 +136,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
           </Button>
         ) : (
           <div className="p-4 bg-yellow-100 border-[3px] border-black rounded-base font-bold text-sm text-black">
-            Waiting for host to start rematch...
+            Waiting for the host to hit rematch and ruin more friendships.
           </div>
         )}
 
@@ -145,7 +145,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
           onClick={() => connection.leave()}
           className="text-xs font-black uppercase tracking-wider text-red-600 hover:text-red-700 flex items-center justify-center gap-1.5 mx-auto cursor-pointer"
         >
-          <LogOut className="size-3.5" /> Return to Menu
+          <LogOut className="size-3.5" /> Exit to Main Menu
         </button>
       </div>
     </div>

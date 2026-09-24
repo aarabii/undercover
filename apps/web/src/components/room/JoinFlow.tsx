@@ -78,7 +78,7 @@ export default function JoinFlow({
         onClick={onBack}
         className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black hover:underline cursor-pointer"
       >
-        <ArrowLeft className="size-4" /> Back to menu
+        <ArrowLeft className="size-4" /> Back to Menu
       </button>
 
       {/* Code Input Card */}
@@ -114,27 +114,27 @@ export default function JoinFlow({
             {!roomStatus.exists ? (
               <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-red-600 bg-red-50 p-2 border border-red-300 rounded-base">
                 <XCircle className="size-4 shrink-0" />
-                <span>Room not found. Check the code or create a room.</span>
+                <span>No room with that code. Check your spelling or host your own.</span>
               </div>
             ) : roomStatus.locked ? (
               <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-red-600 bg-red-50 p-2 border border-red-300 rounded-base">
                 <XCircle className="size-4 shrink-0" />
-                <span>This room is locked by the host.</span>
+                <span>Room is locked. The host is having trust issues.</span>
               </div>
             ) : roomStatus.full ? (
               <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 p-2 border border-amber-300 rounded-base">
                 <AlertTriangle className="size-4 shrink-0" />
-                <span>This room is currently full.</span>
+                <span>Room at capacity. No more seats at this interrogation table.</span>
               </div>
             ) : roomStatus.inGame ? (
               <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 p-2 border border-blue-300 rounded-base">
                 <AlertTriangle className="size-4 shrink-0" />
-                <span>Game in progress. You'll join as a waiting spectator.</span>
+                <span>Game already started. You'll spectate until the current round finishes.</span>
               </div>
             ) : (
               <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-green-700 bg-green-50 p-2 border border-green-300 rounded-base">
                 <CheckCircle2 className="size-4 shrink-0" />
-                <span>Room ready to join!</span>
+                <span>Room found. Proceed at your own risk.</span>
               </div>
             )}
           </div>
@@ -164,7 +164,7 @@ export default function JoinFlow({
         {connectionStatus === "connecting" ? (
           <>
             <Loader2 className="size-5 animate-spin" />
-            <span>Connecting...</span>
+            <span>Sneaking In...</span>
           </>
         ) : (
           <>

@@ -118,10 +118,12 @@ test.describe("Undercover E2E Game Suite", () => {
     expect(undercoverName).toBeTruthy();
 
     // 5. Host skips to Discussion and then to Voting
-    await hostPage.click('button:has-text("Skip Timer")');
-    await expect(hostPage.locator("text=Discussion Phase")).toBeVisible();
-
-    await hostPage.click('button:has-text("Skip Timer")');
+    if (await hostPage.locator("text=Check Your Identity").isVisible()) {
+      await hostPage.click('button:has-text("Skip Timer")');
+    }
+    if (await hostPage.locator("text=Discussion Phase").isVisible()) {
+      await hostPage.click('button:has-text("Skip Timer")');
+    }
     await expect(hostPage.locator("text=Voting Phase")).toBeVisible();
 
     // 6. Civilians vote to eliminate the Undercover player, Undercover votes for someone else

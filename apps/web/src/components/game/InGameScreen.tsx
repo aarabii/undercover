@@ -56,7 +56,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
     phaseLabel = "Voting Phase";
     phaseColor = "pink";
   } else if (isElimination) {
-    phaseLabel = "Round Results";
+    phaseLabel = "The Verdict";
     phaseColor = "primary";
   }
 
@@ -156,7 +156,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
         {/* Voting Progress Counter */}
         {isVoting && (
           <div className="font-mono text-xs font-black uppercase tracking-wider text-black">
-            {roomView.votedCount ?? 0} / {roomView.totalVoters ?? 0} voted
+            {roomView.votedCount ?? 0} of {roomView.totalVoters ?? 0} votes locked in
           </div>
         )}
       </div>

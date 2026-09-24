@@ -28,11 +28,11 @@ export default function PlayerGrid({
     <div className="w-full bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-4">
       <div className="flex items-center justify-between border-b-2 border-black pb-2 text-left">
         <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
-          Players
+          The Lineup
         </span>
         {isVotingPhase && (
           <span className="text-xs font-black uppercase tracking-wider text-[#FF4B3E]">
-            Tap player to vote
+            Tap a player to accuse them
           </span>
         )}
       </div>

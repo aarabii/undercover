@@ -38,10 +38,10 @@ export default function SelfEditModal({
       <DialogContent className="max-w-md bg-white border-[3px] border-black shadow-[6px_6px_0px_#000] p-6 text-center">
         <DialogHeader className="border-b-2 border-black pb-3">
           <DialogTitle className="font-heading font-black text-xl text-black">
-            Edit Your Identity
+            Change Your Disguise
           </DialogTitle>
           <DialogDescription className="text-xs font-bold text-gray-700">
-            Change your nickname or disguise in the lobby.
+            Switch your alias or face before anyone gets suspicious.
           </DialogDescription>
         </DialogHeader>
 
@@ -58,7 +58,7 @@ export default function SelfEditModal({
             disabled={!name.trim()}
             className="w-full font-black bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
-            <Check className="mr-2 size-5" /> Save Changes
+            <Check className="mr-2 size-5" /> Apply Changes
           </Button>
         </DialogFooter>
       </DialogContent>

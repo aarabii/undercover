@@ -33,33 +33,33 @@ export default function RoleCard({ card, code, className = "" }: RoleCardProps) 
   // Exact copy mapping per spec §7
   let title = "YOUR WORD";
   let description =
-    "This is your word. Play along: describe it without saying it, and figure out who's different.";
+    "This is your word. Say something believable. Or don't—chaos is also a valid strategy.";
 
   if (card) {
     switch (card.variant) {
       case "MR_WHITE":
         title = "YOU ARE MR. WHITE";
         description =
-          "You don't have a word. Play along, listen to everyone, and try to work out the word. If you're voted out you get one last guess.";
+          "You have no word. You know nothing. Nod thoughtfully, drop a generic clue, and if they catch you, guess their word to steal victory.";
         break;
 
       case "CIVILIAN":
         title = "CIVILIAN";
         description =
-          "This is your word. Play along: describe it without saying it, and spot who's different.";
+          "This is the common word. Describe it without giving it away to Mr. White, and vote out anyone giving shady answers.";
         break;
 
       case "UNDERCOVER":
         title = "UNDERCOVER";
         description =
-          "Your word is different from everyone else's. Play along and blend in.";
+          "Your word is slightly different from the civilians'. Blend in, pretend you belong, and deflect suspicion onto literally anyone else.";
         break;
 
       case "WORD_ONLY":
       default:
         title = "YOUR WORD";
         description =
-          "This is your word. Play along: describe it without saying it, and figure out who's different.";
+          "This is your word. Say something believable. Or don't—chaos is also a valid strategy.";
         break;
     }
   }
@@ -98,7 +98,7 @@ export default function RoleCard({ card, code, className = "" }: RoleCardProps) 
                 </DialogTitle>
               </div>
               <DialogDescription className="text-xs font-bold text-gray-700">
-                Keep your secret information hidden from other players!
+                Angle your screen down. Peeking eyes are everywhere.
               </DialogDescription>
             </DialogHeader>
 
@@ -110,7 +110,7 @@ export default function RoleCard({ card, code, className = "" }: RoleCardProps) 
                 </div>
               ) : (
                 <div className="py-3.5 px-4 bg-gray-100 border-2 border-dashed border-black rounded-base font-mono text-base font-bold text-gray-600">
-                  [ NO WORD ]
+                  [ ABSOLUTELY NOTHING ]
                 </div>
               )}
 
@@ -119,7 +119,7 @@ export default function RoleCard({ card, code, className = "" }: RoleCardProps) 
               </p>
 
               <span className="block text-[10px] font-mono font-medium text-gray-500 pt-1">
-                (Auto-hides on tab blur)
+                (Auto-hides if you switch tabs)
               </span>
             </div>
 

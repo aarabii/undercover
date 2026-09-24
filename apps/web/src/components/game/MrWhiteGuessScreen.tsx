@@ -47,7 +47,7 @@ export default function MrWhiteGuessScreen({
               Final Guess!
             </span>
             <p className="text-xs font-bold text-gray-700">
-              You were voted out as Mr. White. Guess the Civilians' secret word to steal victory for the Infiltrators!
+              You've been caught, but you have one parting shot: guess the civilian word and you steal the entire match.
             </p>
           </div>
 
@@ -95,7 +95,7 @@ export default function MrWhiteGuessScreen({
               Mr. White is Guessing...
             </span>
             <p className="text-xs font-bold text-gray-700">
-              The eliminated Mr. White is typing their final guess. If they guess the Civilian word, Infiltrators win!
+              Hold your breath. If Mr. White cracks your secret word right now, all your detective work was for nothing.
             </p>
           </div>
         </div>

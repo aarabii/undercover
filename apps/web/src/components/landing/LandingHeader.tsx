@@ -22,7 +22,7 @@ export const LandingHeader: React.FC = () => {
           className="bg-white hover:bg-yellow-200 font-bold border-2 border-black shadow-brutal-sm text-xs sm:text-sm flex items-center gap-1.5"
         >
           <GiSecretBook className="size-4" />
-          <span>Rules</span>
+          <span>How Not to Lose</span>
         </Button>
 
         <a href="/play">
@@ -33,7 +33,7 @@ export const LandingHeader: React.FC = () => {
             className="bg-[#facc15] hover:bg-yellow-300 text-black font-black border-2 border-black shadow-brutal-sm text-xs sm:text-sm flex items-center gap-1.5"
           >
             <GiEntryDoor className="size-4" />
-            <span>Play Now</span>
+            <span>Start Accusing</span>
           </Button>
         </a>
       </nav>

@@ -73,7 +73,7 @@ export default function RoomCodeShare({ code }: RoomCodeShareProps) {
           className="bg-pink-300 hover:bg-pink-200 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-bold flex items-center gap-1.5"
         >
           <Share2 className="size-4 shrink-0" />
-          <span>{copied ? "Copied Link!" : "Share"}</span>
+          <span>{copied ? "Invite Copied!" : "Invite Friends"}</span>
         </Button>
 
         <Button
@@ -106,7 +106,7 @@ export default function RoomCodeShare({ code }: RoomCodeShareProps) {
         <DialogContent className="max-w-xs bg-white border-[3px] border-black shadow-[6px_6px_0px_#000] p-6 text-center">
           <DialogHeader className="border-b-2 border-black pb-2">
             <DialogTitle className="font-heading font-black text-lg">
-              Scan to Join
+              Scan to Join the Interrogation
             </DialogTitle>
             <DialogDescription className="text-xs font-bold text-gray-700 font-mono">
               ROOM: {code}

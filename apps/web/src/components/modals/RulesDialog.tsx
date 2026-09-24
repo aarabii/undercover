@@ -46,7 +46,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                 How to Play Undercover
               </DialogTitle>
               <DialogDescription className="text-xs font-bold text-gray-700 uppercase tracking-wider">
-                Social Deduction & Word Bluffing Game
+                The Art of Lying Convincingly to People You Know
               </DialogDescription>
             </div>
           </div>
@@ -59,7 +59,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
               <span>🎯</span> Objective
             </h4>
             <p className="text-sm font-medium text-gray-900 leading-relaxed">
-              Every player receives a secret word on their screen. Civilians share the same word, while the Undercover gets a slightly different word. Mr. White receives no word at all. Find and eliminate the impostors before they take over!
+              Everyone gets a secret word on their screen. Civilians get the same word. The Undercover gets a cousin word. Mr. White gets a blank screen and a dream. Spot the impostors before they outnumber you.
             </p>
           </div>
 
@@ -80,11 +80,11 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                   </div>
                   <h5 className="font-black text-base text-black mb-1">Civilian</h5>
                   <p className="text-xs font-medium text-gray-700 leading-relaxed">
-                    You have the secret word shared by most players. Give subtle clues to identify allies without revealing the exact word to Mr. White!
+                    You're on the majority team. Prove you know the word without spelling it out for Mr. White.
                   </p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-black/10 text-[11px] font-bold text-sky-800">
-                  Goal: Eliminate all Undercovers & Mr. White.
+                  Goal: Sniff out the fakes and eliminate them.
                 </div>
               </div>
 
@@ -99,11 +99,11 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                   </div>
                   <h5 className="font-black text-base text-black mb-1">Undercover</h5>
                   <p className="text-xs font-medium text-gray-700 leading-relaxed">
-                    Your word is slightly different (e.g. "Coffee" vs "Tea"). Blend in, deduce what the civilians have, and deflect suspicion!
+                    Your word is subtly different (e.g. "Coffee" vs "Tea"). Blend in, pray nobody asks you for details, and frame an innocent person.
                   </p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-black/10 text-[11px] font-bold text-yellow-900">
-                  Goal: Survive until only 1 civilian remains.
+                  Goal: Survive until only 1 civilian is left standing.
                 </div>
               </div>
 
@@ -118,11 +118,11 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                   </div>
                   <h5 className="font-black text-base text-black mb-1">Mr. White</h5>
                   <p className="text-xs font-medium text-gray-700 leading-relaxed">
-                    You get NO word at all! Listen closely, improvise a plausible clue, and if caught, guess the civilian word to steal the win!
+                    You get zero intel. Fake confidence, give an aggressively generic clue, and if you get voted out, guess their word to steal the win.
                   </p>
                 </div>
                 <div className="mt-3 pt-2 border-t border-black/10 text-[11px] font-bold text-pink-900">
-                  Goal: Survive, or correctly guess the word if voted out.
+                  Goal: Stay alive, or steal the win with one final guess.
                 </div>
               </div>
             </div>
@@ -144,7 +144,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                     Word Delivery
                   </div>
                   <p className="text-xs font-medium text-gray-700">
-                    Each player receives their secret word privately on their mobile device or browser.
+                    Inspect your secret word privately. Poker face starts now.
                   </p>
                 </div>
               </div>
@@ -159,7 +159,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                     Give Clues
                   </div>
                   <p className="text-xs font-medium text-gray-700">
-                    In random order, each alive player states ONE single word or short clue describing their secret word. Never repeat a clue!
+                    Take turns giving a one-word or short clue. Be believable, but don't give away the farm.
                   </p>
                 </div>
               </div>
@@ -174,7 +174,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
                     Vote & Elimination
                   </div>
                   <p className="text-xs font-medium text-gray-700">
-                    After everyone has given a clue, discuss and vote on who looks the most suspicious. The player with the most votes is eliminated.
+                    Argue passionately, blame the quietest person, and vote someone out.
                   </p>
                 </div>
               </div>
@@ -185,7 +185,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
         <DialogFooter className="border-t-2 border-black pt-4">
           <DialogClose asChild>
             <Button variant="default" size="default" className="w-full sm:w-auto font-black">
-              <GiCheckMark className="mr-2 size-4" /> Got it, Let's Play!
+              <GiCheckMark className="mr-2 size-4" /> Understood. Prepare the pitchforks.
             </Button>
           </DialogClose>
         </DialogFooter>

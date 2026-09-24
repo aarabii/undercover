@@ -40,10 +40,10 @@ export default function PlayerManageModal({
       <DialogContent className="max-w-xs bg-white border-[3px] border-black shadow-[6px_6px_0px_#000] p-6 text-center">
         <DialogHeader className="border-b-2 border-black pb-3">
           <DialogTitle className="font-heading font-black text-lg">
-            Manage Player
+            Suspect Actions: {player.name}
           </DialogTitle>
           <DialogDescription className="text-xs font-bold text-gray-700">
-            Host actions for {player.name}
+            Decide what to do with this suspect.
           </DialogDescription>
         </DialogHeader>
 
@@ -56,18 +56,22 @@ export default function PlayerManageModal({
             type="button"
             variant="secondary"
             onClick={handleTransfer}
+            title="Transfer host"
+            aria-label="Transfer host"
             className="w-full bg-yellow-300 hover:bg-yellow-200 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-black flex items-center justify-center gap-2"
           >
-            <Crown className="size-4" /> Transfer Host
+            <Crown className="size-4" /> Pass the Crown
           </Button>
 
           <Button
             type="button"
             variant="default"
             onClick={handleKick}
+            title="Kick player"
+            aria-label="Kick player"
             className="w-full bg-red-400 hover:bg-red-300 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-black flex items-center justify-center gap-2"
           >
-            <UserMinus className="size-4" /> Kick Player
+            <UserMinus className="size-4" /> Kick From Room
           </Button>
         </DialogFooter>
       </DialogContent>

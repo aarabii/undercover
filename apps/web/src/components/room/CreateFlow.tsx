@@ -55,17 +55,17 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
         onClick={onBack}
         className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black hover:underline cursor-pointer"
       >
-        <ArrowLeft className="size-4" /> Back to menu
+        <ArrowLeft className="size-4" /> Back to Menu
       </button>
 
       {isCreating ? (
         <div className="p-8 text-center bg-white border-[3px] border-black rounded-base shadow-[4px_4px_0px_#000] space-y-3">
           <Loader2 className="size-8 animate-spin mx-auto text-black" />
-          <p className="font-heading font-black text-lg">Reserving room code...</p>
+          <p className="font-heading font-black text-lg">Securing a room code. Sabotaging trust...</p>
         </div>
       ) : createError ? (
         <div className="p-6 text-center bg-red-100 border-[3px] border-black rounded-base shadow-[4px_4px_0px_#000] space-y-3">
-          <p className="font-heading font-black text-red-700 text-lg">Creation Failed</p>
+          <p className="font-heading font-black text-red-700 text-lg">Room Creation Failed</p>
           <p className="text-xs font-bold text-black">{createError}</p>
           <Button
             type="button"
@@ -84,7 +84,7 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
             }}
             className="bg-yellow-400 font-bold border-2 border-black"
           >
-            Try Again
+            Give It Another Shot
           </Button>
         </div>
       ) : (
@@ -115,7 +115,7 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
             {connectionStatus === "connecting" ? (
               <>
                 <Loader2 className="size-5 animate-spin" />
-                <span>Entering Room...</span>
+                <span>Taking Your Seat...</span>
               </>
             ) : (
               <>

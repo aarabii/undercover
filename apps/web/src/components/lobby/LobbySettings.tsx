@@ -27,7 +27,7 @@ export default function LobbySettings({
         <div className="flex items-center gap-2 border-b-2 border-black pb-2">
           <Sliders className="size-4 text-black" />
           <span className="font-heading font-black text-xs uppercase tracking-wider text-black">
-            Game Rules & Settings
+            House Rules
           </span>
         </div>
 
@@ -54,7 +54,7 @@ export default function LobbySettings({
           <div className="p-2 bg-[#fdfbf7] border border-black rounded-tight">
             <span className="block text-[10px] font-bold text-gray-600 uppercase">Timers</span>
             <span className="font-black text-black font-mono">
-              {Math.floor(settings.discussionSeconds / 60)}m discuss / {settings.votingSeconds}s vote
+              {Math.floor(settings.discussionSeconds / 60)}m to argue / {settings.votingSeconds}s to vote
             </span>
           </div>
         </div>
@@ -69,12 +69,12 @@ export default function LobbySettings({
         <div className="flex items-center gap-2">
           <Sliders className="size-5 text-black" />
           <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
-            Room Settings (Host)
+            Game Rules (Host Controls)
           </span>
         </div>
         {totalInfiltrators > maxInfiltrators && playerCount >= 4 && (
           <span className="text-[11px] font-bold text-red-600">
-            Too many infiltrators! (Max {maxInfiltrators})
+            Too many infiltrators for this group size (Max {maxInfiltrators})
           </span>
         )}
       </div>
@@ -199,7 +199,7 @@ export default function LobbySettings({
           >
             <UserCheck className="size-4" />
             <span className="text-xs font-black uppercase">
-              {settings.requireApproval ? "Approval ON" : "Instant Join"}
+              {settings.requireApproval ? "Bouncer Mode" : "Open Door"}
             </span>
           </button>
         </div>
@@ -208,7 +208,7 @@ export default function LobbySettings({
         <div className="p-3 bg-[#fdfbf7] border-2 border-black rounded-base space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-black uppercase text-black">
             <Clock className="size-4" />
-            <span>Discussion Timer</span>
+            <span>Interrogation Timer</span>
           </div>
           <div className="grid grid-cols-4 gap-1.5">
             {[60, 120, 180, 300].map((sec) => (

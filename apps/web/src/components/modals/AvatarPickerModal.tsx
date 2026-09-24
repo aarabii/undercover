@@ -48,10 +48,10 @@ export default function AvatarPickerModal({
       <DialogContent className="max-w-md bg-white border-[3px] border-black shadow-[6px_6px_0px_#000] p-6">
         <DialogHeader className="border-b-2 border-black pb-3">
           <DialogTitle className="font-heading font-black text-xl text-black">
-            Choose Your Avatar
+            Pick Your Disguise
           </DialogTitle>
           <DialogDescription className="text-xs font-bold text-gray-700">
-            Select a style and roll the dice to customize your disguise.
+            Choose a disguise style and re-roll until you look reasonably innocent.
           </DialogDescription>
         </DialogHeader>
 
@@ -71,8 +71,8 @@ export default function AvatarPickerModal({
               type="button"
               onClick={handleRandomize}
               className="absolute -bottom-2 -right-2 p-2 rounded-full border-2 border-black bg-yellow-300 hover:bg-yellow-400 active:translate-x-0.5 active:translate-y-0.5 shadow-[2px_2px_0px_#000] cursor-pointer transition-all"
-              title="Randomize avatar"
-              aria-label="Randomize avatar"
+              title="Reroll disguise"
+              aria-label="Reroll disguise"
             >
               <Dices className="size-5 text-black" />
             </button>
@@ -113,7 +113,7 @@ export default function AvatarPickerModal({
             onClick={handleSave}
             className="w-full font-black bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
-            <Check className="mr-2 size-5" /> Done
+            <Check className="mr-2 size-5" /> Lock In Look
           </Button>
         </DialogFooter>
       </DialogContent>
