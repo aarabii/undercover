@@ -7,6 +7,6 @@ dist
 .dev.vars
 
 _local
-_agent/*
-!_agent/undercover.md
-!_agent/audit-log.md
+_agent
+_agent/
+_agent.md
