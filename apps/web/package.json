@@ -1,20 +1,12 @@
 {
   "name": "@game/web",
-  "type": "module",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "astro dev --ignore-lock",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "typecheck": "tsc -p ."
-  },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^6.0.6",
     "@astrojs/sitemap": "^3.7.4",
+    "@dicebear/collection": "^9.4.2",
+    "@dicebear/core": "9.4.2",
     "@game/protocol": "workspace:*",
     "@game/types": "workspace:*",
     "@radix-ui/react-dialog": "^1.1.23",
@@ -38,8 +30,14 @@
     "zod": "^4.6.5",
     "zustand": "^5.0.3"
   },
-  "devDependencies": {
-    "@dicebear/collection": "^9.4.2",
-    "@dicebear/core": "9.4.2"
-  }
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --ignore-lock",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "typecheck": "tsc -p ."
+  },
+  "type": "module"
 }
