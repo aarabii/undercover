@@ -245,6 +245,23 @@ describe("Phase 6: Presence and host migration", () => {
 
       expect(result.state.hostId).toBe("p4"); // p4 selected, not pending p2 or away p3
     });
+
+    it("removes away player from lobby after 15s disconnect grace (Spec §10.2)", () => {
+      const room = createPresenceTestRoom("LOBBY");
+      room.players[1]!.presence = "away";
+      room.players[1]!.disconnectedAt = 10000;
+      deepFreeze(room);
+
+      // At 10000 + 14999 ms: player still in lobby
+      const ctxBefore = createMockContext({ now: 24999 });
+      const resBefore = reduce(room, { type: "tick" }, ctxBefore);
+      expect(resBefore.state.players.some((p) => p.id === "p2")).toBe(true);
+
+      // At 10000 + 15000 ms: player removed from roster
+      const ctxAfter = createMockContext({ now: 25000 });
+      const resAfter = reduce(room, { type: "tick" }, ctxAfter);
+      expect(resAfter.state.players.some((p) => p.id === "p2")).toBe(false);
+    });
   });
 
   describe("Voluntary leave action", () => {
@@ -272,6 +289,21 @@ describe("Phase 6: Presence and host migration", () => {
       expect(result.error).toBeUndefined();
       expect(result.state.hostId).toBe("p2");
       expect(result.state.players.some((p) => p.id === "p1")).toBe(false);
+    });
+
+    it("migrates to oldest admitted player if host leaves and literally everyone else is away (Spec §10.3)", () => {
+      const room = createPresenceTestRoom("LOBBY");
+      room.players[1]!.presence = "away"; // p2 joined at 200
+      room.players[2]!.presence = "away"; // p3 joined at 300
+      room.players[3]!.presence = "away"; // p4 joined at 400
+      deepFreeze(room);
+
+      const ctx = createMockContext();
+      const result = reduce(room, { type: "leave", playerId: "p1" }, ctx);
+
+      expect(result.error).toBeUndefined();
+      // Should pick p2 (oldest admitted player) even though p2 is away
+      expect(result.state.hostId).toBe("p2");
     });
 
     it("eliminates active player immediately with LEFT and runs win check in game", () => {

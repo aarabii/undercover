@@ -13,20 +13,39 @@ export function selectNewHost(room: Room, excludePlayerId?: string): string {
     (p) => p.id !== excludePlayerId && p.presence === "online" && p.status !== "pending"
   );
 
-  if (eligible.length === 0) {
-    return room.hostId === excludePlayerId ? "" : room.hostId;
+  if (eligible.length > 0) {
+    eligible.sort((a, b) => {
+      const aAlive = a.status === "active" ? 1 : 0;
+      const bAlive = b.status === "active" ? 1 : 0;
+      if (aAlive !== bAlive) {
+        return bAlive - aAlive; // Alive preferred
+      }
+      return a.joinedAt - b.joinedAt; // Earliest-joined first
+    });
+    return eligible[0].id;
   }
 
-  eligible.sort((a, b) => {
-    const aAlive = a.status === "active" ? 1 : 0;
-    const bAlive = b.status === "active" ? 1 : 0;
-    if (aAlive !== bAlive) {
-      return bAlive - aAlive; // Alive preferred
+  // If host leaves voluntarily (excludePlayerId provided) and NO player is online,
+  // pick the oldest admitted player regardless of presence (Spec §10.3)
+  if (excludePlayerId && excludePlayerId === room.hostId) {
+    const fallback = room.players.filter(
+      (p) => p.id !== excludePlayerId && p.status !== "pending"
+    );
+    if (fallback.length > 0) {
+      fallback.sort((a, b) => {
+        const aAlive = a.status === "active" ? 1 : 0;
+        const bAlive = b.status === "active" ? 1 : 0;
+        if (aAlive !== bAlive) {
+          return bAlive - aAlive;
+        }
+        return a.joinedAt - b.joinedAt;
+      });
+      return fallback[0].id;
     }
-    return a.joinedAt - b.joinedAt; // Earliest-joined first
-  });
+    return "";
+  }
 
-  return eligible[0].id;
+  return room.hostId;
 }
 
 export function checkHostMigration(room: Room, now: number): Room {
