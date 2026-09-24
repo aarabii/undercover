@@ -2,6 +2,7 @@ import type { RoomView } from "../views/room-view";
 
 export interface StatePayload {
   view: RoomView;
+  token?: string;
 }
 
 export interface ErrorPayload {

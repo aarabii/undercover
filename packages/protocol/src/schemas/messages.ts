@@ -53,6 +53,7 @@ export const ClientMessageSchema = z.discriminatedUnion("type", [
 
 export const StatePayloadSchema = z.object({
   view: RoomViewSchema,
+  token: z.string().optional(),
 });
 
 export const ErrorPayloadSchema = z.object({
