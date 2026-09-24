@@ -1,34 +1,48 @@
-import { createAvatar } from "@dicebear/core";
-import {
-  lorelei,
-  thumbs,
-  shapes,
-  identicon,
-  pixelArt,
-  rings,
-} from "@dicebear/collection";
+import { Avatar, Style } from "@dicebear/core";
+import loreleiJson from "@dicebear/styles/lorelei.json";
+import micahJson from "@dicebear/styles/micah.json";
+import openPeepsJson from "@dicebear/styles/open-peeps.json";
+import voxelArtJson from "@dicebear/styles/voxel-art.json";
+import adventurerJson from "@dicebear/styles/adventurer.json";
+import toonHeadJson from "@dicebear/styles/toon-head.json";
 import type { AvatarConfig } from "@game/types";
 
 export const ALLOWED_AVATAR_STYLES = [
   { id: "lorelei", label: "Lorelei" },
-  { id: "thumbs", label: "Thumbs" },
-  { id: "shapes", label: "Shapes" },
-  { id: "identicon", label: "Identicon" },
-  { id: "pixelArt", label: "Pixel" },
-  { id: "rings", label: "Rings" },
+  { id: "micah", label: "Micah" },
+  { id: "openPeeps", label: "Open peeps" },
+  { id: "voxelArt", label: "Voxel Art" },
+  { id: "adventurer", label: "Adventurer" },
+  { id: "toonHead", label: "Toon Head" },
 ] as const;
 
 export type AllowedAvatarStyleId = (typeof ALLOWED_AVATAR_STYLES)[number]["id"];
 
-const STYLE_MAP: Record<string, any> = {
-  lorelei,
-  bottts: lorelei, // Graceful fallback for legacy stored avatars
-  thumbs,
-  shapes,
-  identicon,
-  pixelArt,
-  "pixel-art": pixelArt,
-  rings,
+const styleLorelei = new Style(loreleiJson as any);
+const styleMicah = new Style(micahJson as any);
+const styleOpenPeeps = new Style(openPeepsJson as any);
+const styleVoxelArt = new Style(voxelArtJson as any);
+const styleAdventurer = new Style(adventurerJson as any);
+const styleToonHead = new Style(toonHeadJson as any);
+
+const STYLE_MAP: Record<string, Style> = {
+  lorelei: styleLorelei,
+  micah: styleMicah,
+  openPeeps: styleOpenPeeps,
+  "open-peeps": styleOpenPeeps,
+  voxelArt: styleVoxelArt,
+  "voxel-art": styleVoxelArt,
+  adventurer: styleAdventurer,
+  toonHead: styleToonHead,
+  "toon-head": styleToonHead,
+  // Graceful fallbacks for legacy stored avatars
+  bottts: styleLorelei,
+  thumbs: styleLorelei,
+  shapes: styleLorelei,
+  identicon: styleLorelei,
+  pixelArt: styleVoxelArt,
+  "pixel-art": styleVoxelArt,
+  rings: styleLorelei,
 };
 
 const avatarUriCache = new Map<string, string>();
@@ -46,10 +60,10 @@ export function getAvatarDataUri(avatar: AvatarConfig): string {
   const cached = avatarUriCache.get(cacheKey);
   if (cached) return cached;
 
-  const styleDefinition = STYLE_MAP[styleKey] || lorelei;
+  const styleDefinition = STYLE_MAP[styleKey] || styleLorelei;
 
   try {
-    const avatarInstance = createAvatar(styleDefinition, {
+    const avatarInstance = new Avatar(styleDefinition, {
       seed: seedKey,
       ...avatar.options,
     });

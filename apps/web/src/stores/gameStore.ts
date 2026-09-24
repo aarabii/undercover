@@ -40,13 +40,23 @@ export interface GameStoreState {
   resetGame: () => void;
 }
 
-const DEFAULT_PROFILE: StoredProfile = {
-  name: "Agent",
-  avatar: {
-    style: "lorelei",
-    seed: "agent-1",
-  },
-};
+import { getRandomNickname } from "@/lib/nickname";
+import { generateRandomSeed } from "@/lib/avatar";
+
+function getInitialProfile(): StoredProfile {
+  const stored = getStoredProfile();
+  if (stored) return stored;
+
+  const initial: StoredProfile = {
+    name: getRandomNickname(),
+    avatar: {
+      style: "lorelei",
+      seed: generateRandomSeed(),
+    },
+  };
+  setStoredProfile(initial);
+  return initial;
+}
 
 export const useGameStore = create<GameStoreState>((set) => ({
   connectionStatus: "disconnected",
@@ -59,7 +69,7 @@ export const useGameStore = create<GameStoreState>((set) => ({
   replaced: false,
   roomClosed: false,
 
-  profile: getStoredProfile() ?? DEFAULT_PROFILE,
+  profile: getInitialProfile(),
 
   isInfoCardVisible: false,
 

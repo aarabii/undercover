@@ -50,6 +50,7 @@ export default function PlayerGrid({
               avatar={player.avatar}
               name={player.name}
               isHost={player.isHost}
+              isMe={isMe}
               isEliminated={isEliminated}
               eliminatedInfo={player.eliminated}
               isAway={player.presence === "away"}

@@ -62,22 +62,23 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-5 text-center font-para pb-8">
-      {/* 1. Top Bar: Secret Info Toggle & Round Meta */}
+      {/* 1. Top Bar: Round & Meta */}
       <div className="flex items-center justify-between gap-3 bg-white border-[3px] border-black rounded-base p-3 shadow-[4px_4px_0px_#000]">
         <div className="flex items-center gap-2">
           <Badge variant="primary" className="font-mono text-xs">
             R{roomView.round}
           </Badge>
           <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
-            ROOM: {roomView.code}
+            Round {roomView.round}
           </span>
         </div>
-
-        {/* Secret Info Card Trigger */}
-        <div className="flex-1 max-w-[180px]">
-          <RoleCard card={roomView.me.card} />
-        </div>
+        <span className="font-mono text-xs font-bold text-gray-600 uppercase">
+          ROOM: {roomView.code}
+        </span>
       </div>
+
+      {/* 2. Role Card (with RoomCodeShare & Secret Info Button) */}
+      <RoleCard card={roomView.me.card} code={roomView.code} />
 
       {/* 2. Host Controls Toolbar */}
       {isHost && (

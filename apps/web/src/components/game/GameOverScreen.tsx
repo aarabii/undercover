@@ -93,7 +93,13 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
                 key={player.id}
                 className="flex flex-col items-center p-3 bg-[#fdfbf7] border-2 border-black rounded-base shadow-[2px_2px_0px_#000] space-y-1.5"
               >
-                <AvatarTile avatar={player.avatar} name={player.name} size="sm" />
+                <AvatarTile
+                  avatar={player.avatar}
+                  name={player.name}
+                  isHost={player.isHost}
+                  isMe={player.id === roomView.me.id}
+                  size="sm"
+                />
                 <span
                   className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-tight border border-black ${
                     isCivilian

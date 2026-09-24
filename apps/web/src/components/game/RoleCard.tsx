@@ -1,116 +1,142 @@
+import { useEffect } from "react";
 import type { CardView } from "@game/types";
 import { useGameStore } from "@/stores/gameStore";
+import RoomCodeShare from "@/components/room/RoomCodeShare";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Eye, EyeOff, ShieldAlert } from "lucide-react";
 
 interface RoleCardProps {
   card?: CardView;
+  code?: string;
+  className?: string;
 }
 
-export default function RoleCard({ card }: RoleCardProps) {
-  const { isInfoCardVisible, toggleInfoCard } = useGameStore();
+export default function RoleCard({ card, code, className = "" }: RoleCardProps) {
+  const { roomView, isInfoCardVisible, setInfoCardVisible } = useGameStore();
+  const roomCode = code || roomView?.code || "";
 
-  if (!card) return null;
+  // Auto-close secret info modal if game phase changes
+  useEffect(() => {
+    setInfoCardVisible(false);
+  }, [roomView?.phase, setInfoCardVisible]);
+
+  if (!card && !roomCode) return null;
 
   // Exact copy mapping per spec §7
   let title = "YOUR WORD";
   let description =
     "This is your word. Play along: describe it without saying it, and figure out who's different.";
-  let shadowClass = "shadow-[4px_4px_0px_#000]";
-  let borderClass = "border-[3px] border-black";
-  let bgClass = "bg-white";
 
-  switch (card.variant) {
-    case "MR_WHITE":
-      title = "YOU ARE MR. WHITE";
-      description =
-        "You don't have a word. Play along, listen to everyone, and try to work out the word. If you're voted out you get one last guess.";
-      shadowClass = "shadow-none";
-      borderClass = "border-2 border-dashed border-black";
-      bgClass = "bg-white";
-      break;
+  if (card) {
+    switch (card.variant) {
+      case "MR_WHITE":
+        title = "YOU ARE MR. WHITE";
+        description =
+          "You don't have a word. Play along, listen to everyone, and try to work out the word. If you're voted out you get one last guess.";
+        break;
 
-    case "CIVILIAN":
-      title = "CIVILIAN";
-      description =
-        "This is your word. Play along: describe it without saying it, and spot who's different.";
-      shadowClass = "shadow-[4px_4px_0px_#A3E635]";
-      borderClass = "border-[3px] border-black";
-      bgClass = "bg-white";
-      break;
+      case "CIVILIAN":
+        title = "CIVILIAN";
+        description =
+          "This is your word. Play along: describe it without saying it, and spot who's different.";
+        break;
 
-    case "UNDERCOVER":
-      title = "UNDERCOVER";
-      description =
-        "Your word is different from everyone else's. Play along and blend in.";
-      shadowClass = "shadow-[4px_4px_0px_#38BDF8]";
-      borderClass = "border-[3px] border-black";
-      bgClass = "bg-white";
-      break;
+      case "UNDERCOVER":
+        title = "UNDERCOVER";
+        description =
+          "Your word is different from everyone else's. Play along and blend in.";
+        break;
 
-    case "WORD_ONLY":
-    default:
-      title = "YOUR WORD";
-      description =
-        "This is your word. Play along: describe it without saying it, and figure out who's different.";
-      shadowClass = "shadow-[4px_4px_0px_#000]";
-      borderClass = "border-[3px] border-black";
-      bgClass = "bg-white";
-      break;
+      case "WORD_ONLY":
+      default:
+        title = "YOUR WORD";
+        description =
+          "This is your word. Play along: describe it without saying it, and figure out who's different.";
+        break;
+    }
   }
 
   return (
-    <div className="w-full max-w-sm mx-auto space-y-2 select-none">
-      {/* Toggle Button */}
-      <Button
-        type="button"
-        variant="secondary"
-        size="sm"
-        onClick={toggleInfoCard}
-        className="w-full bg-[#fdfbf7] hover:bg-yellow-200 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-black uppercase text-xs flex items-center justify-center gap-2 cursor-pointer h-10"
-      >
-        {isInfoCardVisible ? (
-          <>
-            <EyeOff className="size-4" />
-            <span>Hide Secret Info</span>
-          </>
-        ) : (
-          <>
-            <Eye className="size-4" />
-            <span>Show Secret Info</span>
-          </>
-        )}
-      </Button>
+    <div className={`w-full max-w-md mx-auto space-y-3 select-none ${className}`}>
+      {/* 1. Room Code Share Div */}
+      {roomCode && <RoomCodeShare code={roomCode} />}
 
-      {/* Expanded Info Card */}
-      {isInfoCardVisible && (
-        <div
-          className={`${bgClass} ${borderClass} ${shadowClass} rounded-base p-5 text-center space-y-3 transition-all`}
+      {/* 2. Show Secret Info Trigger Button */}
+      {card && (
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={() => setInfoCardVisible(true)}
+          className="w-full bg-[#fdfbf7] hover:bg-yellow-200 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-black uppercase text-xs flex items-center justify-center gap-2 cursor-pointer h-10"
         >
-          <div className="flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-widest text-black">
-            <ShieldAlert className="size-4 text-black" />
-            <span data-testid="role-card-title">{title}</span>
-          </div>
+          <Eye className="size-4" />
+          <span>Show Secret Info</span>
+        </Button>
+      )}
 
-          {/* Word Display (null for Mr. White) */}
-          {card.word ? (
-            <div className="py-2.5 px-4 bg-yellow-200 border-2 border-black rounded-base font-heading font-black text-2xl tracking-wider text-black select-all">
-              {card.word}
+      {/* 3. Secret Info Modal */}
+      {card && (
+        <Dialog open={isInfoCardVisible} onOpenChange={setInfoCardVisible}>
+          <DialogContent className="max-w-md bg-white border-[3px] border-black shadow-[6px_6px_0px_#000] p-6 text-center">
+            <DialogHeader className="border-b-2 border-black pb-3">
+              <div className="flex items-center justify-center gap-2">
+                <ShieldAlert className="size-5 text-black" />
+                <DialogTitle
+                  className="font-heading font-black text-xl text-black"
+                  data-testid="role-card-title"
+                >
+                  {title}
+                </DialogTitle>
+              </div>
+              <DialogDescription className="text-xs font-bold text-gray-700">
+                Keep your secret information hidden from other players!
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="py-4 space-y-4">
+              {/* Word Display (null for Mr. White) */}
+              {card.word ? (
+                <div className="py-3.5 px-4 bg-yellow-200 border-2 border-black rounded-base font-heading font-black text-2xl sm:text-3xl tracking-wider text-black select-all shadow-[2px_2px_0px_#000]">
+                  {card.word}
+                </div>
+              ) : (
+                <div className="py-3.5 px-4 bg-gray-100 border-2 border-dashed border-black rounded-base font-mono text-base font-bold text-gray-600">
+                  [ NO WORD ]
+                </div>
+              )}
+
+              <p className="text-xs sm:text-sm font-bold text-gray-700 leading-relaxed px-1">
+                {description}
+              </p>
+
+              <span className="block text-[10px] font-mono font-medium text-gray-500 pt-1">
+                (Auto-hides on tab blur)
+              </span>
             </div>
-          ) : (
-            <div className="py-2.5 px-4 bg-gray-100 border-2 border-dashed border-black rounded-base font-mono text-sm font-bold text-gray-600">
-              [ NO WORD ]
-            </div>
-          )}
 
-          <p className="text-xs font-bold text-gray-700 leading-relaxed px-1">
-            {description}
-          </p>
-
-          <span className="block text-[10px] font-mono font-medium text-gray-500 pt-1">
-            (Auto-hides on tab blur)
-          </span>
-        </div>
+            <DialogFooter className="pt-2">
+              <Button
+                type="button"
+                variant="default"
+                size="lg"
+                onClick={() => setInfoCardVisible(false)}
+                className="w-full font-black bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <EyeOff className="size-5" />
+                <span>Hide Secret Info</span>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   );

@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import type { AvatarConfig, Role, ElimReason } from "@game/types";
 import { getAvatarDataUri } from "@/lib/avatar";
-import { Crown, Skull, Check, Pencil } from "lucide-react";
+import { Crown, Skull, Check, Pencil, User } from "lucide-react";
 
 export interface AvatarTileProps {
   avatar: AvatarConfig;
   name: string;
   isHost?: boolean;
+  isMe?: boolean;
   isEliminated?: boolean;
   eliminatedInfo?: {
     reason: ElimReason;
@@ -27,6 +28,7 @@ export default function AvatarTile({
   avatar,
   name,
   isHost = false,
+  isMe = false,
   isEliminated = false,
   eliminatedInfo,
   isAway = false,
@@ -57,8 +59,11 @@ export default function AvatarTile({
     if (isSelected) {
       return "border-[3px] border-black bg-sky-100 shadow-[3px_3px_0px_#000] scale-105";
     }
+    if (isMe) {
+      return "border-[3px] border-black bg-emerald-50 shadow-[2px_2px_0px_#059669]";
+    }
     return "border-2 border-black bg-[#fdfbf7] shadow-[2px_2px_0px_#000]";
-  }, [isEliminated, isAway, isSelected]);
+  }, [isEliminated, isAway, isSelected, isMe]);
 
   return (
     <div
@@ -74,34 +79,47 @@ export default function AvatarTile({
           onClick();
         }
       }}
-      aria-label={`${name}${isHost ? ", Host" : ""}${isEliminated ? ", Eliminated" : ""}${isAway ? ", Away" : ""}`}
+      aria-label={`${name}${isMe ? ", You" : ""}${isHost ? ", Host" : ""}${isEliminated ? ", Eliminated" : ""}${isAway ? ", Away" : ""}`}
     >
       {/* Main Avatar Circle */}
       <div
         className={`relative ${sizeClasses} rounded-full p-1.5 flex items-center justify-center transition-all ${ringClasses}`}
       >
-        <img
-          src={dataUri}
-          alt={name}
-          className={`w-full h-full object-contain pointer-events-none ${
-            isEliminated ? "grayscale contrast-125" : ""
-          }`}
-        />
+        {/* Inner container to prevent avatar image overflow */}
+        <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+          <img
+            src={dataUri}
+            alt={name}
+            className={`w-full h-full object-contain pointer-events-none ${
+              isEliminated ? "grayscale contrast-125" : ""
+            }`}
+          />
+        </div>
+
+        {/* Self Identification Badge */}
+        {isMe && (
+          <div
+            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-emerald-400 flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
+            title="You"
+          >
+            <User className="size-3.5 text-black stroke-[3]" />
+          </div>
+        )}
 
         {/* Host Crown Badge */}
         {isHost && (
           <div
-            className="absolute -top-1.5 -right-1.5 size-6 rounded-full border-2 border-black bg-yellow-300 flex items-center justify-center shadow-[1px_1px_0px_#000]"
+            className="absolute -top-1.5 -right-1.5 size-6 rounded-full border-2 border-black bg-yellow-300 flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
             title="Host"
           >
             <Crown className="size-3.5 text-black fill-black" />
           </div>
         )}
 
-        {/* Voted checkmark badge */}
-        {isVotedForMe && !isEliminated && (
+        {/* Voted checkmark badge (only on other players that user voted for) */}
+        {isVotedForMe && !isEliminated && !isMe && (
           <div
-            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-lime-400 flex items-center justify-center shadow-[1px_1px_0px_#000]"
+            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-lime-400 flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
             title="Your vote"
           >
             <Check className="size-3.5 text-black stroke-[3]" />
@@ -138,14 +156,25 @@ export default function AvatarTile({
       </div>
 
       {/* Name and Tags */}
-      <div className="mt-1 text-center max-w-[100px]">
+      <div className="mt-1 text-center max-w-[100px] flex flex-col items-center">
         <span
-          className={`block text-xs font-black truncate ${
-            isEliminated ? "line-through text-gray-500" : "text-black"
+          className={`block text-xs font-black truncate max-w-full ${
+            isEliminated
+              ? "line-through text-gray-500"
+              : isMe
+              ? "text-emerald-700"
+              : "text-black"
           }`}
         >
           {name}
         </span>
+
+        {/* You badge */}
+        {isMe && !isEliminated && (
+          <span className="inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded-tight bg-emerald-300 text-black border border-black shadow-[1px_1px_0px_#000] mt-0.5">
+            YOU
+          </span>
+        )}
 
         {/* Away Badge */}
         {isAway && !isEliminated && (

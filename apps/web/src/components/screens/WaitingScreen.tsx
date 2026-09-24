@@ -46,6 +46,7 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
               avatar={player.avatar}
               name={player.name}
               isHost={player.isHost}
+              isMe={player.id === roomView.me.id}
               isEliminated={player.status === "eliminated"}
               isAway={player.presence === "away"}
               size="sm"

@@ -59,11 +59,13 @@ export default function AvatarPickerModal({
           {/* Avatar Preview */}
           <div className="relative group">
             <div className="size-28 rounded-full border-[3px] border-black bg-[#fdfbf7] p-2 shadow-[4px_4px_0px_#000] flex items-center justify-center overflow-hidden">
-              <img
-                src={previewUri}
-                alt="Avatar preview"
-                className="w-full h-full object-contain pointer-events-none select-none"
-              />
+              <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+                <img
+                  src={previewUri}
+                  alt="Avatar preview"
+                  className="w-full h-full object-contain pointer-events-none select-none"
+                />
+              </div>
             </div>
             <button
               type="button"

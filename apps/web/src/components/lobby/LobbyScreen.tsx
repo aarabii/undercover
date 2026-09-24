@@ -95,6 +95,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
                 avatar={player.avatar}
                 name={player.name}
                 isHost={player.isHost}
+                isMe={isMe}
                 isAway={player.presence === "away"}
                 canEdit={isMe}
                 onEdit={isMe ? () => setSelfEditOpen(true) : undefined}
