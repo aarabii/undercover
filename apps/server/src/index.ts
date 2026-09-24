@@ -9,11 +9,25 @@ import {
   type ClientMessage,
   type ServerMessage,
 } from "@game/protocol";
+import {
+  reduce,
+  viewFor,
+  createRoom,
+  type Room as RoomState,
+  type EngineContext,
+  type ReduceResult,
+  type Action,
+} from "@game/engine";
+import { ServerWordBank } from "./words";
+import { createMulberry32, generateSeed } from "./prng";
+import { initDatabase, loadRoom, saveRoom } from "./storage";
+import { generateShortId, hashToken } from "./utils";
 
 export interface Env {
   Room: DurableObjectNamespace<Room>;
   ALLOWED_ORIGINS?: string;
   TURNSTILE_SECRET?: string;
+  RATE_LIMITER?: RateLimit;
   [key: string]: unknown;
 }
 
@@ -21,31 +35,73 @@ export interface ConnectionState {
   playerId: string;
 }
 
-const MAX_MESSAGE_BYTES = 2048; // 2 KB size limit
+export const MAX_MESSAGE_BYTES = 2048; // 2 KB size limit per Spec §6.3
 
 export class Room extends Server<Env> {
   static options = {
     hibernate: true,
   };
 
+  roomState: RoomState | null = null;
+  rngSeed: number = 0;
+  rng: () => number = Math.random;
+  wordBank: ServerWordBank = new ServerWordBank();
+  reservedUntil?: number;
+
   /**
-   * Loaded once when the Durable Object wakes up.
-   * TODO: [server-shell phase] Load persisted room snapshot from SQLite storage (`this.ctx.storage.sql`)
+   * Loaded once when the Durable Object starts or wakes from hibernation.
    */
   async onStart(): Promise<void> {
-    // Stored room state will be loaded here in the server-shell phase.
+    initDatabase(this.ctx.storage.sql);
+    const persisted = loadRoom(this.ctx.storage.sql);
+    if (persisted) {
+      this.roomState = persisted.room;
+      this.rngSeed = persisted.rngSeed;
+      this.reservedUntil = persisted.reservedUntil;
+      this.rng = createMulberry32(this.rngSeed);
+    } else {
+      this.rngSeed = generateSeed();
+      this.rng = createMulberry32(this.rngSeed);
+      this.roomState = null;
+    }
+  }
+
+  /**
+   * Creates an EngineContext instance injecting deterministic PRNG,
+   * fresh timestamp, collision-free ID generator, and WordBank.
+   */
+  getEngineContext(): EngineContext {
+    return {
+      now: Date.now(),
+      rng: this.rng,
+      newId: () =>
+        generateShortId(this.roomState?.players.map((p) => p.id) ?? []),
+      words: this.wordBank,
+    };
+  }
+
+  /**
+   * Persists current room snapshot to SQLite storage.
+   */
+  persistState(): void {
+    saveRoom(
+      this.ctx.storage.sql,
+      this.name,
+      this.roomState,
+      this.rngSeed,
+      this.reservedUntil
+    );
   }
 
   /**
    * Alarm handler for phase transitions and disconnect timers.
-   * TODO: [server-shell phase] Process earliest scheduled room timer without using setTimeout
    */
   async onAlarm(): Promise<void> {
-    // Durable Object alarm timer processing will be implemented here.
+    // Phase 3 implementation
   }
 
   onConnect(conn: Connection<ConnectionState>, ctx: ConnectionContext) {
-    // Basic connection handling, waiting for "hello" message
+    // Phase 2 implementation
   }
 
   onMessage(conn: Connection<ConnectionState>, message: string | ArrayBuffer) {
@@ -116,12 +172,10 @@ export class Room extends Server<Env> {
     if (clientMsg.type === "hello" && clientMsg.payload.playerId) {
       conn.setState({ playerId: clientMsg.payload.playerId });
     }
-
-    // Action dispatch to engine reduce() will be connected in server-shell phase
   }
 
   onClose(conn: Connection<ConnectionState>) {
-    // Disconnect handling
+    // Phase 2 disconnect handling
   }
 }
 
@@ -141,7 +195,11 @@ export default {
             .map((o) => o.trim())
             .filter(Boolean);
 
-          if (allowedOrigins.length > 0 && origin && !allowedOrigins.includes(origin)) {
+          if (
+            allowedOrigins.length > 0 &&
+            origin &&
+            !allowedOrigins.includes(origin)
+          ) {
             return new Response("Forbidden: Origin not allowed", {
               status: 403,
               headers: { "Content-Type": "text/plain" },
