@@ -96,7 +96,7 @@ undercover/
 ```
 
 - [x] Init monorepo with Bun workspaces
-- [ ] `engine` has zero dependencies on Cloudflare, DOM, or Bun
+- [x] `engine` has zero dependencies on Cloudflare, DOM, or Bun
 - [x] `web` must never import `words` (add a lint rule or dependency-boundary check)
 - [ ] Shared `tsconfig.base.json`, ESLint, Prettier
 - [x] Root scripts: `dev` (web + server together), `test`, `typecheck`, `build`, `check:boundaries`
@@ -110,7 +110,7 @@ viewFor(state, playerId) → RoomView   // sanitized snapshot for ONE player
 ```
 
 - [ ] The Durable Object is a thin shell: parse message → `reduce` → apply effects
-- [ ] Time and randomness are injected, so tests are deterministic
+- [x] Time and randomness are injected, so tests are deterministic
 - [ ] If you ever leave Cloudflare, only `apps/server` is rewritten
 
 ---
@@ -131,19 +131,19 @@ viewFor(state, playerId) → RoomView   // sanitized snapshot for ONE player
 
 ### 3.2 Role distribution
 
-- [ ] Hard validation at start: `infiltrators ≥ 1` and `civilians ≥ infiltrators + 1`
-- [ ] Hard cap: `undercover + mrWhite ≤ floor((n − 1) / 2)`
+- [x] Hard validation at start: `infiltrators ≥ 1` and `civilians ≥ infiltrators + 1`
+- [x] Hard cap: `undercover + mrWhite ≤ floor((n − 1) / 2)`
 - [ ] 💡 Suggested defaults: `floor(n / 3)` infiltrators (min 1): 4–5 → 1, 6–8 → 2, 9–11 → 3, 12–14 → 4
 - [ ] 💡 Default mix: 1 Undercover only for n ≤ 5; add 1 Mr. White from n ≥ 6
 - [ ] Show a warning (not an error) when infiltrators > `n / 3` ("very hard for civilians")
-- [ ] Assign roles with a server-side shuffle (Fisher–Yates using injected `rng`)
+- [x] Assign roles with a server-side shuffle (Fisher–Yates using injected `rng`)
 
 ### 3.3 Words
 
 - [ ] Word bank record: `{ id, category, difficulty, a, b, accept?: string[] }`
 - [ ] Difficulty = how close the two words are (easy = clearly different, hard = very similar)
-- [ ] Each game randomly decides which of `a` / `b` is the Civilian word (so pair order never leaks)
-- [ ] Track `usedPairIds` per room; don't repeat until the pool is exhausted
+- [x] Each game randomly decides which of `a` / `b` is the Civilian word (so pair order never leaks)
+- [x] Track `usedPairIds` per room; don't repeat until the pool is exhausted
 - [ ] Host picks `category` (or Random) and `difficulty` (or Mixed)
 - [ ] Words live **only on the server**. Never ship the bank in the web bundle
 - [ ] 💡 SEO pages show only a **sample** (30–50 pairs), not the full bank. A public full list lets players look up their word's partner
@@ -159,20 +159,20 @@ After **every** elimination (vote, disconnect, leave, kick) compute:
 | `C > I > 0`         |                        | Game continues                                                     |
 | —                   | —                      | **Also:** a correct Mr. White guess → Infiltrators win immediately |
 
-- [ ] Unit-test this table exhaustively for n = 4…20
-- [ ] If nobody is left alive/connected: abort game → back to lobby (no winner)
+- [x] Unit-test this table exhaustively for n = 4…20
+- [x] If nobody is left alive/connected: abort game → back to lobby (no winner)
 
 ### 3.5 Voting
 
-- [ ] One vote per alive player per round; can **change** the vote until voting closes
-- [ ] Cannot vote for: yourself, eliminated players, waiting/pending players
-- [ ] Eliminated, waiting and pending players cannot vote
-- [ ] Voting closes when: **(a)** every alive player (including `away` ones) has voted, **(b)** the vote timer ends, or **(c)** host taps "End voting"
-- [ ] 💡 `away` players count as "not voted", so a brief blip never triggers an early close and eliminates someone
-- [ ] Most votes → eliminated
-- [ ] **Tie for the top** → nobody eliminated (L5)
-- [ ] **Nobody voted** → nobody eliminated (treated as a tie)
-- [ ] Votes are hidden until the tally. After the tally show **vote counts per player** (not who voted for whom) ❓ D5
+- [x] One vote per alive player per round; can **change** the vote until voting closes
+- [x] Cannot vote for: yourself, eliminated players, waiting/pending players
+- [x] Eliminated, waiting and pending players cannot vote
+- [x] Voting closes when: **(a)** every alive player (including `away` ones) has voted, **(b)** the vote timer ends, or **(c)** host taps "End voting"
+- [x] 💡 `away` players count as "not voted", so a brief blip never triggers an early close and eliminates someone
+- [x] Most votes → eliminated
+- [x] **Tie for the top** → nobody eliminated (L5)
+- [x] **Nobody voted** → nobody eliminated (treated as a tie)
+- [x] Votes are hidden until the tally. After the tally show **vote counts per player** (not who voted for whom) ❓ D5
 
 ### 3.6 Elimination
 
@@ -708,14 +708,14 @@ jobs:
 
 ### 16.1 Engine unit tests (`bun test`)
 
-- [ ] Role distribution validation for n = 4…20
-- [ ] Win-check table (every combination of C and I)
-- [ ] Vote tally: clear winner, 2-way tie, 3-way tie, nobody voted, votes for eliminated players void
-- [ ] Round-end ordering: disconnect elimination + vote elimination in one round
-- [ ] Mr. White: correct guess, wrong guess, timeout, disconnected (no guess), two Mr. Whites
-- [ ] Guess normalization: case, accents, articles, plurals, aliases, edit distance
-- [ ] Host migration choice; pause/resume math; pair rotation without repeats
-- [ ] View sanitization: assert **no** foreign role/word ever appears in `viewFor` output (property test)
+- [x] Role distribution validation for n = 4…20
+- [x] Win-check table (every combination of C and I)
+- [x] Vote tally: clear winner, 2-way tie, 3-way tie, nobody voted, votes for eliminated players void
+- [x] Round-end ordering: disconnect elimination + vote elimination in one round
+- [x] Mr. White: correct guess, wrong guess, timeout, disconnected (no guess), two Mr. Whites
+- [x] Guess normalization: case, accents, articles, plurals, aliases, edit distance
+- [x] Host migration choice; pause/resume math; pair rotation without repeats
+- [x] View sanitization: assert **no** foreign role/word ever appears in `viewFor` output (property test)
 
 ### 16.2 Server tests (Vitest in the Workers runtime)
 
@@ -769,7 +769,7 @@ jobs:
 
 ## 18. Build order
 
-1. [ ] **Engine** + tests (roles, votes, win check, Mr. White, timers as pure data)
+1. [x] **Engine** + tests (roles, votes, win check, Mr. White, timers as pure data)
 2. [ ] **Protocol** package (Zod schemas, constants)
 3. [ ] **Server shell**: Worker routes, Room DO, hello/reconnect, persistence, alarms
 4. [ ] **Web shell**: Astro + React island, Zustand store, PartySocket, profile/avatar, create/join screens
