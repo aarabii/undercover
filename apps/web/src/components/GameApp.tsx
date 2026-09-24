@@ -1,124 +1,161 @@
 import { useState, useEffect } from "react";
 import { useGameStore } from "@/stores/gameStore";
-import { MIN_PLAYERS, ROOM_CODE_LENGTH } from "@game/types";
+import CreateFlow from "@/components/CreateFlow";
+import JoinFlow from "@/components/JoinFlow";
+import PendingScreen from "@/components/PendingScreen";
+import StatusNoticeScreen from "@/components/StatusNoticeScreen";
+import { ROOM_CODE_LENGTH } from "@game/types";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BrandLogo } from "@/components/BrandLogo";
-import { GiPadlock, GiEntryDoor, GiSpy } from "react-icons/gi";
+import { GiPadlock, GiEntryDoor } from "react-icons/gi";
+
+type FlowMode = "menu" | "create" | "join";
 
 export default function GameApp() {
-  const { connectionStatus, roomView, profile, setProfile } = useGameStore();
-  const [code, setCode] = useState("");
+  const {
+    roomView,
+    declined,
+    kicked,
+    replaced,
+    roomClosed,
+    profile,
+    setProfile,
+  } = useGameStore();
+
+  const [mode, setMode] = useState<FlowMode>("menu");
+  const [initialCode, setInitialCode] = useState("");
+  const [isLockedCode, setIsLockedCode] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const pathname = window.location.pathname;
+      const pathMatch = pathname.match(/\/r\/([23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6})/i);
+
       const params = new URLSearchParams(window.location.search);
       const urlCode = params.get("code");
+      const urlAction = params.get("action");
       const urlName = params.get("name");
-      if (urlCode) {
-        setCode(urlCode.toUpperCase().slice(0, ROOM_CODE_LENGTH));
-      }
+
       if (urlName) {
         setProfile({ ...profile, name: urlName.slice(0, 16) });
+      }
+
+      if (pathMatch) {
+        setInitialCode(pathMatch[1].toUpperCase());
+        setIsLockedCode(true);
+        setMode("join");
+      } else if (urlCode) {
+        setInitialCode(urlCode.toUpperCase().slice(0, ROOM_CODE_LENGTH));
+        setIsLockedCode(true);
+        setMode("join");
+      } else if (urlAction === "create") {
+        setMode("create");
+      } else if (urlAction === "join") {
+        setMode("join");
       }
     }
   }, []);
 
+  // 1. Terminal / Disconnected / Notice states
+  if (declined || kicked || replaced || roomClosed) {
+    return (
+      <StatusNoticeScreen
+        onHome={() => {
+          setMode("menu");
+          if (typeof window !== "undefined" && window.location.pathname !== "/play") {
+            window.location.href = "/";
+          }
+        }}
+      />
+    );
+  }
+
+  // 2. Connected Room View handling
+  if (roomView) {
+    // If pending host approval
+    if (roomView.me.status === "pending") {
+      return <PendingScreen />;
+    }
+
+    // Temporary placeholder for Phase 3 Lobby & Phase 4 In-game
+    return (
+      <div className="w-full max-w-md mx-auto space-y-4 text-center font-para">
+        <div className="p-4 bg-yellow-200 border-[3px] border-black rounded-base shadow-[4px_4px_0px_#000] font-mono text-2xl font-black tracking-widest">
+          ROOM: {roomView.code}
+        </div>
+        <div className="bg-white border-[3px] border-black rounded-base p-6 shadow-[4px_4px_0px_#000] space-y-4">
+          <div className="flex justify-between items-center text-sm font-bold">
+            <span>Phase:</span>
+            <Badge variant="lime">{roomView.phase}</Badge>
+          </div>
+          <div className="flex justify-between items-center text-sm font-bold">
+            <span>Your Status:</span>
+            <Badge variant="secondary">{roomView.me.status}</Badge>
+          </div>
+          <div className="flex justify-between items-center text-sm font-bold">
+            <span>Players:</span>
+            <span>
+              {roomView.players.length} / {roomView.settings.maxPlayers}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Pre-connection Flow States
+  if (mode === "create") {
+    return <CreateFlow initialCode={initialCode} onBack={() => setMode("menu")} />;
+  }
+
+  if (mode === "join") {
+    return (
+      <JoinFlow
+        initialCode={initialCode}
+        isLockedCode={isLockedCode}
+        onBack={() => setMode("menu")}
+      />
+    );
+  }
+
+  // 4. Default Menu Mode
   return (
-    <div className="flex flex-col items-center justify-center min-h-[75dvh] py-6 text-center font-para">
-      <Card className="w-full max-w-md text-left bg-white border-[3px] border-black shadow-[6px_6px_0px_0px_#000000]">
+    <div className="flex flex-col items-center justify-center min-h-[60dvh] py-6 text-center font-para w-full max-w-md mx-auto">
+      <Card className="w-full text-left bg-white border-[3px] border-black shadow-[6px_6px_0px_#000]">
         <CardHeader className="border-b-2 border-black pb-4">
           <div className="flex items-center justify-between">
             <BrandLogo size="sm" showTagline={false} />
-            <Badge variant="primary">v1.0</Badge>
+            <Badge variant="primary">No Login</Badge>
           </div>
           <CardDescription className="text-xs font-bold text-gray-700 uppercase tracking-wider mt-1">
-            Real-time, no-login social deduction word game.
+            Real-time social deduction word game
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-6 pt-6">
-          {roomView ? (
-            <div className="space-y-4">
-              <div className="p-4 bg-yellow-200 border-[3px] border-black rounded-base shadow-brutal text-center font-mono text-2xl font-black tracking-widest">
-                ROOM: {roomView.code}
-              </div>
-              <div className="flex justify-between items-center text-sm font-bold">
-                <span>Phase:</span>
-                <Badge variant="lime">{roomView.phase}</Badge>
-              </div>
-              <div className="flex justify-between items-center text-sm font-bold">
-                <span>Players:</span>
-                <span>
-                  {roomView.players.length} / {roomView.settings.maxPlayers}
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase tracking-wider">Your Name</label>
-                <Input
-                  type="text"
-                  value={profile.name}
-                  maxLength={16}
-                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  placeholder="Enter your name"
-                  className="font-bold"
-                />
-              </div>
+        <CardContent className="space-y-4 pt-6">
+          <Button
+            type="button"
+            size="lg"
+            variant="default"
+            onClick={() => setMode("create")}
+            className="w-full h-14 text-base font-black bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <GiPadlock className="size-5 shrink-0" />
+            <span>Create New Room</span>
+          </Button>
 
-              <div className="space-y-1.5">
-                <label className="block text-xs font-black uppercase tracking-wider">Room Code</label>
-                <Input
-                  type="text"
-                  value={code}
-                  maxLength={ROOM_CODE_LENGTH}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  className="font-mono text-center tracking-widest text-lg uppercase font-black"
-                  placeholder="6-LETTER CODE"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <Button
-                  type="button"
-                  variant="default"
-                  onClick={() => alert("Creating room...")}
-                  className="w-full font-black bg-lime-400 hover:bg-lime-300 text-black border-[3px] border-black shadow-brutal flex items-center justify-center gap-1.5"
-                >
-                  <GiPadlock className="size-4 shrink-0" />
-                  <span>Create Room</span>
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  disabled={code.length !== ROOM_CODE_LENGTH}
-                  onClick={() => alert(`Joining room ${code}...`)}
-                  className="w-full font-black bg-sky-300 hover:bg-sky-200 text-black border-[3px] border-black shadow-brutal flex items-center justify-center gap-1.5 disabled:opacity-50"
-                >
-                  <GiEntryDoor className="size-4 shrink-0" />
-                  <span>Join Room</span>
-                </Button>
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center justify-between pt-3 border-t-2 border-black/10 text-xs font-mono text-gray-500">
-            <span className="flex items-center gap-1">
-              <GiSpy className="size-3.5" /> Min players: {MIN_PLAYERS}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span
-                className={`size-2.5 rounded-full border border-black ${
-                  connectionStatus === "connected" ? "bg-green-500" : "bg-gray-400"
-                }`}
-              />
-              {connectionStatus}
-            </span>
-          </div>
+          <Button
+            type="button"
+            size="lg"
+            variant="secondary"
+            onClick={() => setMode("join")}
+            className="w-full h-14 text-base font-black bg-sky-300 hover:bg-sky-200 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <GiEntryDoor className="size-5 shrink-0" />
+            <span>Join Existing Room</span>
+          </Button>
         </CardContent>
       </Card>
     </div>
