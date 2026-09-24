@@ -25,7 +25,7 @@ export default function AvatarPickerModal({
   currentAvatar,
   onSave,
 }: AvatarPickerModalProps) {
-  const [style, setStyle] = useState(currentAvatar.style || "bottts");
+  const [style, setStyle] = useState(currentAvatar.style || "lorelei");
   const [seed, setSeed] = useState(currentAvatar.seed || "agent");
 
   const previewUri = getAvatarDataUri({ style, seed, options: currentAvatar.options });

@@ -43,7 +43,7 @@ export interface GameStoreState {
 const DEFAULT_PROFILE: StoredProfile = {
   name: "Agent",
   avatar: {
-    style: "bottts",
+    style: "lorelei",
     seed: "agent-1",
   },
 };

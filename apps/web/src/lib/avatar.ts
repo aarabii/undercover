@@ -1,6 +1,6 @@
 import { createAvatar } from "@dicebear/core";
 import {
-  bottts,
+  lorelei,
   thumbs,
   shapes,
   identicon,
@@ -10,7 +10,7 @@ import {
 import type { AvatarConfig } from "@game/types";
 
 export const ALLOWED_AVATAR_STYLES = [
-  { id: "bottts", label: "Robots" },
+  { id: "lorelei", label: "Lorelei" },
   { id: "thumbs", label: "Thumbs" },
   { id: "shapes", label: "Shapes" },
   { id: "identicon", label: "Identicon" },
@@ -21,7 +21,8 @@ export const ALLOWED_AVATAR_STYLES = [
 export type AllowedAvatarStyleId = (typeof ALLOWED_AVATAR_STYLES)[number]["id"];
 
 const STYLE_MAP: Record<string, any> = {
-  bottts,
+  lorelei,
+  bottts: lorelei, // Graceful fallback for legacy stored avatars
   thumbs,
   shapes,
   identicon,
@@ -37,7 +38,7 @@ const avatarUriCache = new Map<string, string>();
  * Result is cached in-memory by style, seed, and options.
  */
 export function getAvatarDataUri(avatar: AvatarConfig): string {
-  const styleKey = avatar.style || "bottts";
+  const styleKey = avatar.style || "lorelei";
   const seedKey = avatar.seed || "agent";
   const optionsKey = avatar.options ? JSON.stringify(avatar.options) : "";
   const cacheKey = `${styleKey}:${seedKey}:${optionsKey}`;
@@ -45,7 +46,7 @@ export function getAvatarDataUri(avatar: AvatarConfig): string {
   const cached = avatarUriCache.get(cacheKey);
   if (cached) return cached;
 
-  const styleDefinition = STYLE_MAP[styleKey] || bottts;
+  const styleDefinition = STYLE_MAP[styleKey] || lorelei;
 
   try {
     const avatarInstance = createAvatar(styleDefinition, {
