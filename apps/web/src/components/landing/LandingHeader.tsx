@@ -2,43 +2,36 @@ import React, { useState } from "react";
 import BrandLogo from "@/components/common/BrandLogo";
 import RulesDialog from "@/components/modals/RulesDialog";
 import { Button } from "@/components/ui/button";
-import { GiSecretBook, GiEntryDoor } from "react-icons/gi";
+import { GiSecretBook } from "react-icons/gi";
 
 export const LandingHeader: React.FC = () => {
   const [rulesOpen, setRulesOpen] = useState(false);
 
   return (
-    <header className="w-full flex items-center justify-between">
-      <a href="/" className="hover:opacity-95 transition-opacity">
+    <header className="w-full max-w-full min-w-0 flex items-center justify-between gap-2 overflow-hidden">
+      <a
+        href="/"
+        className="min-w-0 shrink hover:opacity-95 transition-opacity"
+      >
         <BrandLogo size="md" showTagline={true} />
       </a>
 
-      <nav className="flex items-center gap-2.5 sm:gap-3">
+      <nav className="shrink-0 flex items-center gap-2.5 sm:gap-3">
         <Button
           type="button"
           variant="outline"
           size="sm"
           onClick={() => setRulesOpen(true)}
-          className="bg-white hover:bg-yellow-200 font-bold border-2 border-black shadow-brutal-sm text-xs sm:text-sm flex items-center gap-1.5"
+          className="bg-white hover:bg-yellow-200 font-bold border-2 border-black shadow-brutal-sm text-xs sm:text-sm flex items-center gap-1.5 whitespace-nowrap"
         >
-          <GiSecretBook className="size-4" />
-          <span>How Not to Lose</span>
-        </Button>
+          <GiSecretBook className="size-4 shrink-0" />
 
-        <a href="/play">
-          <Button
-            type="button"
-            variant="default"
-            size="sm"
-            className="bg-[#facc15] hover:bg-yellow-300 text-black font-black border-2 border-black shadow-brutal-sm text-xs sm:text-sm flex items-center gap-1.5"
-          >
-            <GiEntryDoor className="size-4" />
-            <span>Start Accusing</span>
-          </Button>
-        </a>
+          <span className="hidden sm:inline">How Not to Lose</span>
+
+          <span className="sm:hidden">Rules</span>
+        </Button>
       </nav>
 
-      {/* Rules Dialog Modal */}
       <RulesDialog open={rulesOpen} onOpenChange={setRulesOpen} />
     </header>
   );

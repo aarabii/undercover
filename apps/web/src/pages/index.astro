@@ -17,7 +17,7 @@ import { Badge } from "../components/ui/badge";
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>Undercover — Social Deduction Word Game</title>
+    <title>Undercover | Social Deduction Word Game</title>
     <meta
       name="description"
       content="A real-time, zero-login social deduction word game for groups and calls. Civilians vs Undercover vs Mr. White. Built with neo-brutalism design."
@@ -27,7 +27,7 @@ import { Badge } from "../components/ui/badge";
     <meta property="og:image" content="https://undercover.aarab.me/og-image.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Undercover — Social Deduction Word Game" />
+    <meta name="twitter:title" content="Undercover | Social Deduction Word Game" />
     <meta name="twitter:description" content="Find the impostor before they find you. Instant browser play for 4–20 players." />
     <meta name="twitter:image" content="https://undercover.aarab.me/og-image.png" />
   </head>
@@ -79,27 +79,47 @@ import { Badge } from "../components/ui/badge";
 
     <!-- Footer -->
     <footer class="border-t-[3px] border-black bg-white py-8 mt-16">
-      <Container id="footer-container" className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-        <div class="flex items-center gap-3">
-          <BrandLogo size="sm" showTagline={true} />
-        </div>
+        <Container
+          id="footer-container"
+          className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left"
+        >
+          <div class="flex items-center gap-3">
+            <BrandLogo size="sm" showTagline={true} />
+          </div>
 
-        <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-gray-700">
-          <span class="px-2.5 py-1 rounded-base border-2 border-black bg-yellow-200 shadow-brutal-sm">
-            Cloudflare Workers
-          </span>
-          <span class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-200 shadow-brutal-sm">
-            PartyServer
-          </span>
-          <span class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-200 shadow-brutal-sm">
-            Astro + React
-          </span>
-        </div>
+          <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-gray-700">
+            <a
+              href="https://www.aarab.me/license"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-yellow-200 shadow-brutal-sm no-underline text-inherit"
+            >
+              License
+            </a>
 
-        <div class="text-xs font-black uppercase tracking-wider text-gray-600 font-mono">
-          Zero sign-up • 100% free • No friendship warranty
-        </div>
-      </Container>
+            <a
+              href="https://www.aarab.me/privacy"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-200 shadow-brutal-sm no-underline text-inherit"
+            >
+              Privacy Policy
+            </a>
+
+            <a
+              href="https://www.aarab.me/terms"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-200 shadow-brutal-sm no-underline text-inherit"
+            >
+              Terms
+            </a>
+          </div>
+
+          <div class="text-xs font-black uppercase tracking-wider text-gray-600 font-mono">
+            Made with • ❤️ •{" "}
+            <a
+              href="https://aarab.me"
+              class="no-underline text-inherit"
+            >
+              aarabii
+            </a>
+          </div>
+        </Container>
     </footer>
   </body>
 </html>
