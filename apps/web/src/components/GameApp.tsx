@@ -4,6 +4,8 @@ import CreateFlow from "@/components/CreateFlow";
 import JoinFlow from "@/components/JoinFlow";
 import PendingScreen from "@/components/PendingScreen";
 import StatusNoticeScreen from "@/components/StatusNoticeScreen";
+import LobbyScreen from "@/components/LobbyScreen";
+import WaitingScreen from "@/components/WaitingScreen";
 import { ROOM_CODE_LENGTH } from "@game/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardDescription, CardContent } from "@/components/ui/card";
@@ -79,7 +81,17 @@ export default function GameApp() {
       return <PendingScreen />;
     }
 
-    // Temporary placeholder for Phase 3 Lobby & Phase 4 In-game
+    // If waiting spectator
+    if (roomView.me.status === "waiting") {
+      return <WaitingScreen roomView={roomView} />;
+    }
+
+    // Lobby Phase
+    if (roomView.phase === "LOBBY") {
+      return <LobbyScreen roomView={roomView} />;
+    }
+
+    // Placeholder for Phase 4 In-game
     return (
       <div className="w-full max-w-md mx-auto space-y-4 text-center font-para">
         <div className="p-4 bg-yellow-200 border-[3px] border-black rounded-base shadow-[4px_4px_0px_#000] font-mono text-2xl font-black tracking-widest">
@@ -93,12 +105,6 @@ export default function GameApp() {
           <div className="flex justify-between items-center text-sm font-bold">
             <span>Your Status:</span>
             <Badge variant="secondary">{roomView.me.status}</Badge>
-          </div>
-          <div className="flex justify-between items-center text-sm font-bold">
-            <span>Players:</span>
-            <span>
-              {roomView.players.length} / {roomView.settings.maxPlayers}
-            </span>
           </div>
         </div>
       </div>
