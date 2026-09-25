@@ -72,53 +72,25 @@ describe("Word Bank Data Integrity", () => {
   });
 });
 
-describe("Word Assignment & Random 50/50 Distribution", () => {
-  test("getWordPair assigns dynamic accept equal to civilian word (a)", () => {
+describe("Word Bank Selection", () => {
+  test("getWordPair selects a pair without accept property", () => {
     const pair = getWordPair("Food", "easy");
     expect(pair).toBeDefined();
-    expect(pair.accept).toBe(pair.a);
+    expect(pair.accept).toBeUndefined();
+    expect(pair.a).toBeDefined();
+    expect(pair.b).toBeDefined();
   });
 
-  test("getWordPair randomly flips words so pair order is not deterministic", () => {
-    // Pick the same category and difficulty 200 times and observe the distribution of flipped order
-    let word1FirstCount = 0;
-    let word2FirstCount = 0;
-    const trials = 200;
-
-    // Fixed mock pair data to isolate flip behavior
-    for (let i = 0; i < trials; i++) {
-      const pair = getWordPair("Animals", "easy", [], Math.random);
-      // Look up raw pair
-      const raw = EASY_PAIRS.find((p) => p.id === pair.id)!;
-      if (pair.a === raw.a) {
-        word1FirstCount++;
-      } else {
-        word2FirstCount++;
-      }
-    }
-
-    // Over 200 trials with p = 0.5, each should easily be between 25% and 75%
-    expect(word1FirstCount).toBeGreaterThan(50);
-    expect(word2FirstCount).toBeGreaterThan(50);
+  test("getWordPair respects category and difficulty filters", () => {
+    const pair = getWordPair("Animals", "easy");
+    expect(pair.category).toBe("Animals");
+    expect(pair.difficulty).toBe("easy");
   });
 
-  test("respects deterministic injected RNG", () => {
-    // When rng always returns < 0.5 for flip
-    const rng1 = () => 0.1;
-    const pair1 = getWordPair("Animals", "easy", [], rng1);
-    const raw = EASY_PAIRS.find((p) => p.id === pair1.id)!;
-    expect(pair1.a).toBe(raw.a);
-    expect(pair1.b).toBe(raw.b);
-
-    // When rng returns >= 0.5 for flip
-    let callCount = 0;
-    const rng2 = () => {
-      callCount++;
-      return callCount === 1 ? 0.0 : 0.9; // 0.0 picks first element, 0.9 causes flip
-    };
-    const pair2 = getWordPair("Animals", "easy", [], rng2);
-    const raw2 = EASY_PAIRS.find((p) => p.id === pair2.id)!;
-    expect(pair2.a).toBe(raw2.b);
-    expect(pair2.b).toBe(raw2.a);
+  test("respects deterministic injected RNG for pair selection", () => {
+    const rng = () => 0.0;
+    const pair = getWordPair("Animals", "easy", [], rng);
+    const animalEasy = EASY_PAIRS.filter((p) => p.category === "Animals");
+    expect(pair.id).toBe(animalEasy[0].id);
   });
 });

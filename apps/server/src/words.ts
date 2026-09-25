@@ -45,18 +45,12 @@ export class ServerWordBank implements WordBank {
       return null;
     }
 
-    // 4. Select pair using injected RNG with 50/50 flip
+    // 4. Select pair using injected RNG
     const index = Math.floor(rng() * candidates.length);
     const selected = candidates[index];
-    const flip = rng() < 0.5;
-    const a = flip ? selected.a : selected.b;
-    const b = flip ? selected.b : selected.a;
 
     return {
       ...selected,
-      a,
-      b,
-      accept: a,
     };
   }
 }

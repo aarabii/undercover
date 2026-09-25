@@ -40,23 +40,23 @@ describe("Phase 4: Mr. White Guess and Normalization", () => {
       { desc: "drop 'an'", guess: "an apple", target: "apple", expected: true },
       { desc: "target has article, guess does not", guess: "apple", target: "an apple", expected: true },
 
-      // Simple Plurals
-      { desc: "plural guess (apples -> apple)", guess: "apples", target: "apple", expected: true },
-      { desc: "singular guess (apple -> apples)", guess: "apple", target: "apples", expected: true },
-      { desc: "es plural (boxes -> box)", guess: "boxes", target: "box", expected: true },
-      { desc: "es plural (tomatoes -> tomato)", guess: "tomatoes", target: "tomato", expected: true },
+      // Simple Plurals (no plural tolerance - exact match required)
+      { desc: "plural guess (apples -> apple)", guess: "apples", target: "apple", expected: false },
+      { desc: "singular guess (apple -> apples)", guess: "apple", target: "apples", expected: false },
+      { desc: "es plural (boxes -> box)", guess: "boxes", target: "box", expected: false },
+      { desc: "es plural (tomatoes -> tomato)", guess: "tomatoes", target: "tomato", expected: false },
 
       // Aliases
       { desc: "match primary alias", guess: "espresso", target: "coffee", aliases: ["espresso", "latte"], expected: true },
       { desc: "match secondary alias with formatting", guess: "  The Latte! ", target: "coffee", aliases: ["espresso", "latte"], expected: true },
 
-      // Edit distance <= 1 for words >= 5 letters
-      { desc: "1 typo insertion on 6-letter word (bananna -> banana)", guess: "bananna", target: "banana", expected: true },
-      { desc: "1 typo omission on 6-letter word (banan -> banana)", guess: "banan", target: "banana", expected: true },
-      { desc: "1 typo substitution on 6-letter word (banama -> banana)", guess: "banama", target: "banana", expected: true },
+      // No typo tolerance (exact normalized word match required)
+      { desc: "1 typo insertion on 6-letter word (bananna -> banana)", guess: "bananna", target: "banana", expected: false },
+      { desc: "1 typo omission on 6-letter word (banan -> banana)", guess: "banan", target: "banana", expected: false },
+      { desc: "1 typo substitution on 6-letter word (banama -> banana)", guess: "banama", target: "banana", expected: false },
       { desc: "2 typos on 6-letter word (bannnaa -> banana)", guess: "bannnaa", target: "banana", expected: false },
 
-      // Edit distance NOT allowed for words < 5 letters
+      // Edit distance rejected on all word lengths
       { desc: "1 typo on 3-letter word rejected (cot -> cat)", guess: "cot", target: "cat", expected: false },
       { desc: "1 typo on 4-letter word rejected (dock -> duck)", guess: "dock", target: "duck", expected: false },
 

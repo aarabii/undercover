@@ -35,15 +35,7 @@ export function getWordPair(
   const selectedIndex = Math.floor(rng() * candidates.length);
   const selected = candidates[selectedIndex];
 
-  // 50/50 random coin flip so word1 and word2 have equal probability of being Civilian
-  const flip = rng() < 0.5;
-  const a = flip ? selected.a : selected.b;
-  const b = flip ? selected.b : selected.a;
-
   return {
     ...selected,
-    a,
-    b,
-    accept: a,
   };
 }

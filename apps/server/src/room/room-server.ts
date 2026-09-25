@@ -18,7 +18,7 @@ import {
   type Action,
 } from "@game/engine";
 import { ServerWordBank } from "../words";
-import { createMulberry32, generateSeed } from "../prng";
+import { createMulberry32, generateSeed, cryptoRandom } from "../prng";
 import { initDatabase, loadRoom, saveRoom } from "../storage";
 import { generateShortId, hashToken } from "../utils";
 import {
@@ -43,7 +43,7 @@ export class Room extends Server<Env> {
 
   roomState: RoomState | null = null;
   rngSeed: number = 0;
-  rng: () => number = Math.random;
+  rng: () => number = cryptoRandom;
   wordBank: ServerWordBank = new ServerWordBank();
   reservedUntil?: number;
 
@@ -57,22 +57,22 @@ export class Room extends Server<Env> {
       this.roomState = persisted.room;
       this.rngSeed = persisted.rngSeed;
       this.reservedUntil = persisted.reservedUntil;
-      this.rng = createMulberry32(this.rngSeed);
+      this.rng = cryptoRandom;
     } else {
       this.rngSeed = generateSeed();
-      this.rng = createMulberry32(this.rngSeed);
+      this.rng = cryptoRandom;
       this.roomState = null;
     }
   }
 
   /**
-   * Creates an EngineContext instance injecting deterministic PRNG,
+   * Creates an EngineContext instance injecting cryptographically random RNG,
    * fresh timestamp, collision-free ID generator, and WordBank.
    */
   getEngineContext(): EngineContext {
     return {
       now: Date.now(),
-      rng: this.rng,
+      rng: cryptoRandom,
       newId: () =>
         generateShortId(this.roomState?.players.map((p) => p.id) ?? []),
       words: this.wordBank,
@@ -401,6 +401,9 @@ export class Room extends Server<Env> {
     if (clientMsg.type === "leave") {
       action = { type: "leave", playerId: senderPlayerId };
     } else {
+      if (clientMsg.type === "host.start") {
+        this.rngSeed = generateSeed();
+      }
       action = {
         ...clientMsg,
         playerId: senderPlayerId,

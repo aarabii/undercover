@@ -110,7 +110,6 @@ export function handleStart(
       difficulty: "medium",
       a: "Sun",
       b: "Moon",
-      accept: ["Solar"],
     };
   }
 
@@ -146,11 +145,7 @@ export function handleStart(
     undercoverWord,
     pairId: pair.id,
     votes: {},
-    civilianAliases: pair.accept
-      ? Array.isArray(pair.accept)
-        ? pair.accept
-        : [pair.accept]
-      : [civilianWord],
+    civilianAliases: [civilianWord],
   };
 
   return {

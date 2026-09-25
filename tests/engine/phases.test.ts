@@ -113,7 +113,6 @@ describe("Phase 2: Start game and phases", () => {
         difficulty: "medium",
         a: "Apple",
         b: "Pear",
-        accept: ["Fruit"],
       };
 
       const customCtx = createMockContext({
@@ -133,7 +132,7 @@ describe("Phase 2: Start game and phases", () => {
       expect(res.state.usedPairIds).toContain("pair-10");
       expect(res.state.game).toBeDefined();
       expect(res.state.game?.pairId).toBe("pair-10");
-      expect(res.state.game?.civilianAliases).toEqual(["Fruit"]);
+      expect(res.state.game?.civilianAliases).toEqual(["Apple"]);
 
       // Verify roles assigned: 3 civilians, 1 undercover
       const roles = res.state.players.map((p) => p.role);

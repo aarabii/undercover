@@ -20,3 +20,15 @@ export function generateSeed(): number {
   crypto.getRandomValues(buf);
   return buf[0] >>> 0;
 }
+
+/**
+ * Generates a cryptographically random float in [0, 1),
+ * using 53 bits of entropy (standard IEEE 754 double precision).
+ * Immune to server hibernation and re-seeding issues.
+ */
+export function cryptoRandom(): number {
+  const buf = new Uint32Array(2);
+  crypto.getRandomValues(buf);
+  return ((buf[0] >>> 5) * 67108864 + (buf[1] >>> 6)) / 9007199254740992;
+}
+

@@ -75,29 +75,8 @@ export function matchesTarget(guess: string, target: string): boolean {
     return false;
   }
 
-  // 1. Direct equality after normalization
-  if (normGuess === normTarget) {
-    return true;
-  }
-
-  // 2. Simple plurals comparison
-  const stemGuess = stemSimplePlural(normGuess);
-  const stemTarget = stemSimplePlural(normTarget);
-  if (stemGuess === stemTarget) {
-    return true;
-  }
-
-  // 3. Edit distance <= 1 when target word has >= 5 letters (Spec §3.7)
-  if (normTarget.length >= 5) {
-    if (levenshteinDistance(normGuess, normTarget) <= 1) {
-      return true;
-    }
-    if (levenshteinDistance(stemGuess, stemTarget) <= 1) {
-      return true;
-    }
-  }
-
-  return false;
+  // Exact match after basic normalization (case-insensitive, trimmed, accents/punctuation ignored)
+  return normGuess === normTarget;
 }
 
 export function evaluateMrWhiteGuess(
