@@ -15,26 +15,44 @@ export default function EliminationResultCard({
 
   if (lastElimination.isTie) {
     return (
-      <div className="w-full bg-yellow-100 border-[3px] border-black rounded-base p-6 shadow-[4px_4px_0px_#000] text-center space-y-3 animate-in fade-in duration-300">
+      <div
+        className="
+          w-full
+          max-w-full
+          overflow-hidden
+          bg-yellow-100
+          border-[3px]
+          border-black
+          rounded-base
+          p-4 sm:p-6
+          shadow-[4px_4px_0px_#000]
+          text-center
+          space-y-3
+          animate-in
+          fade-in
+          duration-300
+        "
+      >
         <div className="size-16 rounded-full border-[3px] border-black bg-yellow-300 mx-auto flex items-center justify-center shadow-[3px_3px_0px_#000]">
           <Scale className="size-8 text-black" />
         </div>
 
-        <div className="space-y-1">
-          <span className="font-heading font-black text-2xl uppercase tracking-wider text-black">
+        <div className="space-y-1 min-w-0">
+          <span className="block font-heading font-black text-2xl uppercase tracking-wider text-black break-words">
             TIE — Nobody Eliminated
           </span>
-          <p className="text-xs font-bold text-gray-700">
-            A deadlock. Nobody could agree on who looked the shadiest. Everyone survives to lie another round.
+
+          <p className="text-xs font-bold text-gray-700 break-words">
+            A deadlock. Nobody could agree on who looked the shadiest. Everyone
+            survives to lie another round.
           </p>
         </div>
       </div>
     );
   }
 
-  // Find eliminated player data
   const eliminatedPlayer = players.find(
-    (p) => p.id === lastElimination.eliminatedId
+    (p) => p.id === lastElimination.eliminatedId,
   );
 
   const roleTitle =
@@ -46,20 +64,40 @@ export default function EliminationResultCard({
     lastElimination.role === "CIVILIAN"
       ? "bg-lime-400"
       : lastElimination.role === "UNDERCOVER"
-      ? "bg-sky-300"
-      : "bg-white border-dashed";
+        ? "bg-sky-300"
+        : "bg-white border-dashed";
 
   return (
-    <div className="w-full bg-white border-[3px] border-black rounded-base p-6 shadow-[4px_4px_0px_#000] text-center space-y-4 animate-in zoom-in-95 duration-300">
-      <div className="flex items-center justify-center gap-2">
-        <Skull className="size-6 text-red-600" />
-        <span className="font-heading font-black text-xl uppercase tracking-wider text-black">
+    <div
+      className="
+        w-full
+        max-w-full
+        overflow-hidden
+        bg-white
+        border-[3px]
+        border-black
+        rounded-base
+        p-4 sm:p-6
+        shadow-[4px_4px_0px_#000]
+        text-center
+        space-y-4
+        animate-in
+        zoom-in-95
+        duration-300
+      "
+    >
+      {/* Header */}
+      <div className="flex items-center justify-center gap-2 min-w-0">
+        <Skull className="size-6 shrink-0 text-red-600" />
+
+        <span className="font-heading font-black text-xl uppercase tracking-wider text-black break-words">
           The Verdict
         </span>
       </div>
 
+      {/* Eliminated Player */}
       {eliminatedPlayer && (
-        <div className="flex flex-col items-center gap-2 py-2">
+        <div className="flex flex-col items-center gap-2 py-2 min-w-0">
           <AvatarTile
             avatar={eliminatedPlayer.avatar}
             name={eliminatedPlayer.name}
@@ -69,20 +107,38 @@ export default function EliminationResultCard({
         </div>
       )}
 
-      {/* Role Reveal Banner */}
-      <div className="space-y-1">
+      {/* Role Reveal */}
+      <div className="flex flex-col items-center gap-2 min-w-0">
         <span className="text-xs font-bold uppercase tracking-wider text-gray-600">
           Actual Identity:
         </span>
+
         <div
-          className={`py-2 px-4 rounded-base border-[3px] border-black font-heading font-black text-2xl uppercase tracking-wider text-black shadow-[3px_3px_0px_#000] inline-block ${roleColor}`}
+          className={`
+            max-w-full
+            py-2
+            px-4
+            rounded-base
+            border-[3px]
+            border-black
+            font-heading
+            font-black
+            text-xl sm:text-2xl
+            uppercase
+            tracking-wider
+            text-black
+            shadow-[3px_3px_0px_#000]
+            break-words
+            [overflow-wrap:anywhere]
+            ${roleColor}
+          `}
         >
           {roleTitle}
         </div>
       </div>
 
       {/* Elimination Reason */}
-      <p className="text-xs font-bold text-gray-700">
+      <p className="text-xs font-bold text-gray-700 break-words">
         Voted out. The jury has spoken, and the jury was ruthless.
       </p>
     </div>
