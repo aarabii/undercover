@@ -48,11 +48,53 @@ import GameApp from "../components/GameApp";
     </main>
 
     <footer class="border-t-[3px] border-black py-4 bg-white/50 text-center">
-      <Container id="play-footer">
-        <span class="text-xs font-bold text-gray-600 font-mono">
-          UNDERCOVER • Social Deduction • Deny Everything
-        </span>
-      </Container>
+        <Container
+          id="footer-container"
+          className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left"
+        >
+          <div class="flex items-center gap-3">
+            <BrandLogo size="sm" showTagline={true} />
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-gray-700">
+            <a
+              href="https://github.com/aarabii/undercover/issues/new?template=bug_report.yml"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-yellow-200 shadow-brutal-sm no-underline text-inherit"
+            >
+              Report a Bug
+            </a>
+
+            <a
+              href="https://www.aarab.me/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-200 shadow-brutal-sm no-underline text-inherit"
+            >
+                Contact Dev
+            </a>
+
+            <a
+              href="https://github.com/aarabii/undercover/issues/new?template=feature_request.yml"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-200 shadow-brutal-sm no-underline text-inherit"
+            >
+              Request a Feature
+            </a>
+          </div>
+
+          <div class="text-xs font-black uppercase tracking-wider text-gray-600 font-mono">
+            Made with • ❤️ •{" "}
+            <a
+              href="https://aarab.me"
+              class="no-underline text-inherit"
+            >
+              aarabii
+            </a>
+          </div>
+        </Container>
     </footer>
   </body>
 </html>
