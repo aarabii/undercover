@@ -11,6 +11,7 @@ export interface Player {
   presence: Presence;
   joinedAt: number;
   lastSeenAt: number;
+  lastActiveAt?: number;
   disconnectedAt?: number;
   role?: Role;
   word?: string | null;

@@ -11,11 +11,14 @@ import {
   clearStoredRoomCredentials,
 } from "@/lib/storage";
 
+export const HEARTBEAT_INTERVAL_MS = 25_000;
+
 class ConnectionManager {
   private socket: PartySocket | null = null;
   private currentCode: string | null = null;
   private listenersAttached = false;
   private isIntentionalClose = false;
+  private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
     this.setupWindowListeners();
@@ -66,6 +69,22 @@ class ConnectionManager {
     });
   }
 
+  private startHeartbeat(): void {
+    this.stopHeartbeat();
+    this.heartbeatTimer = setInterval(() => {
+      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.send({ type: "heartbeat" });
+      }
+    }, HEARTBEAT_INTERVAL_MS);
+  }
+
+  private stopHeartbeat(): void {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = null;
+    }
+  }
+
   /**
    * Connects to a room via PartySocket and sends the hello handshake.
    */
@@ -94,6 +113,7 @@ class ConnectionManager {
     });
 
     socket.addEventListener("open", () => {
+      this.startHeartbeat();
       this.sendHello(code);
     });
 
@@ -102,6 +122,7 @@ class ConnectionManager {
     });
 
     socket.addEventListener("close", (_event) => {
+      this.stopHeartbeat();
       const store = useGameStore.getState();
       if (this.isIntentionalClose || store.kicked || store.replaced || store.roomClosed) {
         store.setConnectionStatus("disconnected");
@@ -158,6 +179,16 @@ class ConnectionManager {
       return;
     }
 
+    // Ignore heartbeat_ack responses gracefully before schema parsing
+    if (
+      parsedJson &&
+      typeof parsedJson === "object" &&
+      "type" in parsedJson &&
+      (parsedJson as any).type === "heartbeat_ack"
+    ) {
+      return;
+    }
+
     const parseResult = ServerMessageSchema.safeParse(parsedJson);
     if (!parseResult.success) {
       console.error("[PartySocket] Invalid server message schema:", parseResult.error);
@@ -165,6 +196,12 @@ class ConnectionManager {
     }
 
     const message = parseResult.data;
+
+    // Ignore heartbeat_ack responses gracefully after schema parsing
+    if (message.type === "heartbeat_ack") {
+      return;
+    }
+
     const store = useGameStore.getState();
 
     switch (message.type) {
@@ -260,6 +297,7 @@ class ConnectionManager {
    */
   public disconnect(): void {
     this.isIntentionalClose = true;
+    this.stopHeartbeat();
     if (this.socket) {
       this.socket.close();
       this.socket = null;

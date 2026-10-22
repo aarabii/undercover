@@ -255,6 +255,10 @@ describe("ClientMessageSchema (18 client messages)", () => {
     }
   });
 
+  test("parses heartbeat message", () => {
+    expect(ClientMessageSchema.parse({ type: "heartbeat" })).toEqual({ type: "heartbeat" });
+  });
+
   test("rejects invalid client messages", () => {
     // Unknown type
     expect(() => ClientMessageSchema.parse({ type: "unknown.action" })).toThrow();
@@ -352,6 +356,7 @@ describe("ServerMessageSchema (6 server messages)", () => {
     expect(ServerMessageSchema.parse({ type: "declined" })).toBeDefined();
     expect(ServerMessageSchema.parse({ type: "kicked" })).toBeDefined();
     expect(ServerMessageSchema.parse({ type: "replaced" })).toBeDefined();
+    expect(ServerMessageSchema.parse({ type: "heartbeat_ack" })).toBeDefined();
     expect(ServerMessageSchema.parse({ type: "roomClosed" })).toBeDefined();
   });
 

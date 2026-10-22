@@ -1,6 +1,31 @@
 import type { AvatarConfig } from "../models/avatar";
 import type { Settings } from "../models/settings";
 
+export const ClientMessageType = {
+  HELLO: "hello",
+  PROFILE_UPDATE: "profile.update",
+  VOTE_CAST: "vote.cast",
+  MRWHITE_GUESS: "mrwhite.guess",
+  LEAVE: "leave",
+  HOST_SETTINGS_UPDATE: "host.settings.update",
+  HOST_APPROVE: "host.approve",
+  HOST_DECLINE: "host.decline",
+  HOST_KICK: "host.kick",
+  HOST_LOCK: "host.lock",
+  HOST_TRANSFER: "host.transfer",
+  HOST_START: "host.start",
+  HOST_PAUSE: "host.pause",
+  HOST_RESUME: "host.resume",
+  HOST_SKIP: "host.skip",
+  HOST_END_VOTING: "host.endVoting",
+  HOST_END_GAME: "host.endGame",
+  HOST_PLAY_AGAIN: "host.playAgain",
+  HEARTBEAT: "heartbeat",
+} as const;
+
+export type ClientMessageType =
+  (typeof ClientMessageType)[keyof typeof ClientMessageType];
+
 export interface HelloPayload {
   code: string;
   playerId?: string;
@@ -42,4 +67,5 @@ export type ClientMessage =
   | { type: "host.skip" }
   | { type: "host.endVoting" }
   | { type: "host.endGame" }
-  | { type: "host.playAgain" };
+  | { type: "host.playAgain" }
+  | { type: "heartbeat" };

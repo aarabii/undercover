@@ -6,7 +6,7 @@ import {
   handleGetRoomStatus,
 } from "./routes/rooms";
 
-export { Room, type Env, type ConnectionState };
+export { Room, Room as RoomServer, type Env, type ConnectionState };
 
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { env, SELF, runInDurableObject, runDurableObjectAlarm, evictDurableObject } from "cloudflare:test";
 import type { Room } from "../../apps/server/src/index";
+import { RoomStorage } from "../../apps/server/src/storage";
 import { MAX_MESSAGE_BYTES } from "../../apps/server/src/constants";
 import { hashToken } from "../../apps/server/src/utils";
 import type { ServerMessage, ClientMessage } from "@game/protocol";
@@ -474,6 +475,207 @@ describe("Undercover Server Shell (apps/server)", () => {
       await runInDurableObject(stub, async (room: Room) => {
         await room.onStart();
         expect(room.roomState).toBeNull();
+      });
+    });
+  });
+
+  describe("5. Optimization & Lazy Writes (Phase 1-4)", () => {
+    describe("RoomStorage Lazy & Dirty Writes", () => {
+      it("skips writes on minor mutations and flushes on major transitions or flushIfDirty", async () => {
+        let puts = 0;
+        const fakeStorage: any = {
+          put: async () => {
+            puts++;
+          },
+          get: async () => null,
+        };
+        const storage = new RoomStorage(fakeStorage);
+
+        const dummyPlayer = {
+          id: "p1",
+          tokenHash: "hash1",
+          name: "Alice",
+          avatar: avatarFixture,
+          status: "active" as const,
+          presence: "online" as const,
+          joinedAt: 1000,
+          lastSeenAt: 1000,
+        };
+
+        const initialRoom: any = {
+          code: "TEST01",
+          phase: "LOBBY",
+          locked: false,
+          settings: { discussionSeconds: 180 },
+          players: [dummyPlayer],
+        };
+
+        // 1. Initial write with force=true
+        const savedInitial = await storage.saveRoom(initialRoom, true, { code: "TEST01" });
+        expect(savedInitial).toBe(true);
+        expect(puts).toBe(1);
+        expect(storage.isDirty()).toBe(false);
+
+        // 2. Minor mutation: settings update (no phase, player count, or status change)
+        const updatedSettingsRoom = {
+          ...initialRoom,
+          settings: { discussionSeconds: 120 },
+        };
+        const savedSettings = await storage.saveRoom(updatedSettingsRoom, false);
+        expect(savedSettings).toBe(false);
+        expect(puts).toBe(1); // not written to storage
+        expect(storage.isDirty()).toBe(true);
+
+        // 3. flushIfDirty flushes the dirty state
+        const flushed = await storage.flushIfDirty(updatedSettingsRoom);
+        expect(flushed).toBe(true);
+        expect(puts).toBe(2);
+        expect(storage.isDirty()).toBe(false);
+
+        // 4. Another minor mutation: in-memory vote change
+        const voteRoom = {
+          ...updatedSettingsRoom,
+        };
+        expect(await storage.saveRoom(voteRoom, false)).toBe(false);
+        expect(storage.isDirty()).toBe(true);
+
+        // 5. Major transition: player status changes (e.g. pending -> active)
+        const statusChangedRoom = {
+          ...updatedSettingsRoom,
+          players: [{ ...dummyPlayer, status: "pending" as const }],
+        };
+        expect(await storage.saveRoom(statusChangedRoom, false)).toBe(true);
+        expect(puts).toBe(3);
+        expect(storage.isDirty()).toBe(false);
+
+        // 6. Major transition: phase changes (LOBBY -> ROLE_REVEAL)
+        const phaseChangedRoom = {
+          ...statusChangedRoom,
+          phase: "ROLE_REVEAL",
+        };
+        expect(await storage.saveRoom(phaseChangedRoom, false)).toBe(true);
+        expect(puts).toBe(4);
+        expect(storage.isDirty()).toBe(false);
+
+        // 7. Major transition: player count changes
+        const playerCountChangedRoom = {
+          ...phaseChangedRoom,
+          players: [
+            ...phaseChangedRoom.players,
+            { ...dummyPlayer, id: "p2", tokenHash: "hash2" },
+          ],
+        };
+        expect(await storage.saveRoom(playerCountChangedRoom, false)).toBe(true);
+        expect(puts).toBe(5);
+        expect(storage.isDirty()).toBe(false);
+      });
+    });
+
+    describe("Fast-Path Client Heartbeats", () => {
+      it("updates player lastActiveAt in memory without broadcasting views or writing to storage", async () => {
+        const stub = env.Room.get(env.Room.idFromName("HBEAT1"));
+        await runInDurableObject(stub, async (room: Room) => {
+          await room.onStart();
+          const sentMessages: string[] = [];
+          const conn: any = {
+            id: "conn-hb",
+            state: null,
+            setState(s: any) {
+              this.state = s;
+            },
+            send(msg: string) {
+              sentMessages.push(msg);
+            },
+            close() {},
+          };
+          room.getConnections = function* () {
+            yield conn;
+          };
+
+          // Join room as host
+          await room.onMessage(
+            conn,
+            JSON.stringify({
+              type: "hello",
+              payload: { code: "HBEAT1", profile: { name: "Host", avatar: avatarFixture } },
+            }),
+          );
+
+          expect(room.roomState).not.toBeNull();
+          expect(room.storage.isDirty()).toBe(false);
+          const initialActiveAt = room.roomState!.players[0].lastActiveAt;
+          expect(initialActiveAt).toBeUndefined();
+
+          // Clear sent messages from join
+          sentMessages.length = 0;
+
+          // Spy on storage.saveRoom
+          let saveCalls = 0;
+          const origSave = room.storage.saveRoom.bind(room.storage);
+          room.storage.saveRoom = async (...args: any[]) => {
+            saveCalls++;
+            return origSave(...args);
+          };
+
+          // Send heartbeat
+          await room.onMessage(
+            conn,
+            JSON.stringify({
+              type: "heartbeat",
+            }),
+          );
+
+          // Verify in-memory timestamps updated
+          const player = room.roomState!.players[0];
+          expect(player.lastActiveAt).toBeDefined();
+          expect(typeof player.lastActiveAt).toBe("number");
+          expect(player.lastSeenAt).toBe(player.lastActiveAt);
+
+          // Verify marked dirty
+          expect(room.storage.isDirty()).toBe(true);
+
+          // Verify zero broadcast views sent
+          expect(sentMessages).toHaveLength(0);
+
+          // Verify saveRoom was not called on fast-path
+          expect(saveCalls).toBe(0);
+        });
+      });
+    });
+
+    describe("In-Memory Alarm Caching (syncAlarm)", () => {
+      it("skips setAlarm when target timestamp delta is under 1,000ms", async () => {
+        const stub = env.Room.get(env.Room.idFromName("ALARM_CACHE"));
+        await runInDurableObject(stub, async (room: Room) => {
+          await room.onStart();
+
+          let setAlarmCalls = 0;
+          let lastSetTime: number | null = null;
+          room.ctx.storage.setAlarm = async (time: number) => {
+            setAlarmCalls++;
+            lastSetTime = time;
+          };
+
+          const baseTime = Date.now() + 60_000;
+
+          // 1. Initial alarm set
+          await room.syncAlarm(baseTime);
+          expect(setAlarmCalls).toBe(1);
+          expect(lastSetTime).toBe(baseTime);
+
+          // 2. Target within < 1000ms delta (e.g. +500ms) -> SKIPPED
+          await room.syncAlarm(baseTime + 500);
+          expect(setAlarmCalls).toBe(1);
+
+          // 3. Target with delta < 1000ms (-300ms from currentAlarmTime) -> SKIPPED
+          await room.syncAlarm(baseTime - 300);
+          expect(setAlarmCalls).toBe(1);
+
+          // 4. Target with delta >= 1000ms (+1500ms) -> UPDATES ALARM
+          await room.syncAlarm(baseTime + 1500);
+          expect(setAlarmCalls).toBe(2);
+          expect(lastSetTime).toBe(baseTime + 1500);
+        });
       });
     });
   });

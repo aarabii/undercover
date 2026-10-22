@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { MAX_NAME_LENGTH } from "@game/types";
-import { AvatarConfigSchema, SettingsSchema, SettingsPatchSchema } from "./models";
+import { AvatarConfigSchema, SettingsPatchSchema } from "./models";
 import { RoomViewSchema } from "./views";
 
 // --- Client -> Server Message Schemas ---
@@ -47,6 +47,7 @@ export const ClientMessageSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("host.endVoting") }),
   z.object({ type: z.literal("host.endGame") }),
   z.object({ type: z.literal("host.playAgain") }),
+  z.object({ type: z.literal("heartbeat") }),
 ]);
 
 // --- Server -> Client Message Schemas ---
@@ -72,4 +73,5 @@ export const ServerMessageSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("kicked") }),
   z.object({ type: z.literal("replaced") }),
   z.object({ type: z.literal("roomClosed") }),
+  z.object({ type: z.literal("heartbeat_ack") }),
 ]);

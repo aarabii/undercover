@@ -4,7 +4,6 @@ import type {
   Difficulty,
   WordPair,
   EngineEffect,
-  ServerMessage,
   HelloPayload,
   ProfileUpdatePayload,
   VoteCastPayload,
@@ -33,6 +32,7 @@ export type Action =
   | { type: "connect"; playerId: string }
   | { type: "disconnect"; playerId: string }
   | { type: "tick"; now?: number }
+  | { type: "heartbeat"; playerId?: string }
   // Client Messages (tagged with authenticated sender playerId, plus tokenHash for hello)
   | { type: "hello"; playerId?: string; tokenHash: string; payload: HelloPayload }
   | { type: "profile.update"; playerId: string; payload: ProfileUpdatePayload }

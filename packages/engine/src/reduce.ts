@@ -151,6 +151,18 @@ export function reduce(
       break;
     }
 
+    case "heartbeat": {
+      if (action.playerId) {
+        const player = state.players.find((p) => p.id === action.playerId);
+        if (player) {
+          player.lastSeenAt = ctx.now;
+          player.lastActiveAt = ctx.now;
+        }
+      }
+      result = { state };
+      break;
+    }
+
     default: {
       result = {
         state,

@@ -27,6 +27,8 @@ export {
   WinReason,
   CardVariant,
   Difficulty,
+  ClientMessageType,
+  ServerMessageType,
   type Player,
   type Room,
   type Settings,
