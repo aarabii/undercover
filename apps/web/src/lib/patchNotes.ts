@@ -16,10 +16,10 @@ export const PATCH_NOTES: PatchRelease[] = [
   {
     version: "v1.2.0",
     date: "October 2026",
-    title: "Classified Dossier UI & Design System",
+    title: "Classified Dossier UI & Edge Architecture",
     isLatest: true,
     summary:
-      "A complete visual and tactical overhaul: custom 4-tier Neo-Brutalist color schema, official brutalist typography, phase progress steppers, and declassified patch notes.",
+      "A massive visual, tactical, and infrastructure overhaul: full Classified Dossier Neo-Brutalist design system, universal navigation headers & footers, interactive secret dossier flip cards, edge WebSocket heartbeat offloading, and high-performance SQLite write coalescing.",
     items: [
       {
         type: "new",
@@ -27,11 +27,27 @@ export const PATCH_NOTES: PatchRelease[] = [
       },
       {
         type: "new",
-        text: "Declassified Patch Notes popup drawer with instant update tracking and version stamps directly on the home deck.",
+        text: "Declassified Field Patch Notes popup drawer with instant update tracking, categorization badges, and responsive slide-out navigation.",
       },
       {
         type: "new",
-        text: "Interactive Word-Pair Evidence Preview on the landing page to demonstrate the core deduction mechanics in 2 seconds.",
+        text: "Tactile Secret Dossier RoleCard with interactive 3D flip animation, confidential classification stamps, and secret word reveal toggle.",
+      },
+      {
+        type: "new",
+        text: "Universal AppHeader and AppFooter components unifying top navigation, safety escape, rules trigger, bug reporting, and update tracking across all pages.",
+      },
+      {
+        type: "new",
+        text: "Enhanced Room Code Sharing hub with instant QR code modal display, one-tap code copy, direct invite link sharing, and Web Share API integration.",
+      },
+      {
+        type: "new",
+        text: "Tactile Round Phase stepper and voting progress bar during active in-game interrogation rounds.",
+      },
+      {
+        type: "new",
+        text: "Interactive Word-Pair Evidence Preview on the landing page to demonstrate core deduction mechanics in seconds.",
       },
       {
         type: "new",
@@ -39,7 +55,31 @@ export const PATCH_NOTES: PatchRelease[] = [
       },
       {
         type: "new",
-        text: "Tactile Round Phase stepper and voting progress bar during active in-game interrogation rounds.",
+        text: "Expanded 320+ Spy Codename Generator featuring tactical adjectives, NATO callsigns, and intelligence agency operative aliases.",
+      },
+      {
+        type: "new",
+        text: "Centralized StatusBanner component delivering clear alerts for connection drops, room closures, and host events.",
+      },
+      {
+        type: "improved",
+        text: "Edge WebSocket Heartbeat Offloading via Cloudflare's WebSocketRequestResponsePair, responding at edge infrastructure without waking hibernated Durable Objects.",
+      },
+      {
+        type: "improved",
+        text: "High-Performance SQLite Write Coalescing in RoomStorage, skipping redundant database writes during steady states to slash DO I/O and CPU overhead.",
+      },
+      {
+        type: "improved",
+        text: "Smart Alarm Synchronization with deduplication logic, preventing redundant alarm scheduling and execution churn.",
+      },
+      {
+        type: "improved",
+        text: "Selective Broadcast Projections caching player view projections and filtering recipients during engine state transitions.",
+      },
+      {
+        type: "improved",
+        text: "Client-side ConnectionManager 25s ping-pong keepalive loop with graceful heartbeat_ack consumption to prevent stale disconnections.",
       },
       {
         type: "improved",
@@ -47,7 +87,11 @@ export const PATCH_NOTES: PatchRelease[] = [
       },
       {
         type: "improved",
-        text: "Unified role color identity across landing page, rules dialog, and live match: Civilian (Lime), Undercover (Sky), Mr. White (Dashed White).",
+        text: "Full accessibility compliance with prefers-reduced-motion media query support to disable high-intensity animations on demand.",
+      },
+      {
+        type: "improved",
+        text: "Streamlined layout architecture in index.astro and play.astro, eliminating redundant wrappers and dead CSS rules.",
       },
     ],
   },
@@ -71,6 +115,10 @@ export const PATCH_NOTES: PatchRelease[] = [
         text: "Streamlined Host Management modal with clear suspect action choices (Pass the Crown / Kick).",
       },
       {
+        type: "improved",
+        text: "Optimized image assets and repository documentation for faster asset loading and onboarding.",
+      },
+      {
         type: "fixed",
         text: "Addressed tie-round status presentation during deadlocked eliminations.",
       },
@@ -81,11 +129,11 @@ export const PATCH_NOTES: PatchRelease[] = [
     date: "September 2026",
     title: "The Disguise & Alias Expansion",
     summary:
-      "A massive influx of spy codenames, CC0 disguise collections, and refined Mr. White fuzzy deduction logic.",
+      "Client-side disguise collections, seeded PRNG fairness, and refined Mr. White fuzzy deduction logic.",
     items: [
       {
         type: "new",
-        text: "320+ spy codename generator with instant re-roll dice button for quick disguised aliases.",
+        text: "Disguised operative alias generator with instant re-roll dice button for quick aliases.",
       },
       {
         type: "new",
@@ -98,6 +146,10 @@ export const PATCH_NOTES: PatchRelease[] = [
       {
         type: "improved",
         text: "Categorized word pairs into Easy, Medium, Hard, and Fan Favorites banks.",
+      },
+      {
+        type: "improved",
+        text: "Playwright end-to-end multi-player test suite covering lobby creation, joining, and in-game voting cycles.",
       },
       {
         type: "fixed",
@@ -127,6 +179,10 @@ export const PATCH_NOTES: PatchRelease[] = [
       {
         type: "new",
         text: "Complete round lifecycle: secret word delivery, discussion timer, simultaneous voting, and Mr. White final guess.",
+      },
+      {
+        type: "new",
+        text: "SQLite persistence layer with state hydration and recovery across Durable Object hibernation cycles.",
       },
     ],
   },
