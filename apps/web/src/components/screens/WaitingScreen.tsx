@@ -27,7 +27,7 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
           </p>
         </div>
 
-        <div className="p-3 bg-canvas border-2 border-black rounded-base font-mono text-xs font-bold flex justify-between items-center text-ink">
+        <div className="p-3 bg-canvas border-2 border-black rounded-base font-mono text-xs font-bold flex justify-between items-center text-ink shadow-[2px_2px_0px_#000]">
           <span>ROOM: {roomView.code}</span>
           <span className="capitalize">Round {roomView.round}</span>
         </div>
@@ -39,7 +39,7 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
           Current Suspects ({activePlayers.length})
         </span>
 
-        <div className="grid grid-cols-4 gap-2.5 justify-items-center">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 justify-items-center">
           {activePlayers.map((player) => (
             <AvatarTile
               key={player.id}
@@ -56,14 +56,18 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
       </div>
 
       {/* Leave Room Button */}
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={() => connection.leave()}
-        className="text-xs font-bold text-crimson-shade hover:bg-crimson-fade border-2 border-black bg-paper shadow-brutal-sm flex items-center gap-1.5 mx-auto cursor-pointer font-mono"
-      >
-        <LogOut className="size-3.5" /> Leave Room
-      </Button>
+      <div>
+        <Button
+          type="button"
+          variant="subtleDanger"
+          size="sm"
+          onClick={() => connection.leave()}
+          className="mx-auto flex items-center gap-1.5"
+        >
+          <LogOut className="size-3.5" />
+          <span>Leave Room</span>
+        </Button>
+      </div>
     </div>
   );
 }

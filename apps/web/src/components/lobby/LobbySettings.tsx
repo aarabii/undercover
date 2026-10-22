@@ -8,6 +8,72 @@ interface LobbySettingsProps {
   playerCount: number;
 }
 
+// Shared Suspect Balance Breakdown Bar for Host and Non-Host views
+function SuspectBalanceBar({
+  playerCount,
+  estimatedCivilians,
+  undercoverCount,
+  mrWhiteCount,
+}: {
+  playerCount: number;
+  estimatedCivilians: number;
+  undercoverCount: number;
+  mrWhiteCount: number;
+}) {
+  if (playerCount < 4) return null;
+
+  return (
+    <div className="p-3 bg-canvas-fade border-2 border-black rounded-base space-y-2">
+      <div className="flex items-center justify-between text-xs font-mono font-bold text-ink">
+        <span className="flex items-center gap-1.5">
+          <Shield className="size-3.5 text-ink-muted" /> SUSPECT RATIO
+        </span>
+        <span>{playerCount} Players Active</span>
+      </div>
+      <div className="flex h-6 w-full rounded-base border-2 border-black overflow-hidden bg-canvas shadow-brutal-sm">
+        {estimatedCivilians > 0 && (
+          <div
+            style={{ width: `${(estimatedCivilians / playerCount) * 100}%` }}
+            className="bg-lime-base border-r-2 border-black flex items-center justify-center text-[10px] font-mono font-black text-ink"
+            title={`Civilians: ${estimatedCivilians}`}
+          >
+            {estimatedCivilians} Civilians
+          </div>
+        )}
+        {undercoverCount > 0 && (
+          <div
+            style={{ width: `${(undercoverCount / playerCount) * 100}%` }}
+            className="bg-sky-base border-r-2 border-black flex items-center justify-center text-[10px] font-mono font-black text-ink"
+            title={`Undercover: ${undercoverCount}`}
+          >
+            {undercoverCount} Undercover
+          </div>
+        )}
+        {mrWhiteCount > 0 && (
+          <div
+            style={{ width: `${(mrWhiteCount / playerCount) * 100}%` }}
+            className="bg-paper flex items-center justify-center text-[10px] font-mono font-black text-ink"
+            title={`Mr. White: ${mrWhiteCount}`}
+          >
+            {mrWhiteCount} White
+          </div>
+        )}
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] font-mono text-ink-muted pt-0.5">
+        <span className="flex items-center gap-1">
+          <span className="size-2 rounded-full bg-lime-base border border-black inline-block" /> Civilians ({estimatedCivilians})
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="size-2 rounded-full bg-sky-base border border-black inline-block" /> Undercover ({undercoverCount})
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="size-2 rounded-full bg-paper border border-dashed border-black inline-block" /> Mr. White ({mrWhiteCount})
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function LobbySettings({
   settings,
   isHost,
@@ -33,43 +99,12 @@ export default function LobbySettings({
         </div>
 
         {/* Live Ratio Bar for Spectators/Non-Hosts */}
-        {playerCount >= 4 && (
-          <div className="p-3 bg-canvas-fade border-2 border-black rounded-base space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-mono font-bold text-ink">
-              <span>SUSPECT BALANCE</span>
-              <span>{playerCount} Players</span>
-            </div>
-            <div className="flex h-5 w-full rounded-base border-2 border-black overflow-hidden bg-canvas">
-              {estimatedCivilians > 0 && (
-                <div
-                  style={{ width: `${(estimatedCivilians / playerCount) * 100}%` }}
-                  className="bg-lime-base border-r-2 border-black flex items-center justify-center text-[9px] font-mono font-black text-ink"
-                  title={`Civilians: ${estimatedCivilians}`}
-                >
-                  {estimatedCivilians} Civ
-                </div>
-              )}
-              {settings.undercoverCount > 0 && (
-                <div
-                  style={{ width: `${(settings.undercoverCount / playerCount) * 100}%` }}
-                  className="bg-sky-base border-r-2 border-black flex items-center justify-center text-[9px] font-mono font-black text-ink"
-                  title={`Undercover: ${settings.undercoverCount}`}
-                >
-                  {settings.undercoverCount} Und
-                </div>
-              )}
-              {settings.mrWhiteCount > 0 && (
-                <div
-                  style={{ width: `${(settings.mrWhiteCount / playerCount) * 100}%` }}
-                  className="bg-paper flex items-center justify-center text-[9px] font-mono font-black text-ink"
-                  title={`Mr. White: ${settings.mrWhiteCount}`}
-                >
-                  {settings.mrWhiteCount} Wht
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        <SuspectBalanceBar
+          playerCount={playerCount}
+          estimatedCivilians={estimatedCivilians}
+          undercoverCount={settings.undercoverCount}
+          mrWhiteCount={settings.mrWhiteCount}
+        />
 
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="p-2.5 bg-canvas border-2 border-black rounded-base">
@@ -104,7 +139,7 @@ export default function LobbySettings({
 
   // Editable controls for Room Host
   return (
-    <div className="w-full bg-paper border-[3px] border-black rounded-base p-5 shadow-brutal space-y-4 text-left">
+    <div className="w-full bg-paper border-[3px] border-black rounded-base p-4 sm:p-5 shadow-brutal space-y-4 text-left">
       <div className="flex items-center justify-between border-b-2 border-black pb-2">
         <div className="flex items-center gap-2">
           <Sliders className="size-5 text-ink" />
@@ -120,54 +155,21 @@ export default function LobbySettings({
       </div>
 
       {/* Suspect Ratio Breakdown Bar */}
-      {playerCount >= 4 && (
-        <div className="p-3 bg-canvas-fade border-2 border-black rounded-base space-y-2">
-          <div className="flex items-center justify-between text-xs font-mono font-bold text-ink">
-            <span className="flex items-center gap-1.5"><Shield className="size-3.5 text-ink-muted" /> SUSPECT RATIO</span>
-            <span>{playerCount} Players Active</span>
-          </div>
-          <div className="flex h-6 w-full rounded-base border-2 border-black overflow-hidden bg-canvas shadow-brutal-sm">
-            {estimatedCivilians > 0 && (
-              <div
-                style={{ width: `${(estimatedCivilians / playerCount) * 100}%` }}
-                className="bg-lime-base border-r-2 border-black flex items-center justify-center text-[10px] font-mono font-black text-ink"
-                title={`Civilians: ${estimatedCivilians}`}
-              >
-                {estimatedCivilians} Civilians
-              </div>
-            )}
-            {settings.undercoverCount > 0 && (
-              <div
-                style={{ width: `${(settings.undercoverCount / playerCount) * 100}%` }}
-                className="bg-sky-base border-r-2 border-black flex items-center justify-center text-[10px] font-mono font-black text-ink"
-                title={`Undercover: ${settings.undercoverCount}`}
-              >
-                {settings.undercoverCount} Undercover
-              </div>
-            )}
-            {settings.mrWhiteCount > 0 && (
-              <div
-                style={{ width: `${(settings.mrWhiteCount / playerCount) * 100}%` }}
-                className="bg-paper flex items-center justify-center text-[10px] font-mono font-black text-ink"
-                title={`Mr. White: ${settings.mrWhiteCount}`}
-              >
-                {settings.mrWhiteCount} White
-              </div>
-            )}
-          </div>
-          <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] font-mono text-ink-muted pt-0.5">
-            <span className="flex items-center gap-1"><span className="size-2 rounded-full bg-lime-base border border-black inline-block"/> Civilians ({estimatedCivilians})</span>
-            <span className="flex items-center gap-1"><span className="size-2 rounded-full bg-sky-base border border-black inline-block"/> Undercover ({settings.undercoverCount})</span>
-            <span className="flex items-center gap-1"><span className="size-2 rounded-full bg-paper border border-dashed border-black inline-block"/> Mr. White ({settings.mrWhiteCount})</span>
-          </div>
-        </div>
-      )}
+      <SuspectBalanceBar
+        playerCount={playerCount}
+        estimatedCivilians={estimatedCivilians}
+        undercoverCount={settings.undercoverCount}
+        mrWhiteCount={settings.mrWhiteCount}
+      />
 
       <div className="space-y-4">
         {/* Role Counts */}
         <div className="grid grid-cols-2 gap-3">
           {/* Undercover Stepper */}
-          <div data-testid="undercover-stepper" className="p-3 bg-canvas border-2 border-black rounded-base space-y-1.5 shadow-[2px_2px_0px_#000]">
+          <div
+            data-testid="undercover-stepper"
+            className="p-3 bg-canvas border-2 border-black rounded-base space-y-2 shadow-[2px_2px_0px_#000]"
+          >
             <span className="block text-[11px] font-black uppercase text-ink font-mono">
               Undercover
             </span>
@@ -179,18 +181,20 @@ export default function LobbySettings({
                 onClick={() =>
                   handleUpdate({ undercoverCount: Math.max(1, settings.undercoverCount - 1) })
                 }
-                className="size-8 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade disabled:opacity-30 font-black text-lg flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
+                className="size-10 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade disabled:opacity-30 font-black text-xl flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
               >
                 -
               </button>
-              <span data-testid="undercover-count" className="font-mono text-xl font-black text-ink">{settings.undercoverCount}</span>
+              <span data-testid="undercover-count" className="font-mono text-2xl font-black text-ink">
+                {settings.undercoverCount}
+              </span>
               <button
                 type="button"
                 aria-label="Increase Undercover count"
                 onClick={() =>
                   handleUpdate({ undercoverCount: settings.undercoverCount + 1 })
                 }
-                className="size-8 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade font-black text-lg flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
+                className="size-10 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade font-black text-xl flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
               >
                 +
               </button>
@@ -198,7 +202,10 @@ export default function LobbySettings({
           </div>
 
           {/* Mr. White Stepper */}
-          <div data-testid="mr-white-stepper" className="p-3 bg-canvas border-2 border-black rounded-base space-y-1.5 shadow-[2px_2px_0px_#000]">
+          <div
+            data-testid="mr-white-stepper"
+            className="p-3 bg-canvas border-2 border-black rounded-base space-y-2 shadow-[2px_2px_0px_#000]"
+          >
             <span className="block text-[11px] font-black uppercase text-ink font-mono">
               Mr. White
             </span>
@@ -210,18 +217,20 @@ export default function LobbySettings({
                 onClick={() =>
                   handleUpdate({ mrWhiteCount: Math.max(0, settings.mrWhiteCount - 1) })
                 }
-                className="size-8 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade disabled:opacity-30 font-black text-lg flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
+                className="size-10 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade disabled:opacity-30 font-black text-xl flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
               >
                 -
               </button>
-              <span data-testid="mr-white-count" className="font-mono text-xl font-black text-ink">{settings.mrWhiteCount}</span>
+              <span data-testid="mr-white-count" className="font-mono text-2xl font-black text-ink">
+                {settings.mrWhiteCount}
+              </span>
               <button
                 type="button"
                 aria-label="Increase Mr. White count"
                 onClick={() =>
                   handleUpdate({ mrWhiteCount: settings.mrWhiteCount + 1 })
                 }
-                className="size-8 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade font-black text-lg flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
+                className="size-10 rounded-base border-2 border-black bg-paper hover:bg-canvas-fade font-black text-xl flex items-center justify-center cursor-pointer shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 text-ink"
               >
                 +
               </button>
@@ -242,7 +251,7 @@ export default function LobbySettings({
                   key={d}
                   type="button"
                   onClick={() => handleUpdate({ difficulty: d })}
-                  className={`py-1.5 text-xs font-black capitalize rounded-base border-2 border-black transition-all cursor-pointer ${
+                  className={`py-2 text-xs font-black capitalize rounded-base border-2 border-black transition-all cursor-pointer ${
                     active
                       ? "bg-amber-base text-ink shadow-[2px_2px_0px_#000]"
                       : "bg-paper text-ink hover:bg-canvas-fade"
@@ -300,7 +309,7 @@ export default function LobbySettings({
                 key={sec}
                 type="button"
                 onClick={() => handleUpdate({ discussionSeconds: sec })}
-                className={`py-1 text-xs font-mono font-bold rounded-tight border border-black cursor-pointer ${
+                className={`py-1.5 text-xs font-mono font-bold rounded-tight border border-black cursor-pointer ${
                   settings.discussionSeconds === sec
                     ? "bg-amber-base text-ink font-black shadow-[1px_1px_0px_#000]"
                     : "bg-paper text-ink hover:bg-canvas-fade"

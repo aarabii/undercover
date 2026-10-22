@@ -129,9 +129,9 @@ export default function GameApp() {
           <Button
             type="button"
             size="lg"
-            variant="default"
+            variant="primary"
             onClick={() => setMode("create")}
-            className="w-full h-14 text-base font-black bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2"
           >
             <GiPadlock className="size-5 shrink-0" />
             <span>Host a Room</span>
@@ -142,7 +142,7 @@ export default function GameApp() {
             size="lg"
             variant="secondary"
             onClick={() => setMode("join")}
-            className="w-full h-14 text-base font-black bg-sky-base hover:bg-sky-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2"
           >
             <GiEntryDoor className="size-5 shrink-0" />
             <span>Join Room by Code</span>

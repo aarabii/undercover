@@ -32,25 +32,25 @@ export const RolesSection: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-16">
+    <div className="w-full space-y-12 sm:space-y-16">
       {/* 1. Roles Grid */}
       <div>
         <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
           <Badge variant="primary" className="shadow-brutal-sm px-3 py-0.5 text-[11px] bg-amber-base text-ink">
             THE USUAL SUSPECTS
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-ink font-heading uppercase">
+          <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-ink font-heading uppercase">
             Three roles. Infinite paranoia.
           </h2>
-          <p className="text-sm font-medium text-ink-muted">
+          <p className="text-xs sm:text-sm font-medium text-ink-muted">
             Privately dealt at round start. Assume everyone is looking at you weird.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Civilian (Lime) */}
-          <Card className="bg-lime-fade border-[3px] border-black shadow-brutal flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-brutal-lg">
-            <CardHeader className="border-b-2 border-black/15 pb-4">
+          {/* Civilian (Lime Shadow & Fill) */}
+          <Card className="bg-lime-fade border-[3px] border-black shadow-brutal-lime flex flex-col justify-between transition-all hover:-translate-y-1">
+            <CardHeader className="border-b-2 border-black/20 pb-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="size-12 rounded-base border-2 border-black bg-lime-base flex items-center justify-center shadow-brutal-sm">
                   <GiSpy className="size-7 text-ink" />
@@ -71,9 +71,9 @@ export const RolesSection: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Undercover (Sky) */}
-          <Card className="bg-sky-fade border-[3px] border-black shadow-brutal flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-brutal-lg">
-            <CardHeader className="border-b-2 border-black/15 pb-4">
+          {/* Undercover (Sky Shadow & Fill) */}
+          <Card className="bg-sky-fade border-[3px] border-black shadow-brutal-sky flex flex-col justify-between transition-all hover:-translate-y-1">
+            <CardHeader className="border-b-2 border-black/20 pb-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="size-12 rounded-base border-2 border-black bg-sky-base flex items-center justify-center shadow-brutal-sm">
                   <GiHoodedFigure className="size-7 text-ink" />
@@ -94,8 +94,8 @@ export const RolesSection: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Mr. White (Crisp Paper with Dashed Border) */}
-          <Card className="bg-paper border-[3px] border-dashed border-black shadow-brutal flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-brutal-lg">
+          {/* Mr. White (Dashed Border, No Shadow) */}
+          <Card className="bg-paper border-[3px] border-dashed border-black shadow-none flex flex-col justify-between transition-all hover:-translate-y-1">
             <CardHeader className="border-b-2 border-dashed border-black/30 pb-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="size-12 rounded-base border-2 border-dashed border-black bg-canvas-fade flex items-center justify-center shadow-none">
@@ -119,13 +119,13 @@ export const RolesSection: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Interactive Word-Pair Evidence Preview (NEW THEMATIC UI ELEMENT) */}
-      <div className="rounded-base border-[3px] border-black bg-paper p-6 sm:p-8 shadow-brutal space-y-6">
+      {/* 2. Interactive Word-Pair Evidence Preview */}
+      <div className="rounded-base border-[3px] border-black bg-paper p-5 sm:p-8 shadow-brutal space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-black pb-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="size-4 text-amber-shade" />
-              <span className="text-[11px] font-mono font-black uppercase tracking-widest text-ink-muted">
+              <span className="text-[10px] sm:text-[11px] font-mono font-black uppercase tracking-widest text-ink-muted">
                 EXHIBIT A • SECRET INTEL PEEK
               </span>
             </div>
@@ -133,17 +133,17 @@ export const RolesSection: React.FC = () => {
               What Each Player Actually Sees
             </h3>
             <p className="text-xs sm:text-sm font-medium text-ink-muted">
-              Category: <span className="font-bold text-ink">{activePair.topic}</span>. Watch how subtle the discrepancy is.
+              Category: <span className="font-bold text-ink">{activePair.topic}</span>. Notice the subtle discrepancy.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="w-full sm:w-auto grid grid-cols-2 sm:flex items-center gap-2">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => setRevealed(!revealed)}
-              className="bg-paper hover:bg-canvas-fade border-2 border-black shadow-brutal-sm font-bold text-xs"
+              className="w-full sm:w-auto"
             >
               {revealed ? <EyeOff className="size-3.5 mr-1.5" /> : <Eye className="size-3.5 mr-1.5" />}
               <span>{revealed ? "Hide Words" : "Reveal Words"}</span>
@@ -151,10 +151,10 @@ export const RolesSection: React.FC = () => {
 
             <Button
               type="button"
-              variant="outline"
+              variant="primary"
               size="sm"
               onClick={handleNextPair}
-              className="bg-amber-tint hover:bg-amber-base border-2 border-black shadow-brutal-sm font-bold text-xs text-ink"
+              className="w-full sm:w-auto"
               title="Next sample word pair"
             >
               <RefreshCw className="size-3.5 mr-1.5" /> Next Example
@@ -215,10 +215,10 @@ export const RolesSection: React.FC = () => {
       </div>
 
       {/* 3. How a Round Works Bento */}
-      <div className="rounded-base border-[3px] border-black bg-paper p-6 sm:p-8 shadow-brutal">
+      <div className="rounded-base border-[3px] border-black bg-paper p-5 sm:p-8 shadow-brutal">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 border-b-2 border-black pb-4">
           <div>
-            <h3 className="text-2xl font-black tracking-tight uppercase text-ink font-heading">
+            <h3 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-ink font-heading">
               Anatomy of a Betrayal
             </h3>
             <p className="text-xs sm:text-sm font-medium text-ink-muted">
@@ -230,7 +230,7 @@ export const RolesSection: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={() => setRulesOpen(true)}
-            className="border-2 border-black shadow-brutal-sm hover:bg-amber-tint font-bold text-xs"
+            className="w-full sm:w-auto"
           >
             <GiSecretBook className="mr-1.5 size-4" /> Official Rulebook
           </Button>

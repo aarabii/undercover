@@ -7,6 +7,7 @@ import PendingRequestsPanel from "@/components/lobby/PendingRequestsPanel";
 import LobbySettings from "@/components/lobby/LobbySettings";
 import PlayerManageModal from "@/components/lobby/PlayerManageModal";
 import SelfEditModal from "@/components/lobby/SelfEditModal";
+import StatusBanner from "@/components/common/StatusBanner";
 import { Button } from "@/components/ui/button";
 import { Play, Lock, Unlock, LogOut, Users } from "lucide-react";
 
@@ -56,7 +57,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
   return (
     <div className="w-full max-w-xl mx-auto space-y-5 text-center font-para pb-8">
       {/* 1. Header: Room Code & Share */}
-      <RoomCodeShare code={roomView.code} />
+      <RoomCodeShare code={roomView.code} variant="full" />
 
       {/* 2. Host Pending Requests Panel */}
       {isHost && roomView.pendingRequests && (
@@ -76,7 +77,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
             <button
               type="button"
               onClick={() => connection.hostLock(!roomView.locked)}
-              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-tight border-2 border-black bg-paper hover:bg-amber-tint cursor-pointer shadow-[1px_1px_0px_#000] text-ink font-mono"
+              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-tight border-2 border-black bg-paper hover:bg-amber-tint cursor-pointer shadow-[1px_1px_0px_#000] text-ink font-mono active:translate-x-0.5 active:translate-y-0.5"
               title={roomView.locked ? "Let others in" : "Keep strangers out"}
             >
               {roomView.locked ? <Lock className="size-3.5 text-crimson-shade" /> : <Unlock className="size-3.5 text-ink-muted" />}
@@ -85,10 +86,12 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
           )}
         </div>
 
-        {/* Avatar Grid */}
+        {/* Avatar Grid: Only interactive if player is self OR user is host */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pt-1 justify-items-center">
           {activePlayers.map((player) => {
             const isMe = player.id === roomView.me.id;
+            const canClick = isMe || isHost;
+
             return (
               <AvatarTile
                 key={player.id}
@@ -99,7 +102,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
                 isAway={player.presence === "away"}
                 canEdit={isMe}
                 onEdit={isMe ? () => setSelfEditOpen(true) : undefined}
-                onClick={() => handlePlayerClick(player)}
+                onClick={canClick ? () => handlePlayerClick(player) : undefined}
                 size="md"
               />
             );
@@ -115,41 +118,45 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
       />
 
       {/* 5. Primary Host Action / Non-host Status */}
-      <div className="space-y-2 pt-2">
+      <div className="space-y-3 pt-1">
         {isHost ? (
           <>
             <Button
               type="button"
               size="lg"
+              variant="primary"
               disabled={Boolean(disabledReason)}
               onClick={handleStartGame}
-              className="w-full h-14 text-lg font-black tracking-wide bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2"
             >
               <Play className="size-5 fill-black" />
               <span>Start Game</span>
             </Button>
             {disabledReason && (
-              <p className="text-xs font-black uppercase tracking-wider text-crimson-shade bg-crimson-fade py-1.5 px-3 border border-crimson-shade rounded-tight inline-block font-mono">
+              <StatusBanner variant="warning">
                 {disabledReason}
-              </p>
+              </StatusBanner>
             )}
           </>
         ) : (
-          <div className="p-4 bg-sky-fade border-[3px] border-black rounded-base shadow-brutal-sm text-sm font-bold text-ink">
+          <StatusBanner variant="info">
             Waiting on the host. They hold all the power and they know it.
-          </div>
+          </StatusBanner>
         )}
       </div>
 
       {/* 6. Leave Room Action */}
       <div className="pt-2">
-        <button
+        <Button
           type="button"
+          variant="subtleDanger"
+          size="sm"
           onClick={() => connection.leave()}
-          className="text-xs font-black uppercase tracking-wider text-crimson-shade hover:underline flex items-center justify-center gap-1.5 mx-auto cursor-pointer font-mono"
+          className="mx-auto flex items-center gap-1.5"
         >
-          <LogOut className="size-3.5" /> Bail Out of Room
-        </button>
+          <LogOut className="size-3.5" />
+          <span>Leave Room</span>
+        </Button>
       </div>
 
       {/* Host Player Management Modal */}

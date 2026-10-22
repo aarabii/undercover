@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGameStore } from "@/stores/gameStore";
 import { connection } from "@/lib/connection";
 import ProfileEditor from "@/components/modals/ProfileEditor";
@@ -24,12 +24,22 @@ export default function SelfEditModal({
 }: SelfEditModalProps) {
   const { profile, setProfile } = useGameStore();
   const [name, setName] = useState(profile.name);
+  const [avatar, setAvatar] = useState(profile.avatar);
+
+  // Re-sync with store when modal is opened
+  useEffect(() => {
+    if (open) {
+      setName(profile.name);
+      setAvatar(profile.avatar);
+    }
+  }, [open, profile]);
 
   const handleSave = () => {
     const trimmed = name.trim();
     if (!trimmed) return;
-    setProfile({ ...profile, name: trimmed });
-    connection.updateProfile({ name: trimmed, avatar: profile.avatar });
+    const updated = { ...profile, name: trimmed, avatar };
+    setProfile(updated);
+    connection.updateProfile({ name: trimmed, avatar });
     onOpenChange(false);
   };
 
@@ -46,19 +56,25 @@ export default function SelfEditModal({
         </DialogHeader>
 
         <div className="py-4">
-          <ProfileEditor name={name} onNameChange={setName} />
+          <ProfileEditor
+            name={name}
+            onNameChange={setName}
+            avatar={avatar}
+            onAvatarChange={setAvatar}
+          />
         </div>
 
         <DialogFooter className="pt-2">
           <Button
             type="button"
-            variant="default"
+            variant="primary"
             size="lg"
             onClick={handleSave}
             disabled={!name.trim()}
-            className="w-full font-black bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer"
+            className="w-full flex items-center justify-center gap-2"
           >
-            <Check className="mr-2 size-5" /> Apply Changes
+            <Check className="size-5" />
+            <span>Apply Changes</span>
           </Button>
         </DialogFooter>
       </DialogContent>

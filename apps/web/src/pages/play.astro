@@ -1,7 +1,8 @@
 ---
 import "../styles/global.css";
 import Container from "../components/common/Container";
-import BrandLogo from "../components/common/BrandLogo";
+import AppHeader from "../components/common/AppHeader";
+import AppFooter from "../components/common/AppFooter";
 import GameApp from "../components/GameApp";
 ---
 
@@ -11,7 +12,7 @@ import GameApp from "../components/GameApp";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content="noindex, follow" />
     <title>Play Undercover — Real-Time Deduction</title>
@@ -33,76 +34,18 @@ import GameApp from "../components/GameApp";
     />
   </head>
   <body class="bg-canvas text-ink bg-dossier-grid min-h-screen flex flex-col justify-between font-para selection:bg-amber-tint selection:text-ink">
-    <header class="border-b-[3px] border-black bg-paper sticky top-0 z-40">
-      <Container id="play-header" className="py-3 flex justify-between items-center">
-        <a href="/" class="hover:opacity-90 transition-opacity">
-          <BrandLogo size="sm" showTagline={false} />
-        </a>
-        <div class="flex items-center gap-3">
-          <a
-            href="/"
-            class="text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-base border-2 border-black bg-paper shadow-brutal-sm hover:bg-amber-tint transition-colors text-ink"
-          >
-            Back to Safety
-          </a>
-        </div>
+    <div class="border-b-[3px] border-black bg-paper/95 backdrop-blur-xs sticky top-0 z-40">
+      <Container id="play-header" className="py-3 sm:py-3.5">
+        <AppHeader client:load variant="play" />
       </Container>
-    </header>
+    </div>
 
-    <main class="my-auto py-4">
+    <main class="my-auto py-4 sm:py-6">
       <Container id="play-main">
         <GameApp client:only="react" />
       </Container>
     </main>
 
-    <footer class="border-t-[3px] border-black py-4 bg-paper/80 text-center">
-        <Container
-          id="footer-container"
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left"
-        >
-          <div class="flex items-center gap-3">
-            <BrandLogo size="sm" showTagline={true} />
-          </div>
-
-          <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-ink-muted">
-            <a
-              href="https://github.com/aarabii/undercover/issues/new?template=bug_report.yml"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-amber-tint shadow-brutal-sm no-underline text-ink hover:bg-amber-base transition-colors"
-            >
-              Report a Bug
-            </a>
-
-            <a
-              href="https://www.aarab.me/contact"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-tint shadow-brutal-sm no-underline text-ink hover:bg-sky-base transition-colors"
-            >
-                Contact Dev
-            </a>
-
-            <a
-              href="https://github.com/aarabii/undercover/issues/new?template=feature_request.yml"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-tint shadow-brutal-sm no-underline text-ink hover:bg-lime-base transition-colors"
-            >
-              Request a Feature
-            </a>
-          </div>
-
-          <div class="text-xs font-black uppercase tracking-wider text-ink-muted font-mono">
-            Made with • ❤️ •{" "}
-            <a
-              href="https://aarab.me"
-              class="no-underline text-inherit hover:underline"
-            >
-              aarabii
-            </a>
-          </div>
-        </Container>
-    </footer>
+    <AppFooter client:load />
   </body>
 </html>

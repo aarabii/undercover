@@ -1,5 +1,12 @@
+// Common & Navigation
+export { default as AppHeader } from "./common/AppHeader";
+export { default as AppFooter } from "./common/AppFooter";
+export { default as Container } from "./common/Container";
+export { BrandLogo } from "./common/BrandLogo";
+export { default as AvatarTile } from "./common/AvatarTile";
+export { default as StatusBanner } from "./common/StatusBanner";
+
 // Landing
-export { default as LandingHeader } from "./landing/LandingHeader";
 export { default as LandingActions } from "./landing/LandingActions";
 export { default as RolesSection } from "./landing/RolesSection";
 
@@ -34,11 +41,6 @@ export { default as AvatarPickerModal } from "./modals/AvatarPickerModal";
 export { default as RulesDialog } from "./modals/RulesDialog";
 export { default as ProfileEditor } from "./modals/ProfileEditor";
 export { default as PatchNotesDrawer } from "./modals/PatchNotesDrawer";
-
-// Common
-export { default as Container } from "./common/Container";
-export { BrandLogo } from "./common/BrandLogo";
-export { default as AvatarTile } from "./common/AvatarTile";
 
 // UI primitives
 export * from "./ui/badge";

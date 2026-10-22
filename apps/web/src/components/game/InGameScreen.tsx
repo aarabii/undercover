@@ -6,6 +6,7 @@ import PlayerGrid from "@/components/game/PlayerGrid";
 import EliminationResultCard from "@/components/game/EliminationResultCard";
 import MrWhiteGuessScreen from "@/components/game/MrWhiteGuessScreen";
 import GameOverScreen from "@/components/game/GameOverScreen";
+import RoomCodeShare from "@/components/room/RoomCodeShare";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +15,7 @@ import {
   FastForward,
   CheckCircle2,
   StopCircle,
+  LogOut,
 } from "lucide-react";
 
 interface InGameScreenProps {
@@ -62,7 +64,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-5 text-center font-para pb-8">
-      {/* 1. Top Bar: Round & Meta */}
+      {/* 1. Top Bar: Round & Compact Room Code */}
       <div className="flex items-center justify-between gap-3 bg-paper border-[3px] border-black rounded-base p-3 shadow-brutal">
         <div className="flex items-center gap-2">
           <Badge variant="primary" className="font-mono text-xs bg-amber-base text-ink">
@@ -72,9 +74,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
             Round {roomView.round}
           </span>
         </div>
-        <span className="font-mono text-xs font-bold text-ink-muted uppercase">
-          ROOM: {roomView.code}
-        </span>
+        <RoomCodeShare code={roomView.code} variant="compact" />
       </div>
 
       {/* 2. Round Phase Stepper Bar */}
@@ -120,8 +120,8 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
         </div>
       </div>
 
-      {/* 3. Role Card (with RoomCodeShare & Secret Info Button) */}
-      <RoleCard card={roomView.me.card} code={roomView.code} />
+      {/* 3. Role Card (Secret Info Trigger & Modal) */}
+      <RoleCard card={roomView.me.card} />
 
       {/* 4. Host Controls Toolbar */}
       {isHost && (
@@ -130,9 +130,9 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
           <Button
             type="button"
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() => (isPaused ? connection.hostResume() : connection.hostPause())}
-            className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-paper hover:bg-amber-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 cursor-pointer text-ink"
+            className="flex items-center gap-1"
           >
             {isPaused ? <Play className="size-3.5 fill-black" /> : <Pause className="size-3.5 fill-black" />}
             <span>{isPaused ? "Resume" : "Pause"}</span>
@@ -143,9 +143,9 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
             <Button
               type="button"
               size="sm"
-              variant="secondary"
+              variant="outline"
               onClick={() => connection.hostSkip()}
-              className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-paper hover:bg-amber-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 cursor-pointer text-ink"
+              className="flex items-center gap-1"
             >
               <FastForward className="size-3.5" />
               <span>Skip Timer</span>
@@ -157,9 +157,9 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
             <Button
               type="button"
               size="sm"
-              variant="secondary"
+              variant="lime"
               onClick={() => connection.hostEndVoting()}
-              className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-lime-base hover:bg-lime-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 cursor-pointer text-ink"
+              className="flex items-center gap-1"
             >
               <CheckCircle2 className="size-3.5" />
               <span>End Voting</span>
@@ -170,9 +170,9 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
           <Button
             type="button"
             size="sm"
-            variant="secondary"
+            variant="subtleDanger"
             onClick={() => connection.hostEndGame()}
-            className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-crimson-fade hover:bg-crimson-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 text-crimson-shade cursor-pointer"
+            className="flex items-center gap-1"
           >
             <StopCircle className="size-3.5" />
             <span>End Game</span>
@@ -232,6 +232,20 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
         myVote={roomView.me.myVote}
         voteCounts={roomView.lastElimination?.voteCounts}
       />
+
+      {/* 8. Leave Room Action */}
+      <div className="pt-2">
+        <Button
+          type="button"
+          variant="subtleDanger"
+          size="sm"
+          onClick={() => connection.leave()}
+          className="mx-auto flex items-center gap-1.5"
+        >
+          <LogOut className="size-3.5" />
+          <span>Leave Room</span>
+        </Button>
+      </div>
     </div>
   );
 }

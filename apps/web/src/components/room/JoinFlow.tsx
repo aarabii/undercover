@@ -3,9 +3,10 @@ import { useGameStore } from "@/stores/gameStore";
 import { connection } from "@/lib/connection";
 import { checkRoom, type RoomStatus } from "@/lib/api";
 import ProfileEditor from "@/components/modals/ProfileEditor";
+import StatusBanner from "@/components/common/StatusBanner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Loader2, ArrowLeft, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { ArrowRight, Loader2, ArrowLeft } from "lucide-react";
 
 interface JoinFlowProps {
   initialCode?: string;
@@ -18,7 +19,7 @@ export default function JoinFlow({
   isLockedCode = false,
   onBack,
 }: JoinFlowProps) {
-  const { profile, connectionStatus, error } = useGameStore();
+  const { profile, setProfile, connectionStatus, error } = useGameStore();
   const [code, setCode] = useState(initialCode.toUpperCase().slice(0, 6));
   const [name, setName] = useState(profile.name || "Player");
   const [roomStatus, setRoomStatus] = useState<RoomStatus | null>(null);
@@ -61,6 +62,8 @@ export default function JoinFlow({
 
   const handleJoin = () => {
     if (code.length !== 6) return;
+    const trimmed = name.trim() || profile.name || "Player";
+    setProfile({ ...profile, name: trimmed });
     connection.connect(code);
   };
 
@@ -71,18 +74,23 @@ export default function JoinFlow({
     Boolean(roomStatus && (!roomStatus.exists || roomStatus.locked || roomStatus.full));
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6">
-      {/* Back button */}
-      <button
-        type="button"
-        onClick={onBack}
-        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink hover:underline cursor-pointer"
-      >
-        <ArrowLeft className="size-4" /> Back to Menu
-      </button>
+    <div className="w-full max-w-md mx-auto space-y-5">
+      {/* Top Navigation Row */}
+      <div className="flex items-center justify-between">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onBack}
+          className="flex items-center gap-1.5"
+        >
+          <ArrowLeft className="size-3.5" />
+          <span>Back to Menu</span>
+        </Button>
+      </div>
 
       {/* Code Input Card */}
-      <div className="bg-paper border-[3px] border-black rounded-base p-6 shadow-brutal space-y-3">
+      <div className="bg-paper border-[3px] border-black rounded-base p-5 sm:p-6 shadow-brutal space-y-3">
         <label
           htmlFor="room-code-input"
           className="block text-xs font-black uppercase tracking-wider text-ink text-center font-mono"
@@ -99,7 +107,7 @@ export default function JoinFlow({
             onChange={(e) => handleCodeChange(e.target.value)}
             placeholder="ABCXYZ"
             maxLength={6}
-            className="font-mono text-center tracking-widest text-3xl font-black uppercase h-14 bg-canvas-fade border-[3px] border-black rounded-base shadow-[2px_2px_0px_#000] focus-visible:ring-2 focus-visible:ring-black text-ink"
+            className="font-mono text-center tracking-widest text-3xl font-black uppercase h-14 bg-canvas-fade border-[3px] border-black text-ink"
           />
           {isChecking && (
             <div className="absolute right-3 top-4">
@@ -122,58 +130,54 @@ export default function JoinFlow({
           ))}
         </div>
 
-        {/* Room status feedback */}
+        {/* Room status feedback using StatusBanner */}
         {code.length === 6 && !isChecking && roomStatus && (
           <div className="pt-1">
             {!roomStatus.exists ? (
-              <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-crimson-shade bg-crimson-fade p-2.5 border-2 border-crimson-shade rounded-base">
-                <XCircle className="size-4 shrink-0" />
-                <span>No room with that code. Check your spelling or host your own.</span>
-              </div>
+              <StatusBanner variant="danger">
+                No room with that code. Check your spelling or host your own.
+              </StatusBanner>
             ) : roomStatus.locked ? (
-              <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-crimson-shade bg-crimson-fade p-2.5 border-2 border-crimson-shade rounded-base">
-                <XCircle className="size-4 shrink-0" />
-                <span>Room is locked. The host is having trust issues.</span>
-              </div>
+              <StatusBanner variant="danger">
+                Room is locked. The host is having trust issues.
+              </StatusBanner>
             ) : roomStatus.full ? (
-              <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-amber-shade bg-amber-fade p-2.5 border-2 border-amber-shade rounded-base">
-                <AlertTriangle className="size-4 shrink-0" />
-                <span>Room at capacity. No more seats at this interrogation table.</span>
-              </div>
+              <StatusBanner variant="warning">
+                Room at capacity. No more seats at this interrogation table.
+              </StatusBanner>
             ) : roomStatus.inGame ? (
-              <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-sky-shade bg-sky-fade p-2.5 border-2 border-sky-shade rounded-base">
-                <AlertTriangle className="size-4 shrink-0" />
-                <span>Game already started. You'll spectate until the current round finishes.</span>
-              </div>
+              <StatusBanner variant="info">
+                Game already started. You'll spectate until the current round finishes.
+              </StatusBanner>
             ) : (
-              <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-lime-shade bg-lime-fade p-2.5 border-2 border-lime-shade rounded-base">
-                <CheckCircle2 className="size-4 shrink-0" />
-                <span>Room found. Proceed at your own risk.</span>
-              </div>
+              <StatusBanner variant="success">
+                Room found. Proceed at your own risk.
+              </StatusBanner>
             )}
           </div>
         )}
       </div>
 
       {/* Profile Section */}
-      <div className="bg-paper border-[3px] border-black rounded-base p-6 shadow-brutal">
+      <div className="bg-paper border-[3px] border-black rounded-base p-5 sm:p-6 shadow-brutal">
         <ProfileEditor name={name} onNameChange={setName} />
       </div>
 
       {/* Error Message banner */}
       {error && (
-        <div className="p-3 bg-crimson-fade border-2 border-black rounded-base text-xs font-bold text-crimson-shade text-center">
+        <StatusBanner variant="danger">
           {error.message}
-        </div>
+        </StatusBanner>
       )}
 
       {/* Enter Room CTA Button */}
       <Button
         type="button"
         size="lg"
+        variant="secondary"
         disabled={isJoinDisabled}
         onClick={handleJoin}
-        className="w-full h-14 text-lg font-black tracking-wide bg-sky-base hover:bg-sky-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-2"
       >
         {connectionStatus === "connecting" ? (
           <>

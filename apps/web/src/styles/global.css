@@ -116,37 +116,6 @@
   background-size: 20px 20px;
 }
 
-/* Neobrutalist styling helpers */
-.neo-box {
-  background-color: #FFFFFF;
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
-  border-radius: 6px;
-}
-
-.neo-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
-  border-radius: 6px;
-  font-weight: 700;
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
-  user-select: none;
-}
-
-.neo-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
-}
-
-.neo-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px #000000;
-}
-
 /* Role identity cards */
 .card-civilian {
   box-shadow: 4px 4px 0px 0px #84CC16 !important;
@@ -159,4 +128,14 @@
 .card-mrwhite {
   border-style: dashed !important;
   box-shadow: none !important;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

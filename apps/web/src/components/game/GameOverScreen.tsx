@@ -33,7 +33,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
     <div className="w-full max-w-xl mx-auto space-y-6 text-center font-para pb-8 animate-in fade-in duration-300">
       {/* 1. Loud Full-Bleed Winner Banner per Design System §5.2 */}
       <div
-        className={`w-full py-5 px-4 border-[3px] border-black rounded-none shadow-[6px_6px_0px_#000] space-y-1 ${
+        className={`w-full py-5 px-4 border-[3px] border-black rounded-none shadow-[6px_6px_0px_#000] space-y-1.5 ${
           civiliansWon ? "bg-lime-base" : "bg-sky-base"
         }`}
       >
@@ -55,20 +55,20 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
         </span>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 bg-lime-fade border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
-            <span className="block text-[11px] font-black uppercase text-ink font-mono">
+          <div className="p-3 bg-lime-fade border-2 border-black rounded-base shadow-[2px_2px_0px_#000] min-w-0">
+            <span className="block text-[10px] sm:text-[11px] font-black uppercase text-ink font-mono">
               Civilian Word
             </span>
-            <span className="font-heading font-black text-xl text-ink select-all">
+            <span className="font-heading font-black text-lg sm:text-xl text-ink select-all break-words [overflow-wrap:anywhere]">
               {summary.civilianWord}
             </span>
           </div>
 
-          <div className="p-3 bg-sky-fade border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
-            <span className="block text-[11px] font-black uppercase text-ink font-mono">
+          <div className="p-3 bg-sky-fade border-2 border-black rounded-base shadow-[2px_2px_0px_#000] min-w-0">
+            <span className="block text-[10px] sm:text-[11px] font-black uppercase text-ink font-mono">
               Undercover Word
             </span>
-            <span className="font-heading font-black text-xl text-ink select-all">
+            <span className="font-heading font-black text-lg sm:text-xl text-ink select-all break-words [overflow-wrap:anywhere]">
               {summary.undercoverWord}
             </span>
           </div>
@@ -91,7 +91,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
             return (
               <div
                 key={player.id}
-                className="flex flex-col items-center p-3 bg-canvas border-2 border-black rounded-base shadow-[2px_2px_0px_#000] space-y-1.5"
+                className="flex flex-col items-center p-3 bg-canvas border-2 border-black rounded-base shadow-[2px_2px_0px_#000] space-y-1.5 min-w-0"
               >
                 <AvatarTile
                   avatar={player.avatar}
@@ -112,7 +112,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
                   {isMrWhite ? "Mr. White" : roleInfo?.role}
                 </span>
                 {roleInfo?.word && (
-                  <span className="text-xs font-mono font-bold text-ink-muted">
+                  <span className="text-xs font-mono font-bold text-ink-muted truncate max-w-full">
                     "{roleInfo.word}"
                   </span>
                 )}
@@ -128,25 +128,31 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
           <Button
             type="button"
             size="lg"
+            variant="primary"
             onClick={() => connection.hostPlayAgain()}
-            className="w-full h-14 text-lg font-black tracking-wide bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2"
           >
             <RotateCcw className="size-5" />
             <span>Play Again</span>
           </Button>
         ) : (
-          <div className="p-4 bg-amber-fade border-[3px] border-black rounded-base font-bold text-sm text-ink">
+          <div className="p-4 bg-amber-fade border-[3px] border-black rounded-base font-bold text-sm text-ink shadow-brutal-sm">
             Waiting for the host to hit rematch and ruin more friendships.
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={() => connection.leave()}
-          className="text-xs font-black uppercase tracking-wider text-crimson-shade hover:underline flex items-center justify-center gap-1.5 mx-auto cursor-pointer font-mono"
-        >
-          <LogOut className="size-3.5" /> Exit to Main Menu
-        </button>
+        <div>
+          <Button
+            type="button"
+            variant="subtleDanger"
+            size="sm"
+            onClick={() => connection.leave()}
+            className="mx-auto flex items-center gap-1.5"
+          >
+            <LogOut className="size-3.5" />
+            <span>Exit to Main Menu</span>
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ export const Container: React.FC<ContainerProps> = ({
     <section
       id={id}
       className={cn(
-        "mx-auto max-w-6xl px-2 sm:px-4 lg:px-6 pb-2 sm:pb-4 lg:pb-6 font-para",
+        "w-full mx-auto max-w-5xl px-4 sm:px-6 font-para",
         className,
         classProp
       )}

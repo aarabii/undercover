@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { AvatarConfig, Role, ElimReason } from "@game/types";
 import { getAvatarDataUri } from "@/lib/avatar";
-import { Crown, Skull, Check, Pencil, User } from "lucide-react";
+import { Crown, Skull, Check, Pencil } from "lucide-react";
 
 export interface AvatarTileProps {
   avatar: AvatarConfig;
@@ -15,7 +15,7 @@ export interface AvatarTileProps {
   };
   isAway?: boolean;
   isSelected?: boolean;
-  isVotedForMe?: boolean;
+  isVotedForMe?: boolean; // Kept for backward compatibility
   voteCount?: number;
   canEdit?: boolean;
   onEdit?: () => void;
@@ -42,6 +42,7 @@ export default function AvatarTile({
   className = "",
 }: AvatarTileProps) {
   const dataUri = useMemo(() => getAvatarDataUri(avatar), [avatar]);
+  const isVoted = isSelected || isVotedForMe;
 
   const sizeClasses = {
     sm: "size-14 text-xs",
@@ -56,25 +57,27 @@ export default function AvatarTile({
     if (isAway) {
       return "border-2 border-dashed border-black opacity-60";
     }
-    if (isSelected) {
+    if (isVoted) {
       return "border-[3px] border-black bg-sky-tint shadow-[3px_3px_0px_#000] scale-105";
     }
     if (isMe) {
       return "border-[3px] border-black bg-mint-fade shadow-[2px_2px_0px_#10B981]";
     }
     return "border-2 border-black bg-paper shadow-[2px_2px_0px_#000]";
-  }, [isEliminated, isAway, isSelected, isMe]);
+  }, [isEliminated, isAway, isVoted, isMe]);
+
+  const isClickable = Boolean(onClick && !isEliminated);
 
   return (
     <div
       className={`relative flex flex-col items-center select-none group min-w-[56px] min-h-[56px] ${
-        onClick && !isEliminated ? "cursor-pointer" : ""
+        isClickable ? "cursor-pointer transition-transform active:translate-y-0.5" : ""
       } ${className}`}
-      onClick={!isEliminated && onClick ? onClick : undefined}
-      role={onClick && !isEliminated ? "button" : undefined}
-      tabIndex={onClick && !isEliminated ? 0 : undefined}
+      onClick={isClickable ? onClick : undefined}
+      role={isClickable ? "button" : undefined}
+      tabIndex={isClickable ? 0 : undefined}
       onKeyDown={(e) => {
-        if ((e.key === "Enter" || e.key === " ") && onClick && !isEliminated) {
+        if ((e.key === "Enter" || e.key === " ") && isClickable && onClick) {
           e.preventDefault();
           onClick();
         }
@@ -96,16 +99,6 @@ export default function AvatarTile({
           />
         </div>
 
-        {/* Self Identification Badge */}
-        {isMe && (
-          <div
-            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-mint-base flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
-            title="You"
-          >
-            <User className="size-3.5 text-black stroke-[3]" />
-          </div>
-        )}
-
         {/* Host Crown Badge */}
         {isHost && (
           <div
@@ -116,8 +109,8 @@ export default function AvatarTile({
           </div>
         )}
 
-        {/* Voted checkmark badge (only on other players that user voted for) */}
-        {isVotedForMe && !isEliminated && !isMe && (
+        {/* Voted checkmark badge (shows on the player user voted for) */}
+        {isVoted && !isEliminated && !isMe && (
           <div
             className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-lime-base flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
             title="Your vote"
@@ -171,7 +164,7 @@ export default function AvatarTile({
 
         {/* You badge */}
         {isMe && !isEliminated && (
-          <span className="inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded-tight bg-mint-tint text-ink border border-black shadow-[1px_1px_0px_#000] mt-0.5">
+          <span className="inline-block px-1.5 py-0.5 text-[9px] font-black uppercase rounded-tight bg-mint-tint text-ink border border-black shadow-[1px_1px_0px_#000] mt-0.5">
             YOU
           </span>
         )}
@@ -200,7 +193,7 @@ export default function AvatarTile({
 
         {/* Tally count badge during / after voting */}
         {typeof voteCount === "number" && voteCount > 0 && (
-          <span className="inline-block px-1.5 py-0.2 text-[10px] font-mono font-bold bg-crimson-base text-ink border border-black rounded-tight mt-0.5 shadow-[1px_1px_0px_#000]">
+          <span className="inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold bg-crimson-base text-ink border border-black rounded-tight mt-0.5 shadow-[1px_1px_0px_#000]">
             {voteCount} {voteCount === 1 ? "vote" : "votes"}
           </span>
         )}

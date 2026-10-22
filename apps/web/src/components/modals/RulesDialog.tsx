@@ -20,6 +20,7 @@ import {
   GiVote,
   GiCheckMark,
 } from "react-icons/gi";
+import { Target } from "lucide-react";
 
 interface RulesDialogProps {
   trigger?: React.ReactNode;
@@ -35,14 +36,14 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-canvas p-6 border-[3px] border-black shadow-[6px_6px_0px_#000]">
-        <DialogHeader className="space-y-2 border-b-2 border-black pb-4">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-canvas p-5 sm:p-6 border-[3px] border-black shadow-[6px_6px_0px_#000]">
+        <DialogHeader className="space-y-2 border-b-2 border-black pb-4 text-left">
           <div className="flex items-center gap-2.5">
             <div className="size-9 rounded-base border-2 border-black bg-amber-base shadow-brutal-sm flex items-center justify-center shrink-0">
               <GiSecretBook className="size-5 text-ink" />
             </div>
             <div>
-              <DialogTitle className="text-2xl font-black tracking-tight font-heading text-ink">
+              <DialogTitle className="text-xl sm:text-2xl font-black tracking-tight font-heading text-ink">
                 How to Play Undercover
               </DialogTitle>
               <DialogDescription className="text-xs font-bold text-ink-muted uppercase tracking-wider">
@@ -56,7 +57,8 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
           {/* Objective */}
           <div className="rounded-base border-2 border-black bg-amber-fade p-4 shadow-brutal-sm">
             <h4 className="font-black text-sm uppercase tracking-wider text-ink mb-1 flex items-center gap-1.5 font-heading">
-              <span>🎯</span> Objective
+              <Target className="size-4 text-ink stroke-[2.5]" />
+              <span>Objective</span>
             </h4>
             <p className="text-sm font-medium text-ink leading-relaxed">
               Everyone gets a secret word on their screen. Civilians get the same word. The Undercover gets a cousin word. Mr. White gets a blank screen and a dream. Spot the impostors before they outnumber you.
@@ -184,7 +186,7 @@ export const RulesDialog: React.FC<RulesDialogProps> = ({
 
         <DialogFooter className="border-t-2 border-black pt-4">
           <DialogClose asChild>
-            <Button variant="default" size="default" className="w-full sm:w-auto font-black bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal-sm active:translate-x-0.5 active:translate-y-0.5 cursor-pointer">
+            <Button variant="primary" size="default" className="w-full sm:w-auto">
               <GiCheckMark className="mr-2 size-4" /> Understood. Prepare the pitchforks.
             </Button>
           </DialogClose>

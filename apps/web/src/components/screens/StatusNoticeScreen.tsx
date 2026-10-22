@@ -45,7 +45,7 @@ export default function StatusNoticeScreen({ onHome }: StatusNoticeScreenProps) 
 
   return (
     <div className="w-full max-w-md mx-auto text-center space-y-6 font-para">
-      <div className="bg-paper border-[3px] border-black rounded-base p-8 shadow-brutal space-y-6">
+      <div className="bg-paper border-[3px] border-black rounded-base p-6 sm:p-8 shadow-brutal space-y-6">
         <div className={`size-20 rounded-full border-[3px] border-black ${color} mx-auto flex items-center justify-center shadow-brutal`}>
           {icon}
         </div>
@@ -62,8 +62,9 @@ export default function StatusNoticeScreen({ onHome }: StatusNoticeScreenProps) 
         <Button
           type="button"
           size="lg"
+          variant="primary"
           onClick={handleReturn}
-          className="w-full h-12 text-base font-black bg-amber-base hover:bg-amber-tint text-ink border-2 border-black shadow-brutal active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
+          className="w-full"
         >
           Back to the Main Menu
         </Button>

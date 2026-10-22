@@ -60,8 +60,8 @@ export default function PlayerManageModal({
               text-lg
               leading-tight
               text-ink
-              warp-break-word
-              wrap-anywhere
+              wrap-break-word
+              [overflow-wrap:anywhere]
             "
           >
             Suspect Actions: {player.name}
@@ -88,64 +88,28 @@ export default function PlayerManageModal({
         >
           <Button
             type="button"
-            variant="secondary"
+            variant="primary"
+            size="default"
             onClick={handleTransfer}
             title="Transfer host"
             aria-label="Transfer host"
-            className="
-              min-w-0
-              w-full
-              bg-amber-base
-              hover:bg-amber-tint
-              text-ink
-              border-2
-              border-black
-              shadow-[2px_2px_0px_#000]
-              active:translate-x-0.5
-              active:translate-y-0.5
-              font-black
-              flex
-              items-center
-              justify-center
-              gap-2
-              whitespace-normal
-              wrap-break-word
-              cursor-pointer
-            "
+            className="w-full flex items-center justify-center gap-2"
           >
             <Crown className="size-4 shrink-0" />
-            <span className="min-w-0">Pass the Crown</span>
+            <span>Pass the Crown</span>
           </Button>
 
           <Button
             type="button"
-            variant="default"
+            variant="destructive"
+            size="default"
             onClick={handleKick}
             title="Kick player"
             aria-label="Kick player"
-            className="
-              min-w-0
-              w-full
-              bg-crimson-base
-              hover:bg-crimson-tint
-              text-ink
-              border-2
-              border-black
-              shadow-[2px_2px_0px_#000]
-              active:translate-x-0.5
-              active:translate-y-0.5
-              font-black
-              flex
-              items-center
-              justify-center
-              gap-2
-              whitespace-normal
-              wrap-break-word
-              cursor-pointer
-            "
+            className="w-full flex items-center justify-center gap-2"
           >
             <UserMinus className="size-4 shrink-0" />
-            <span className="min-w-0">Kick From Room</span>
+            <span>Kick From Room</span>
           </Button>
         </DialogFooter>
       </DialogContent>

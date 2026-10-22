@@ -24,7 +24,7 @@ export default function EliminationResultCard({
           border-[3px]
           border-black
           rounded-base
-          p-4 sm:p-6
+          p-5 sm:p-6
           shadow-brutal
           text-center
           space-y-3
@@ -33,12 +33,12 @@ export default function EliminationResultCard({
           duration-300
         "
       >
-        <div className="size-16 rounded-full border-[3px] border-black bg-amber-base mx-auto flex items-center justify-center shadow-brutal-sm">
-          <Scale className="size-8 text-ink" />
+        <div className="size-14 sm:size-16 rounded-full border-[3px] border-black bg-amber-base mx-auto flex items-center justify-center shadow-brutal-sm">
+          <Scale className="size-7 sm:size-8 text-ink" />
         </div>
 
         <div className="space-y-1 min-w-0">
-          <span className="block font-heading font-black text-2xl uppercase tracking-wider text-ink break-words">
+          <span className="block font-heading font-black text-xl sm:text-2xl uppercase tracking-wider text-ink break-words">
             TIE — Nobody Eliminated
           </span>
 
@@ -67,6 +67,23 @@ export default function EliminationResultCard({
         ? "bg-sky-base"
         : "bg-paper border-dashed";
 
+  let reasonDescription = "Voted out. The jury has spoken, and the jury was ruthless.";
+  switch (lastElimination.reason) {
+    case "DISCONNECTED":
+      reasonDescription = "Lost connection during interrogation. Disconnected.";
+      break;
+    case "LEFT":
+      reasonDescription = "Bailed out of the room voluntarily.";
+      break;
+    case "KICKED":
+      reasonDescription = "Removed from the room by the host.";
+      break;
+    case "VOTED":
+    default:
+      reasonDescription = "Voted out. The jury has spoken, and the jury was ruthless.";
+      break;
+  }
+
   return (
     <div
       className="
@@ -77,7 +94,7 @@ export default function EliminationResultCard({
         border-[3px]
         border-black
         rounded-base
-        p-4 sm:p-6
+        p-5 sm:p-6
         shadow-brutal
         text-center
         space-y-4
@@ -97,7 +114,7 @@ export default function EliminationResultCard({
 
       {/* Eliminated Player */}
       {eliminatedPlayer && (
-        <div className="flex flex-col items-center gap-2 py-2 min-w-0">
+        <div className="flex flex-col items-center gap-2 py-1 min-w-0">
           <AvatarTile
             avatar={eliminatedPlayer.avatar}
             name={eliminatedPlayer.name}
@@ -139,7 +156,7 @@ export default function EliminationResultCard({
 
       {/* Elimination Reason */}
       <p className="text-xs font-bold text-ink-muted break-words">
-        Voted out. The jury has spoken, and the jury was ruthless.
+        {reasonDescription}
       </p>
     </div>
   );

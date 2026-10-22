@@ -4,6 +4,7 @@ import { connection } from "@/lib/connection";
 import { createRoom } from "@/lib/api";
 import RoomCodeShare from "@/components/room/RoomCodeShare";
 import ProfileEditor from "@/components/modals/ProfileEditor";
+import StatusBanner from "@/components/common/StatusBanner";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2, ArrowLeft } from "lucide-react";
 
@@ -13,7 +14,7 @@ interface CreateFlowProps {
 }
 
 export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
-  const { profile, connectionStatus, error } = useGameStore();
+  const { profile, setProfile, connectionStatus, error } = useGameStore();
   const [code, setCode] = useState(initialCode || "");
   const [name, setName] = useState(profile.name || "Host");
   const [isCreating, setIsCreating] = useState(!initialCode);
@@ -44,31 +45,42 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
 
   const handleGoToRoom = () => {
     if (!code) return;
+    const trimmed = name.trim() || profile.name || "Host";
+    setProfile({ ...profile, name: trimmed });
     connection.connect(code);
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6">
-      {/* Back button */}
-      <button
-        type="button"
-        onClick={onBack}
-        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink hover:underline cursor-pointer"
-      >
-        <ArrowLeft className="size-4" /> Back to Menu
-      </button>
+    <div className="w-full max-w-md mx-auto space-y-5">
+      {/* Top Navigation Row */}
+      <div className="flex items-center justify-between">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onBack}
+          className="flex items-center gap-1.5"
+        >
+          <ArrowLeft className="size-3.5" />
+          <span>Back to Menu</span>
+        </Button>
+      </div>
 
       {isCreating ? (
         <div className="p-8 text-center bg-paper border-[3px] border-black rounded-base shadow-brutal space-y-3">
           <Loader2 className="size-8 animate-spin mx-auto text-ink" />
-          <p className="font-heading font-black text-lg text-ink">Securing a room code. Sabotaging trust...</p>
+          <p className="font-heading font-black text-lg text-ink">
+            Securing a room code. Sabotaging trust...
+          </p>
         </div>
       ) : createError ? (
-        <div className="p-6 text-center bg-crimson-fade border-[3px] border-black rounded-base shadow-brutal space-y-3">
+        <div className="p-6 text-center bg-crimson-fade border-[3px] border-black rounded-base shadow-brutal space-y-4">
           <p className="font-heading font-black text-crimson-shade text-lg">Room Creation Failed</p>
           <p className="text-xs font-bold text-ink">{createError}</p>
           <Button
             type="button"
+            variant="primary"
+            size="default"
             onClick={() => {
               setCreateError(null);
               setIsCreating(true);
@@ -82,7 +94,6 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
                   setIsCreating(false);
                 });
             }}
-            className="bg-amber-base hover:bg-amber-tint text-ink font-bold border-2 border-black"
           >
             Give It Another Shot
           </Button>
@@ -90,27 +101,28 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
       ) : (
         <>
           {/* Room Code & Share/QR strip */}
-          <RoomCodeShare code={code} />
+          <RoomCodeShare code={code} variant="full" />
 
           {/* Profile Section */}
-          <div className="bg-paper border-[3px] border-black rounded-base p-6 shadow-brutal">
+          <div className="bg-paper border-[3px] border-black rounded-base p-5 sm:p-6 shadow-brutal">
             <ProfileEditor name={name} onNameChange={setName} />
           </div>
 
           {/* Error Message banner */}
           {error && (
-            <div className="p-3 bg-crimson-fade border-2 border-black rounded-base text-xs font-bold text-crimson-shade text-center">
+            <StatusBanner variant="danger">
               {error.message}
-            </div>
+            </StatusBanner>
           )}
 
           {/* Go to the Room CTA Button */}
           <Button
             type="button"
             size="lg"
+            variant="primary"
             disabled={!name.trim() || connectionStatus === "connecting"}
             onClick={handleGoToRoom}
-            className="w-full h-14 text-lg font-black tracking-wide bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2"
           >
             {connectionStatus === "connecting" ? (
               <>

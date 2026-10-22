@@ -1,11 +1,12 @@
 ---
 import "../styles/global.css";
 import Container from "../components/common/Container";
-import LandingHeader from "../components/landing/LandingHeader";
+import AppHeader from "../components/common/AppHeader";
+import AppFooter from "../components/common/AppFooter";
 import LandingActions from "../components/landing/LandingActions";
 import RolesSection from "../components/landing/RolesSection";
-import BrandLogo from "../components/common/BrandLogo";
 import { Badge } from "../components/ui/badge";
+import { Shield } from "lucide-react";
 ---
 
 <html lang="en">
@@ -42,40 +43,41 @@ import { Badge } from "../components/ui/badge";
   <body class="bg-canvas text-ink bg-dossier-grid min-h-screen flex flex-col justify-between font-para selection:bg-amber-tint selection:text-ink">
     <!-- Top Header -->
     <div class="border-b-[3px] border-black bg-paper/95 backdrop-blur-xs sticky top-0 z-40">
-      <Container id="header-container" className="py-3.5">
-        <LandingHeader client:load />
+      <Container id="header-container" className="py-3 sm:py-3.5">
+        <AppHeader client:load />
       </Container>
     </div>
 
     <!-- Main Content Area -->
-    <main class="my-auto py-10 sm:py-16 space-y-16 sm:space-y-24">
+    <main class="my-auto py-8 sm:py-16 space-y-12 sm:space-y-20">
       <!-- Hero Section -->
       <Container id="hero-section" className="text-center flex flex-col items-center">
         <!-- Eyebrow Badge -->
-        <div class="mb-6">
+        <div class="mb-5 sm:mb-6">
           <Badge
             variant="primary"
-            className="px-3.5 py-1 text-xs font-black tracking-wider uppercase border-2 border-black shadow-brutal-sm inline-flex items-center gap-2 bg-amber-base text-ink"
+            className="px-3 py-1 text-[11px] sm:text-xs font-black tracking-wider uppercase border-2 border-black shadow-brutal-sm inline-flex items-center gap-1.5 bg-amber-base text-ink"
           >
-            <span>🕵️</span> NO LOGIN • REAL-TIME • ZERO FRIENDSHIPS PRESERVED
+            <Shield className="size-3.5 stroke-[2.5]" />
+            <span>NO LOGIN • 4–20 PLAYERS • REAL-TIME</span>
           </Badge>
         </div>
 
         <!-- Headline -->
-        <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-ink max-w-4xl leading-[1.04] mb-6 font-heading">
+        <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-ink max-w-4xl leading-[1.08] mb-5 sm:mb-6 font-heading">
           One of you is lying. <br class="hidden sm:inline" />
-          <span class="bg-amber-base px-2.5 py-0.5 border-[3px] border-black shadow-brutal inline-block my-1.5 sm:my-0 rotate-[-1deg] text-ink">
+          <span class="bg-amber-base px-2.5 py-0.5 border-[3px] border-black shadow-brutal inline-block my-1 sm:my-0 rotate-[-1deg] text-ink">
             Find the Impostor
           </span>{" "}
           before you lose all respect for your friends.
         </h1>
 
         <!-- Subtitle -->
-        <p class="text-base sm:text-xl font-medium text-ink-muted max-w-2xl mb-10 leading-relaxed">
+        <p class="text-sm sm:text-lg font-medium text-ink-muted max-w-2xl mb-8 sm:mb-10 leading-relaxed px-2">
           Gather your friends in person or on a call. Everyone gets a secret word, except one person with a slightly different word, and one person who is completely winging it with nothing.
         </p>
 
-        <!-- Main Action Buttons: Create Room, Join Room & Rules Dialog -->
+        <!-- Main Action Buttons: Create Room & Join Room -->
         <LandingActions client:load />
       </Container>
 
@@ -85,55 +87,7 @@ import { Badge } from "../components/ui/badge";
       </Container>
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t-[3px] border-black bg-paper py-8 mt-16">
-        <Container
-          id="footer-container"
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left"
-        >
-          <div class="flex items-center gap-3">
-            <BrandLogo size="sm" showTagline={true} />
-          </div>
-
-          <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-ink-muted">
-            <a
-              href="https://www.aarab.me/license"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-amber-tint shadow-brutal-sm no-underline text-ink hover:bg-amber-base transition-colors"
-            >
-              License
-            </a>
-
-            <a
-              href="https://www.aarab.me/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-tint shadow-brutal-sm no-underline text-ink hover:bg-sky-base transition-colors"
-            >
-              Privacy Policy
-            </a>
-
-            <a
-              href="https://www.aarab.me/terms"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-tint shadow-brutal-sm no-underline text-ink hover:bg-lime-base transition-colors"
-            >
-              Terms
-            </a>
-          </div>
-
-          <div class="text-xs font-black uppercase tracking-wider text-ink-muted font-mono">
-            Made with • ❤️ •{" "}
-            <a
-              href="https://aarab.me"
-              class="no-underline text-inherit hover:underline"
-            >
-              aarabii
-            </a>
-          </div>
-        </Container>
-    </footer>
+    <!-- Unified Footer -->
+    <AppFooter client:load />
   </body>
 </html>
