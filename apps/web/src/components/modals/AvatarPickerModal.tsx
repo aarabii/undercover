@@ -45,12 +45,12 @@ export default function AvatarPickerModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md bg-white border-[3px] border-black shadow-[6px_6px_0px_#000] p-6">
+      <DialogContent className="max-w-md bg-paper border-[3px] border-black shadow-[6px_6px_0px_#000] p-6">
         <DialogHeader className="border-b-2 border-black pb-3">
-          <DialogTitle className="font-heading font-black text-xl text-black">
+          <DialogTitle className="font-heading font-black text-xl text-ink">
             Pick Your Disguise
           </DialogTitle>
-          <DialogDescription className="text-xs font-bold text-gray-700">
+          <DialogDescription className="text-xs font-bold text-ink-muted">
             Choose a disguise style and re-roll until you look reasonably innocent.
           </DialogDescription>
         </DialogHeader>
@@ -58,7 +58,7 @@ export default function AvatarPickerModal({
         <div className="flex flex-col items-center gap-6 py-4">
           {/* Avatar Preview */}
           <div className="relative group">
-            <div className="size-28 rounded-full border-[3px] border-black bg-[#fdfbf7] p-2 shadow-[4px_4px_0px_#000] flex items-center justify-center overflow-hidden">
+            <div className="size-28 rounded-full border-[3px] border-black bg-canvas p-2 shadow-brutal flex items-center justify-center overflow-hidden">
               <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
                 <img
                   src={previewUri}
@@ -70,17 +70,17 @@ export default function AvatarPickerModal({
             <button
               type="button"
               onClick={handleRandomize}
-              className="absolute -bottom-2 -right-2 p-2 rounded-full border-2 border-black bg-yellow-300 hover:bg-yellow-400 active:translate-x-0.5 active:translate-y-0.5 shadow-[2px_2px_0px_#000] cursor-pointer transition-all"
+              className="absolute -bottom-2 -right-2 p-2 rounded-full border-2 border-black bg-amber-base hover:bg-amber-tint active:translate-x-0.5 active:translate-y-0.5 shadow-[2px_2px_0px_#000] cursor-pointer transition-all text-ink"
               title="Reroll disguise"
               aria-label="Reroll disguise"
             >
-              <Dices className="size-5 text-black" />
+              <Dices className="size-5 text-ink" />
             </button>
           </div>
 
           {/* Style Selector Tabs */}
           <div className="w-full space-y-2">
-            <span className="block text-xs font-black uppercase tracking-wider text-black">
+            <span className="block text-xs font-black uppercase tracking-wider text-ink font-mono">
               Disguise Style
             </span>
             <div className="grid grid-cols-3 gap-2">
@@ -93,8 +93,8 @@ export default function AvatarPickerModal({
                     onClick={() => setStyle(s.id)}
                     className={`py-2 px-3 text-xs font-black uppercase tracking-wider rounded-base border-2 border-black transition-all cursor-pointer ${
                       isSelected
-                        ? "bg-yellow-300 shadow-[3px_3px_0px_#000] translate-x-[-1px] translate-y-[-1px]"
-                        : "bg-white hover:bg-gray-100 shadow-[2px_2px_0px_#000]"
+                        ? "bg-amber-base text-ink shadow-[3px_3px_0px_#000] translate-x-[-1px] translate-y-[-1px]"
+                        : "bg-paper text-ink hover:bg-canvas-fade shadow-[2px_2px_0px_#000]"
                     }`}
                   >
                     {s.label}
@@ -111,7 +111,7 @@ export default function AvatarPickerModal({
             variant="default"
             size="lg"
             onClick={handleSave}
-            className="w-full font-black bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+            className="w-full font-black bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer"
           >
             <Check className="mr-2 size-5" /> Lock In Look
           </Button>

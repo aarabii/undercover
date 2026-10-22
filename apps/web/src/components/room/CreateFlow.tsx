@@ -53,20 +53,20 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black hover:underline cursor-pointer"
+        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-ink hover:underline cursor-pointer"
       >
         <ArrowLeft className="size-4" /> Back to Menu
       </button>
 
       {isCreating ? (
-        <div className="p-8 text-center bg-white border-[3px] border-black rounded-base shadow-[4px_4px_0px_#000] space-y-3">
-          <Loader2 className="size-8 animate-spin mx-auto text-black" />
-          <p className="font-heading font-black text-lg">Securing a room code. Sabotaging trust...</p>
+        <div className="p-8 text-center bg-paper border-[3px] border-black rounded-base shadow-brutal space-y-3">
+          <Loader2 className="size-8 animate-spin mx-auto text-ink" />
+          <p className="font-heading font-black text-lg text-ink">Securing a room code. Sabotaging trust...</p>
         </div>
       ) : createError ? (
-        <div className="p-6 text-center bg-red-100 border-[3px] border-black rounded-base shadow-[4px_4px_0px_#000] space-y-3">
-          <p className="font-heading font-black text-red-700 text-lg">Room Creation Failed</p>
-          <p className="text-xs font-bold text-black">{createError}</p>
+        <div className="p-6 text-center bg-crimson-fade border-[3px] border-black rounded-base shadow-brutal space-y-3">
+          <p className="font-heading font-black text-crimson-shade text-lg">Room Creation Failed</p>
+          <p className="text-xs font-bold text-ink">{createError}</p>
           <Button
             type="button"
             onClick={() => {
@@ -82,7 +82,7 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
                   setIsCreating(false);
                 });
             }}
-            className="bg-yellow-400 font-bold border-2 border-black"
+            className="bg-amber-base hover:bg-amber-tint text-ink font-bold border-2 border-black"
           >
             Give It Another Shot
           </Button>
@@ -93,13 +93,13 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
           <RoomCodeShare code={code} />
 
           {/* Profile Section */}
-          <div className="bg-white border-[3px] border-black rounded-base p-6 shadow-[4px_4px_0px_#000]">
+          <div className="bg-paper border-[3px] border-black rounded-base p-6 shadow-brutal">
             <ProfileEditor name={name} onNameChange={setName} />
           </div>
 
           {/* Error Message banner */}
           {error && (
-            <div className="p-3 bg-red-100 border-2 border-black rounded-base text-xs font-bold text-red-900 text-center">
+            <div className="p-3 bg-crimson-fade border-2 border-black rounded-base text-xs font-bold text-crimson-shade text-center">
               {error.message}
             </div>
           )}
@@ -110,7 +110,7 @@ export default function CreateFlow({ initialCode, onBack }: CreateFlowProps) {
             size="lg"
             disabled={!name.trim() || connectionStatus === "connecting"}
             onClick={handleGoToRoom}
-            className="w-full h-14 text-lg font-black tracking-wide bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            className="w-full h-14 text-lg font-black tracking-wide bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             {connectionStatus === "connecting" ? (
               <>

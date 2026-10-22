@@ -33,6 +33,7 @@ export { default as StatusNoticeScreen } from "./screens/StatusNoticeScreen";
 export { default as AvatarPickerModal } from "./modals/AvatarPickerModal";
 export { default as RulesDialog } from "./modals/RulesDialog";
 export { default as ProfileEditor } from "./modals/ProfileEditor";
+export { default as PatchNotesDrawer } from "./modals/PatchNotesDrawer";
 
 // Common
 export { default as Container } from "./common/Container";

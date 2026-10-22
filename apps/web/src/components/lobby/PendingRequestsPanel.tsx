@@ -14,12 +14,12 @@ export default function PendingRequestsPanel({
   if (pendingRequests.length === 0) return null;
 
   return (
-    <div className="w-full bg-pink-100 border-[3px] border-black rounded-base p-4 shadow-[4px_4px_0px_#000] space-y-3">
+    <div className="w-full bg-rose-fade border-[3px] border-black rounded-base p-4 shadow-brutal space-y-3">
       <div className="flex items-center gap-2">
-        <div className="size-6 rounded-base border-2 border-black bg-pink-300 flex items-center justify-center">
-          <UserPlus className="size-3.5 text-black" />
+        <div className="size-6 rounded-base border-2 border-black bg-rose-base flex items-center justify-center shadow-brutal-sm">
+          <UserPlus className="size-3.5 text-ink" />
         </div>
-        <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
+        <span className="font-heading font-black text-sm uppercase tracking-wider text-ink">
           Waiting at the Door ({pendingRequests.length})
         </span>
       </div>
@@ -29,11 +29,11 @@ export default function PendingRequestsPanel({
           <div
             key={req.id}
             data-testid={`pending-request-${req.name}`}
-            className="flex items-center justify-between p-2.5 bg-white border-2 border-black rounded-base shadow-[2px_2px_0px_#000]"
+            className="flex items-center justify-between p-2.5 bg-paper border-2 border-black rounded-base shadow-[2px_2px_0px_#000]"
           >
             <div className="flex items-center gap-3">
               <AvatarTile avatar={req.avatar} name="" size="sm" />
-              <span className="font-bold text-sm text-black truncate max-w-[120px] sm:max-w-[160px]">
+              <span className="font-bold text-sm text-ink truncate max-w-[120px] sm:max-w-[160px]">
                 {req.name}
               </span>
             </div>
@@ -43,7 +43,7 @@ export default function PendingRequestsPanel({
                 type="button"
                 size="sm"
                 onClick={() => connection.hostApprove(req.id)}
-                className="bg-lime-400 hover:bg-lime-300 text-black border-2 border-black shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-bold h-9 px-3 flex items-center gap-1"
+                className="bg-lime-base hover:bg-lime-tint text-ink border-2 border-black shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-bold h-9 px-3 flex items-center gap-1 cursor-pointer"
                 title="Approve"
               >
                 <Check className="size-4" />
@@ -53,7 +53,7 @@ export default function PendingRequestsPanel({
                 type="button"
                 size="sm"
                 onClick={() => connection.hostDecline(req.id)}
-                className="bg-red-400 hover:bg-red-300 text-black border-2 border-black shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-bold h-9 px-3 flex items-center gap-1"
+                className="bg-crimson-base hover:bg-crimson-tint text-ink border-2 border-black shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 font-bold h-9 px-3 flex items-center gap-1 cursor-pointer"
                 title="Decline"
               >
                 <X className="size-4" />

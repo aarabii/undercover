@@ -64,11 +64,11 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
       )}
 
       {/* 3. Player Roster Grid */}
-      <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-4">
+      <div className="bg-paper border-[3px] border-black rounded-base p-5 shadow-brutal space-y-4">
         <div className="flex items-center justify-between border-b-2 border-black pb-2 text-left">
           <div className="flex items-center gap-2">
-            <Users className="size-5 text-black" />
-            <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
+            <Users className="size-5 text-ink" />
+            <span className="font-heading font-black text-sm uppercase tracking-wider text-ink">
               Players ({activePlayers.length} / {roomView.settings.maxPlayers})
             </span>
           </div>
@@ -76,10 +76,10 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
             <button
               type="button"
               onClick={() => connection.hostLock(!roomView.locked)}
-              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-tight border-2 border-black bg-white hover:bg-yellow-200 cursor-pointer shadow-[1px_1px_0px_#000]"
+              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-tight border-2 border-black bg-paper hover:bg-amber-tint cursor-pointer shadow-[1px_1px_0px_#000] text-ink font-mono"
               title={roomView.locked ? "Let others in" : "Keep strangers out"}
             >
-              {roomView.locked ? <Lock className="size-3.5 text-red-600" /> : <Unlock className="size-3.5 text-gray-700" />}
+              {roomView.locked ? <Lock className="size-3.5 text-crimson-shade" /> : <Unlock className="size-3.5 text-ink-muted" />}
               <span>{roomView.locked ? "Room Locked" : "Lock Room"}</span>
             </button>
           )}
@@ -123,19 +123,19 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
               size="lg"
               disabled={Boolean(disabledReason)}
               onClick={handleStartGame}
-              className="w-full h-14 text-lg font-black tracking-wide bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-14 text-lg font-black tracking-wide bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Play className="size-5 fill-black" />
               <span>Start Game</span>
             </Button>
             {disabledReason && (
-              <p className="text-xs font-black uppercase tracking-wider text-red-600 bg-red-100 py-1.5 px-3 border border-red-300 rounded-tight inline-block">
+              <p className="text-xs font-black uppercase tracking-wider text-crimson-shade bg-crimson-fade py-1.5 px-3 border border-crimson-shade rounded-tight inline-block font-mono">
                 {disabledReason}
               </p>
             )}
           </>
         ) : (
-          <div className="p-4 bg-sky-100 border-[3px] border-black rounded-base shadow-[2px_2px_0px_#000] text-sm font-bold text-black">
+          <div className="p-4 bg-sky-fade border-[3px] border-black rounded-base shadow-brutal-sm text-sm font-bold text-ink">
             Waiting on the host. They hold all the power and they know it.
           </div>
         )}
@@ -146,7 +146,7 @@ export default function LobbyScreen({ roomView }: LobbyScreenProps) {
         <button
           type="button"
           onClick={() => connection.leave()}
-          className="text-xs font-black uppercase tracking-wider text-red-600 hover:text-red-700 flex items-center justify-center gap-1.5 mx-auto cursor-pointer"
+          className="text-xs font-black uppercase tracking-wider text-crimson-shade hover:underline flex items-center justify-center gap-1.5 mx-auto cursor-pointer font-mono"
         >
           <LogOut className="size-3.5" /> Bail Out of Room
         </button>

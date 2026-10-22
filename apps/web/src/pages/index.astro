@@ -30,11 +30,19 @@ import { Badge } from "../components/ui/badge";
     <meta name="twitter:title" content="Undercover | Social Deduction Word Game" />
     <meta name="twitter:description" content="Find the impostor before they find you. Instant browser play for 4–20 players." />
     <meta name="twitter:image" content="https://undercover.aarab.me/og-image.png" />
+
+    <!-- Google Fonts: Archivo Black, Public Sans, IBM Plex Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-[#fdfbf7] text-[#121212] min-h-screen flex flex-col justify-between font-para selection:bg-yellow-300 selection:text-black">
+  <body class="bg-canvas text-ink bg-dossier-grid min-h-screen flex flex-col justify-between font-para selection:bg-amber-tint selection:text-ink">
     <!-- Top Header -->
-    <div class="border-b-[3px] border-black bg-white/60 backdrop-blur-xs">
-      <Container id="header-container" className="py-4">
+    <div class="border-b-[3px] border-black bg-paper/95 backdrop-blur-xs sticky top-0 z-40">
+      <Container id="header-container" className="py-3.5">
         <LandingHeader client:load />
       </Container>
     </div>
@@ -47,23 +55,23 @@ import { Badge } from "../components/ui/badge";
         <div class="mb-6">
           <Badge
             variant="primary"
-            className="px-3.5 py-1 text-xs font-black tracking-wider uppercase border-2 border-black shadow-brutal-sm inline-flex items-center gap-2"
+            className="px-3.5 py-1 text-xs font-black tracking-wider uppercase border-2 border-black shadow-brutal-sm inline-flex items-center gap-2 bg-amber-base text-ink"
           >
             <span>🕵️</span> NO LOGIN • REAL-TIME • ZERO FRIENDSHIPS PRESERVED
           </Badge>
         </div>
 
         <!-- Headline -->
-        <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-black max-w-4xl leading-[1.04] mb-6">
+        <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-ink max-w-4xl leading-[1.04] mb-6 font-heading">
           One of you is lying. <br class="hidden sm:inline" />
-          <span class="bg-yellow-300 px-2.5 py-0.5 border-[3px] border-black shadow-brutal inline-block my-1.5 sm:my-0 rotate-[-1deg]">
+          <span class="bg-amber-base px-2.5 py-0.5 border-[3px] border-black shadow-brutal inline-block my-1.5 sm:my-0 rotate-[-1deg] text-ink">
             Find the Impostor
           </span>{" "}
           before you lose all respect for your friends.
         </h1>
 
         <!-- Subtitle -->
-        <p class="text-base sm:text-xl font-medium text-gray-800 max-w-2xl mb-10 leading-relaxed">
+        <p class="text-base sm:text-xl font-medium text-ink-muted max-w-2xl mb-10 leading-relaxed">
           Gather your friends in person or on a call. Everyone gets a secret word, except one person with a slightly different word, and one person who is completely winging it with nothing.
         </p>
 
@@ -78,7 +86,7 @@ import { Badge } from "../components/ui/badge";
     </main>
 
     <!-- Footer -->
-    <footer class="border-t-[3px] border-black bg-white py-8 mt-16">
+    <footer class="border-t-[3px] border-black bg-paper py-8 mt-16">
         <Container
           id="footer-container"
           className="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left"
@@ -87,12 +95,12 @@ import { Badge } from "../components/ui/badge";
             <BrandLogo size="sm" showTagline={true} />
           </div>
 
-          <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-gray-700">
+          <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-ink-muted">
             <a
               href="https://www.aarab.me/license"
               target="_blank"
               rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-yellow-200 shadow-brutal-sm no-underline text-inherit"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-amber-tint shadow-brutal-sm no-underline text-ink hover:bg-amber-base transition-colors"
             >
               License
             </a>
@@ -101,7 +109,7 @@ import { Badge } from "../components/ui/badge";
               href="https://www.aarab.me/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-200 shadow-brutal-sm no-underline text-inherit"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-sky-tint shadow-brutal-sm no-underline text-ink hover:bg-sky-base transition-colors"
             >
               Privacy Policy
             </a>
@@ -110,17 +118,17 @@ import { Badge } from "../components/ui/badge";
               href="https://www.aarab.me/terms"
               target="_blank"
               rel="noopener noreferrer"
-              class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-200 shadow-brutal-sm no-underline text-inherit"
+              class="px-2.5 py-1 rounded-base border-2 border-black bg-lime-tint shadow-brutal-sm no-underline text-ink hover:bg-lime-base transition-colors"
             >
               Terms
             </a>
           </div>
 
-          <div class="text-xs font-black uppercase tracking-wider text-gray-600 font-mono">
+          <div class="text-xs font-black uppercase tracking-wider text-ink-muted font-mono">
             Made with • ❤️ •{" "}
             <a
               href="https://aarab.me"
-              class="no-underline text-inherit"
+              class="no-underline text-inherit hover:underline"
             >
               aarabii
             </a>

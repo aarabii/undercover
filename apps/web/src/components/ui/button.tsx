@@ -7,17 +7,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-lime-400 text-black shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
+          "bg-lime-base text-ink shadow-brutal hover:bg-lime-tint hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
         primary:
-          "bg-yellow-300 text-black shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
+          "bg-amber-base text-ink shadow-brutal hover:bg-amber-tint hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
         secondary:
-          "bg-sky-300 text-black shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
+          "bg-sky-base text-ink shadow-brutal hover:bg-sky-tint hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
         destructive:
-          "bg-red-400 text-black shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
+          "bg-crimson-base text-ink shadow-brutal hover:bg-crimson-tint hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
         outline:
-          "bg-white text-black shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
+          "bg-paper text-ink shadow-brutal hover:bg-amber-fade hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm",
         ghost: "border-transparent shadow-none hover:bg-black/10 active:bg-black/20",
-        link: "border-none shadow-none text-black underline-offset-4 hover:underline p-0 h-auto",
+        link: "border-none shadow-none text-ink underline-offset-4 hover:underline p-0 h-auto",
       },
       size: {
         default: "h-11 px-5 py-2",

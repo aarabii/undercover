@@ -43,7 +43,7 @@ export default function PlayerManageModal({
           max-w-md
           max-h-[calc(100dvh-2rem)]
           overflow-hidden
-          bg-white
+          bg-paper
           border-[3px]
           border-black
           shadow-[6px_6px_0px_#000]
@@ -59,6 +59,7 @@ export default function PlayerManageModal({
               font-black
               text-lg
               leading-tight
+              text-ink
               warp-break-word
               wrap-anywhere
             "
@@ -66,7 +67,7 @@ export default function PlayerManageModal({
             Suspect Actions: {player.name}
           </DialogTitle>
 
-          <DialogDescription className="text-xs font-bold text-gray-700">
+          <DialogDescription className="text-xs font-bold text-ink-muted">
             Decide what to do with this suspect.
           </DialogDescription>
         </DialogHeader>
@@ -94,9 +95,9 @@ export default function PlayerManageModal({
             className="
               min-w-0
               w-full
-              bg-yellow-300
-              hover:bg-yellow-200
-              text-black
+              bg-amber-base
+              hover:bg-amber-tint
+              text-ink
               border-2
               border-black
               shadow-[2px_2px_0px_#000]
@@ -109,6 +110,7 @@ export default function PlayerManageModal({
               gap-2
               whitespace-normal
               wrap-break-word
+              cursor-pointer
             "
           >
             <Crown className="size-4 shrink-0" />
@@ -124,9 +126,9 @@ export default function PlayerManageModal({
             className="
               min-w-0
               w-full
-              bg-red-400
-              hover:bg-red-300
-              text-black
+              bg-crimson-base
+              hover:bg-crimson-tint
+              text-ink
               border-2
               border-black
               shadow-[2px_2px_0px_#000]
@@ -139,6 +141,7 @@ export default function PlayerManageModal({
               gap-2
               whitespace-normal
               wrap-break-word
+              cursor-pointer
             "
           >
             <UserMinus className="size-4 shrink-0" />

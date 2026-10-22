@@ -63,33 +63,76 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
   return (
     <div className="w-full max-w-xl mx-auto space-y-5 text-center font-para pb-8">
       {/* 1. Top Bar: Round & Meta */}
-      <div className="flex items-center justify-between gap-3 bg-white border-[3px] border-black rounded-base p-3 shadow-[4px_4px_0px_#000]">
+      <div className="flex items-center justify-between gap-3 bg-paper border-[3px] border-black rounded-base p-3 shadow-brutal">
         <div className="flex items-center gap-2">
-          <Badge variant="primary" className="font-mono text-xs">
+          <Badge variant="primary" className="font-mono text-xs bg-amber-base text-ink">
             R{roomView.round}
           </Badge>
-          <span className="font-heading font-black text-sm uppercase tracking-wider text-black">
+          <span className="font-heading font-black text-sm uppercase tracking-wider text-ink">
             Round {roomView.round}
           </span>
         </div>
-        <span className="font-mono text-xs font-bold text-gray-600 uppercase">
+        <span className="font-mono text-xs font-bold text-ink-muted uppercase">
           ROOM: {roomView.code}
         </span>
       </div>
 
-      {/* 2. Role Card (with RoomCodeShare & Secret Info Button) */}
+      {/* 2. Round Phase Stepper Bar */}
+      <div className="grid grid-cols-4 gap-1.5 p-1.5 bg-paper border-2 border-black rounded-base shadow-brutal-sm text-[10px] sm:text-xs font-mono font-black uppercase">
+        <div
+          className={`py-1 rounded-tight border transition-colors flex items-center justify-center gap-1 ${
+            isRoleReveal
+              ? "bg-sky-base text-ink border-black shadow-[1px_1px_0px_#000]"
+              : "bg-canvas text-ink-muted border-transparent"
+          }`}
+        >
+          <span>1.</span> <span className="hidden sm:inline">Intel</span><span className="sm:hidden">Word</span>
+        </div>
+
+        <div
+          className={`py-1 rounded-tight border transition-colors flex items-center justify-center gap-1 ${
+            isDiscussion
+              ? "bg-lime-base text-ink border-black shadow-[1px_1px_0px_#000]"
+              : "bg-canvas text-ink-muted border-transparent"
+          }`}
+        >
+          <span>2.</span> <span>Discuss</span>
+        </div>
+
+        <div
+          className={`py-1 rounded-tight border transition-colors flex items-center justify-center gap-1 ${
+            isVoting
+              ? "bg-rose-base text-ink border-black shadow-[1px_1px_0px_#000]"
+              : "bg-canvas text-ink-muted border-transparent"
+          }`}
+        >
+          <span>3.</span> <span>Vote</span>
+        </div>
+
+        <div
+          className={`py-1 rounded-tight border transition-colors flex items-center justify-center gap-1 ${
+            isElimination
+              ? "bg-amber-base text-ink border-black shadow-[1px_1px_0px_#000]"
+              : "bg-canvas text-ink-muted border-transparent"
+          }`}
+        >
+          <span>4.</span> <span>Verdict</span>
+        </div>
+      </div>
+
+      {/* 3. Role Card (with RoomCodeShare & Secret Info Button) */}
       <RoleCard card={roomView.me.card} code={roomView.code} />
 
-      {/* 2. Host Controls Toolbar */}
+      {/* 4. Host Controls Toolbar */}
       {isHost && (
-        <div className="flex flex-wrap items-center justify-center gap-2 p-2.5 bg-[#fdfbf7] border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
+        <div className="flex flex-wrap items-center justify-center gap-2 p-2.5 bg-canvas border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
           {/* Pause / Resume */}
           <Button
             type="button"
             size="sm"
             variant="secondary"
             onClick={() => (isPaused ? connection.hostResume() : connection.hostPause())}
-            className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-white hover:bg-yellow-200 shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1"
+            className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-paper hover:bg-amber-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 cursor-pointer text-ink"
           >
             {isPaused ? <Play className="size-3.5 fill-black" /> : <Pause className="size-3.5 fill-black" />}
             <span>{isPaused ? "Resume" : "Pause"}</span>
@@ -102,7 +145,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
               size="sm"
               variant="secondary"
               onClick={() => connection.hostSkip()}
-              className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-white hover:bg-yellow-200 shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1"
+              className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-paper hover:bg-amber-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 cursor-pointer text-ink"
             >
               <FastForward className="size-3.5" />
               <span>Skip Timer</span>
@@ -116,7 +159,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
               size="sm"
               variant="secondary"
               onClick={() => connection.hostEndVoting()}
-              className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-lime-300 hover:bg-lime-200 shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1"
+              className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-lime-base hover:bg-lime-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 cursor-pointer text-ink"
             >
               <CheckCircle2 className="size-3.5" />
               <span>End Voting</span>
@@ -129,7 +172,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
             size="sm"
             variant="secondary"
             onClick={() => connection.hostEndGame()}
-            className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-red-200 hover:bg-red-300 shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 text-red-900"
+            className="h-8 px-2.5 text-xs font-black uppercase tracking-wider border-2 border-black bg-crimson-fade hover:bg-crimson-tint shadow-[1px_1px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 text-crimson-shade cursor-pointer"
           >
             <StopCircle className="size-3.5" />
             <span>End Game</span>
@@ -137,9 +180,9 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
         </div>
       )}
 
-      {/* 3. Phase Banner & Countdown */}
+      {/* 5. Phase Banner & Countdown */}
       <div className="space-y-3">
-        <Badge variant={phaseColor} className="text-sm font-black uppercase px-4 py-1 tracking-wider">
+        <Badge variant={phaseColor} className="text-sm font-black uppercase px-4 py-1 tracking-wider shadow-brutal-sm">
           {phaseLabel}
         </Badge>
 
@@ -153,15 +196,28 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
           </div>
         )}
 
-        {/* Voting Progress Counter */}
+        {/* Voting Progress Counter & Bar */}
         {isVoting && (
-          <div className="font-mono text-xs font-black uppercase tracking-wider text-black">
-            {roomView.votedCount ?? 0} of {roomView.totalVoters ?? 0} votes locked in
+          <div className="space-y-1.5 max-w-sm mx-auto pt-1">
+            <div className="font-mono text-xs font-black uppercase tracking-wider text-ink">
+              {roomView.votedCount ?? 0} of {roomView.totalVoters ?? 0} votes locked in
+            </div>
+            <div className="w-full h-3 rounded-full bg-canvas border-2 border-black overflow-hidden shadow-brutal-sm">
+              <div
+                className="h-full bg-rose-base transition-all duration-300"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    ((roomView.votedCount ?? 0) / Math.max(1, roomView.totalVoters ?? 1)) * 100
+                  )}%`,
+                }}
+              />
+            </div>
           </div>
         )}
       </div>
 
-      {/* 4. Elimination Result Card (during ELIMINATION) */}
+      {/* 6. Elimination Result Card (during ELIMINATION) */}
       {isElimination && (
         <EliminationResultCard
           lastElimination={roomView.lastElimination}
@@ -169,7 +225,7 @@ export default function InGameScreen({ roomView }: InGameScreenProps) {
         />
       )}
 
-      {/* 5. Player Grid */}
+      {/* 7. Player Grid */}
       <PlayerGrid
         players={roomView.players}
         isVotingPhase={isVoting}

@@ -20,12 +20,12 @@ export default function EliminationResultCard({
           w-full
           max-w-full
           overflow-hidden
-          bg-yellow-100
+          bg-amber-fade
           border-[3px]
           border-black
           rounded-base
           p-4 sm:p-6
-          shadow-[4px_4px_0px_#000]
+          shadow-brutal
           text-center
           space-y-3
           animate-in
@@ -33,16 +33,16 @@ export default function EliminationResultCard({
           duration-300
         "
       >
-        <div className="size-16 rounded-full border-[3px] border-black bg-yellow-300 mx-auto flex items-center justify-center shadow-[3px_3px_0px_#000]">
-          <Scale className="size-8 text-black" />
+        <div className="size-16 rounded-full border-[3px] border-black bg-amber-base mx-auto flex items-center justify-center shadow-brutal-sm">
+          <Scale className="size-8 text-ink" />
         </div>
 
         <div className="space-y-1 min-w-0">
-          <span className="block font-heading font-black text-2xl uppercase tracking-wider text-black break-words">
+          <span className="block font-heading font-black text-2xl uppercase tracking-wider text-ink break-words">
             TIE — Nobody Eliminated
           </span>
 
-          <p className="text-xs font-bold text-gray-700 break-words">
+          <p className="text-xs font-bold text-ink-muted break-words">
             A deadlock. Nobody could agree on who looked the shadiest. Everyone
             survives to lie another round.
           </p>
@@ -62,10 +62,10 @@ export default function EliminationResultCard({
 
   const roleColor =
     lastElimination.role === "CIVILIAN"
-      ? "bg-lime-400"
+      ? "bg-lime-base"
       : lastElimination.role === "UNDERCOVER"
-        ? "bg-sky-300"
-        : "bg-white border-dashed";
+        ? "bg-sky-base"
+        : "bg-paper border-dashed";
 
   return (
     <div
@@ -73,12 +73,12 @@ export default function EliminationResultCard({
         w-full
         max-w-full
         overflow-hidden
-        bg-white
+        bg-paper
         border-[3px]
         border-black
         rounded-base
         p-4 sm:p-6
-        shadow-[4px_4px_0px_#000]
+        shadow-brutal
         text-center
         space-y-4
         animate-in
@@ -88,9 +88,9 @@ export default function EliminationResultCard({
     >
       {/* Header */}
       <div className="flex items-center justify-center gap-2 min-w-0">
-        <Skull className="size-6 shrink-0 text-red-600" />
+        <Skull className="size-6 shrink-0 text-crimson-shade" />
 
-        <span className="font-heading font-black text-xl uppercase tracking-wider text-black break-words">
+        <span className="font-heading font-black text-xl uppercase tracking-wider text-ink break-words">
           The Verdict
         </span>
       </div>
@@ -109,7 +109,7 @@ export default function EliminationResultCard({
 
       {/* Role Reveal */}
       <div className="flex flex-col items-center gap-2 min-w-0">
-        <span className="text-xs font-bold uppercase tracking-wider text-gray-600">
+        <span className="text-xs font-bold uppercase tracking-wider text-ink-muted font-mono">
           Actual Identity:
         </span>
 
@@ -126,8 +126,8 @@ export default function EliminationResultCard({
             text-xl sm:text-2xl
             uppercase
             tracking-wider
-            text-black
-            shadow-[3px_3px_0px_#000]
+            text-ink
+            shadow-brutal-sm
             break-words
             [overflow-wrap:anywhere]
             ${roleColor}
@@ -138,7 +138,7 @@ export default function EliminationResultCard({
       </div>
 
       {/* Elimination Reason */}
-      <p className="text-xs font-bold text-gray-700 break-words">
+      <p className="text-xs font-bold text-ink-muted break-words">
         Voted out. The jury has spoken, and the jury was ruthless.
       </p>
     </div>

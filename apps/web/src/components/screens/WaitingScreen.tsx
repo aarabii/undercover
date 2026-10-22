@@ -13,29 +13,29 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6 text-center font-para">
-      <div className="bg-white border-[3px] border-black rounded-base p-6 shadow-[4px_4px_0px_#000] space-y-4">
-        <div className="size-16 rounded-full border-[3px] border-black bg-pink-200 mx-auto flex items-center justify-center shadow-[3px_3px_0px_#000]">
-          <Hourglass className="size-8 text-black" />
+      <div className="bg-paper border-[3px] border-black rounded-base p-6 shadow-brutal space-y-4">
+        <div className="size-16 rounded-full border-[3px] border-black bg-rose-tint mx-auto flex items-center justify-center shadow-brutal-sm">
+          <Hourglass className="size-8 text-ink" />
         </div>
 
         <div className="space-y-1">
-          <span className="font-heading font-black text-2xl text-black">
+          <span className="font-heading font-black text-2xl text-ink">
             Round in Progress
           </span>
-          <p className="text-xs font-bold text-gray-700">
+          <p className="text-xs font-bold text-ink-muted">
             Grab some popcorn and watch the accusations fly. You'll jump in once this bloodbath ends.
           </p>
         </div>
 
-        <div className="p-3 bg-[#fdfbf7] border-2 border-black rounded-base font-mono text-xs font-bold flex justify-between items-center">
+        <div className="p-3 bg-canvas border-2 border-black rounded-base font-mono text-xs font-bold flex justify-between items-center text-ink">
           <span>ROOM: {roomView.code}</span>
           <span className="capitalize">Round {roomView.round}</span>
         </div>
       </div>
 
       {/* Public Roster */}
-      <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-3">
-        <span className="block text-xs font-black uppercase tracking-wider text-black text-left">
+      <div className="bg-paper border-[3px] border-black rounded-base p-5 shadow-brutal space-y-3">
+        <span className="block text-xs font-black uppercase tracking-wider text-ink text-left font-mono">
           Current Suspects ({activePlayers.length})
         </span>
 
@@ -60,7 +60,7 @@ export default function WaitingScreen({ roomView }: WaitingScreenProps) {
         type="button"
         variant="secondary"
         onClick={() => connection.leave()}
-        className="text-xs font-bold text-red-600 hover:text-red-700 border-2 border-black bg-white shadow-[2px_2px_0px_#000] flex items-center gap-1.5 mx-auto"
+        className="text-xs font-bold text-crimson-shade hover:bg-crimson-fade border-2 border-black bg-paper shadow-brutal-sm flex items-center gap-1.5 mx-auto cursor-pointer font-mono"
       >
         <LogOut className="size-3.5" /> Leave Room
       </Button>

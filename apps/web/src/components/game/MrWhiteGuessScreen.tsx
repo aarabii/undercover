@@ -37,16 +37,16 @@ export default function MrWhiteGuessScreen({
 
       {isVotedMrWhite ? (
         /* Private Input for the voted-out Mr. White */
-        <div className="bg-white border-[3px] border-black rounded-base p-6 shadow-[4px_4px_0px_#000] space-y-4">
-          <div className="size-16 rounded-full border-2 border-dashed border-black bg-white mx-auto flex items-center justify-center shadow-none">
-            <HelpCircle className="size-8 text-black" />
+        <div className="bg-paper border-[3px] border-black rounded-base p-6 shadow-brutal space-y-4">
+          <div className="size-16 rounded-full border-2 border-dashed border-black bg-canvas mx-auto flex items-center justify-center shadow-none">
+            <HelpCircle className="size-8 text-ink" />
           </div>
 
           <div className="space-y-1">
-            <span className="font-heading font-black text-2xl uppercase tracking-wider text-black">
+            <span className="font-heading font-black text-2xl uppercase tracking-wider text-ink">
               Final Guess!
             </span>
-            <p className="text-xs font-bold text-gray-700">
+            <p className="text-xs font-bold text-ink-muted">
               You've been caught, but you have one parting shot: guess the civilian word and you steal the entire match.
             </p>
           </div>
@@ -60,14 +60,14 @@ export default function MrWhiteGuessScreen({
               maxLength={50}
               onChange={(e) => setGuess(e.target.value)}
               placeholder="Enter your word guess"
-              className="text-center font-heading font-black text-xl uppercase h-14 bg-[#fdfbf7] border-2 border-black rounded-base shadow-[2px_2px_0px_#000]"
+              className="text-center font-heading font-black text-xl uppercase h-14 bg-canvas border-2 border-black rounded-base shadow-[2px_2px_0px_#000] text-ink"
             />
 
             <Button
               type="submit"
               size="lg"
               disabled={!guess.trim() || submitted}
-              className="w-full h-12 text-base font-black bg-yellow-400 hover:bg-yellow-300 text-black border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full h-12 text-base font-black bg-amber-base hover:bg-amber-tint text-ink border-2 border-black shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
               {submitted ? (
                 <>
@@ -85,16 +85,16 @@ export default function MrWhiteGuessScreen({
         </div>
       ) : (
         /* Waiting screen for everyone else */
-        <div className="bg-white border-[3px] border-black rounded-base p-8 shadow-[4px_4px_0px_#000] space-y-4">
-          <div className="size-16 rounded-full border-2 border-dashed border-black bg-white mx-auto flex items-center justify-center shadow-none">
-            <Loader2 className="size-8 animate-spin text-black" />
+        <div className="bg-paper border-[3px] border-black rounded-base p-8 shadow-brutal space-y-4">
+          <div className="size-16 rounded-full border-2 border-dashed border-black bg-canvas mx-auto flex items-center justify-center shadow-none">
+            <Loader2 className="size-8 animate-spin text-ink" />
           </div>
 
           <div className="space-y-1">
-            <span className="font-heading font-black text-xl uppercase tracking-wider text-black">
+            <span className="font-heading font-black text-xl uppercase tracking-wider text-ink">
               Mr. White is Guessing...
             </span>
-            <p className="text-xs font-bold text-gray-700">
+            <p className="text-xs font-bold text-ink-muted">
               Hold your breath. If Mr. White cracks your secret word right now, all your detective work was for nothing.
             </p>
           </div>

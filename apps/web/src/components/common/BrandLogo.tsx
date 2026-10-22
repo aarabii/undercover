@@ -28,7 +28,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     <div className={cn("inline-flex items-center gap-2.5 select-none", className)}>
       <div
         className={cn(
-          "rounded-base border-[3px] border-black bg-[#facc15] shadow-brutal flex items-center justify-center transition-transform hover:rotate-3 shrink-0",
+          "rounded-base border-[3px] border-black bg-amber-base shadow-brutal flex items-center justify-center transition-transform hover:rotate-3 shrink-0",
           iconSizes[size]
         )}
       >
@@ -41,14 +41,14 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       <div className="flex flex-col text-left">
         <span
           className={cn(
-            "font-black tracking-tighter leading-none text-black",
+            "font-black tracking-tighter leading-none text-ink font-heading",
             textSizes[size]
           )}
         >
           UNDERCOVER
         </span>
         {showTagline && (
-          <span className="text-[10px] font-black uppercase tracking-widest text-gray-700 leading-tight mt-0.5">
+          <span className="text-[10px] font-black uppercase tracking-widest text-ink-muted leading-tight mt-0.5 font-mono">
             Social Deduction
           </span>
         )}

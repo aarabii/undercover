@@ -42,20 +42,20 @@ export default function ProfileEditor({
 
       {/* Name Input with 16-char Limit & Live Counter */}
       <div className="w-full space-y-1.5 text-left">
-        <div className="flex justify-between items-center text-xs font-black uppercase tracking-wider text-black">
+        <div className="flex justify-between items-center text-xs font-black uppercase tracking-wider text-ink font-mono">
           <div className="flex items-center gap-1.5">
             <label htmlFor="player-name-input">Codename</label>
             <button
               type="button"
               onClick={handleRandomizeName}
-              className="p-1 rounded-tight border-2 border-black bg-yellow-300 hover:bg-yellow-400 active:translate-x-0.5 active:translate-y-0.5 shadow-[1px_1px_0px_#000] cursor-pointer transition-all flex items-center justify-center"
+              className="p-1 rounded-tight border-2 border-black bg-amber-base hover:bg-amber-tint active:translate-x-0.5 active:translate-y-0.5 shadow-[1px_1px_0px_#000] cursor-pointer transition-all flex items-center justify-center text-ink"
               title="Roll for an alias"
               aria-label="Roll for an alias"
             >
-              <Dices className="size-3.5 text-black" />
+              <Dices className="size-3.5 text-ink" />
             </button>
           </div>
-          <span className="font-mono font-bold text-gray-600">
+          <span className="font-mono font-bold text-ink-muted">
             {name.length}/16
           </span>
         </div>
@@ -71,19 +71,19 @@ export default function ProfileEditor({
               setProfile({ ...profile, name: nextName });
             }}
             placeholder="Enter a codename"
-            className="font-bold text-base h-12 pr-11 bg-white border-2 border-black rounded-base shadow-[2px_2px_0px_#000] focus-visible:ring-2 focus-visible:ring-black"
+            className="font-bold text-base h-12 pr-11 bg-paper border-2 border-black rounded-base shadow-[2px_2px_0px_#000] focus-visible:ring-2 focus-visible:ring-black text-ink"
           />
           <button
             type="button"
             onClick={handleRandomizeName}
-            className="absolute right-2 p-1.5 rounded-base border-2 border-black bg-yellow-300 hover:bg-yellow-400 active:translate-x-0.5 active:translate-y-0.5 shadow-[1px_1px_0px_#000] cursor-pointer transition-all"
+            className="absolute right-2 p-1.5 rounded-base border-2 border-black bg-amber-base hover:bg-amber-tint active:translate-x-0.5 active:translate-y-0.5 shadow-[1px_1px_0px_#000] cursor-pointer transition-all text-ink"
             title="Roll for an alias"
             aria-label="Roll for an alias"
           >
-            <Dices className="size-4 text-black" />
+            <Dices className="size-4 text-ink" />
           </button>
         </div>
-        <p className="text-[11px] font-medium text-gray-500">
+        <p className="text-[11px] font-medium text-ink-muted">
           The name people will shout when they accuse you of treason.
         </p>
       </div>

@@ -7,12 +7,13 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "bg-black text-white",
-        primary: "bg-yellow-300 text-black",
-        secondary: "bg-sky-300 text-black",
-        destructive: "bg-red-400 text-black",
-        lime: "bg-lime-400 text-black",
-        pink: "bg-pink-300 text-black",
-        outline: "bg-white text-black",
+        primary: "bg-amber-base text-ink",
+        secondary: "bg-sky-base text-ink",
+        destructive: "bg-crimson-base text-ink",
+        lime: "bg-lime-base text-ink",
+        pink: "bg-rose-base text-ink",
+        outline: "bg-paper text-ink",
+        mint: "bg-mint-base text-ink",
       },
     },
     defaultVariants: {

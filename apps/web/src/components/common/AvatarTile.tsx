@@ -57,12 +57,12 @@ export default function AvatarTile({
       return "border-2 border-dashed border-black opacity-60";
     }
     if (isSelected) {
-      return "border-[3px] border-black bg-sky-100 shadow-[3px_3px_0px_#000] scale-105";
+      return "border-[3px] border-black bg-sky-tint shadow-[3px_3px_0px_#000] scale-105";
     }
     if (isMe) {
-      return "border-[3px] border-black bg-emerald-50 shadow-[2px_2px_0px_#059669]";
+      return "border-[3px] border-black bg-mint-fade shadow-[2px_2px_0px_#10B981]";
     }
-    return "border-2 border-black bg-[#fdfbf7] shadow-[2px_2px_0px_#000]";
+    return "border-2 border-black bg-paper shadow-[2px_2px_0px_#000]";
   }, [isEliminated, isAway, isSelected, isMe]);
 
   return (
@@ -99,7 +99,7 @@ export default function AvatarTile({
         {/* Self Identification Badge */}
         {isMe && (
           <div
-            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-emerald-400 flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
+            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-mint-base flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
             title="You"
           >
             <User className="size-3.5 text-black stroke-[3]" />
@@ -109,7 +109,7 @@ export default function AvatarTile({
         {/* Host Crown Badge */}
         {isHost && (
           <div
-            className="absolute -top-1.5 -right-1.5 size-6 rounded-full border-2 border-black bg-yellow-300 flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
+            className="absolute -top-1.5 -right-1.5 size-6 rounded-full border-2 border-black bg-amber-base flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
             title="Host"
           >
             <Crown className="size-3.5 text-black fill-black" />
@@ -119,7 +119,7 @@ export default function AvatarTile({
         {/* Voted checkmark badge (only on other players that user voted for) */}
         {isVotedForMe && !isEliminated && !isMe && (
           <div
-            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-lime-400 flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
+            className="absolute -top-1.5 -left-1.5 size-6 rounded-full border-2 border-black bg-lime-base flex items-center justify-center shadow-[1px_1px_0px_#000] z-10"
             title="Your vote"
           >
             <Check className="size-3.5 text-black stroke-[3]" />
@@ -132,7 +132,7 @@ export default function AvatarTile({
             className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full"
             title="Eliminated"
           >
-            <div className="bg-red-500 border-2 border-black p-1.5 rounded-full rotate-[-8deg] shadow-[2px_2px_0px_#000]">
+            <div className="bg-crimson-base border-2 border-black p-1.5 rounded-full rotate-[-8deg] shadow-[2px_2px_0px_#000]">
               <Skull className="size-5 text-white" />
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function AvatarTile({
               e.stopPropagation();
               onEdit();
             }}
-            className="absolute -bottom-1 -right-1 p-1.5 rounded-full border-2 border-black bg-yellow-300 hover:bg-yellow-400 active:translate-x-0.5 active:translate-y-0.5 shadow-[2px_2px_0px_#000] cursor-pointer z-10"
+            className="absolute -bottom-1 -right-1 p-1.5 rounded-full border-2 border-black bg-amber-base hover:bg-amber-tint active:translate-x-0.5 active:translate-y-0.5 shadow-[2px_2px_0px_#000] cursor-pointer z-10"
             title="Edit avatar"
             aria-label="Edit avatar"
           >
@@ -160,10 +160,10 @@ export default function AvatarTile({
         <span
           className={`block text-xs font-black truncate max-w-full ${
             isEliminated
-              ? "line-through text-gray-500"
+              ? "line-through text-ink-muted"
               : isMe
-              ? "text-emerald-700"
-              : "text-black"
+              ? "text-mint-shade"
+              : "text-ink"
           }`}
         >
           {name}
@@ -171,14 +171,14 @@ export default function AvatarTile({
 
         {/* You badge */}
         {isMe && !isEliminated && (
-          <span className="inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded-tight bg-emerald-300 text-black border border-black shadow-[1px_1px_0px_#000] mt-0.5">
+          <span className="inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded-tight bg-mint-tint text-ink border border-black shadow-[1px_1px_0px_#000] mt-0.5">
             YOU
           </span>
         )}
 
         {/* Away Badge */}
         {isAway && !isEliminated && (
-          <span className="inline-block text-[10px] font-bold text-gray-500 uppercase">
+          <span className="inline-block text-[10px] font-bold text-ink-muted uppercase">
             away
           </span>
         )}
@@ -188,10 +188,10 @@ export default function AvatarTile({
           <span
             className={`inline-block px-1.5 py-0.5 text-[9px] font-black uppercase rounded-tight border border-black mt-0.5 ${
               eliminatedInfo.role === "CIVILIAN"
-                ? "bg-lime-300"
+                ? "bg-lime-base text-ink"
                 : eliminatedInfo.role === "UNDERCOVER"
-                ? "bg-sky-300"
-                : "bg-white border-dashed"
+                ? "bg-sky-base text-ink"
+                : "bg-paper text-ink border-dashed"
             }`}
           >
             {eliminatedInfo.role === "MR_WHITE" ? "Mr. White" : eliminatedInfo.role}
@@ -200,7 +200,7 @@ export default function AvatarTile({
 
         {/* Tally count badge during / after voting */}
         {typeof voteCount === "number" && voteCount > 0 && (
-          <span className="inline-block px-1.5 py-0.2 text-[10px] font-mono font-bold bg-red-400 text-black border border-black rounded-tight mt-0.5 shadow-[1px_1px_0px_#000]">
+          <span className="inline-block px-1.5 py-0.2 text-[10px] font-mono font-bold bg-crimson-base text-ink border border-black rounded-tight mt-0.5 shadow-[1px_1px_0px_#000]">
             {voteCount} {voteCount === 1 ? "vote" : "votes"}
           </span>
         )}

@@ -46,18 +46,18 @@ export default function GameCountdown({
   return (
     <div className="relative inline-flex flex-col items-center">
       {paused && (
-        <span className="absolute -top-3.5 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest bg-red-500 text-white border-2 border-black rounded-tight shadow-[1px_1px_0px_#000] animate-pulse z-10">
+        <span className="absolute -top-3.5 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest bg-crimson-base text-white border-2 border-black rounded-tight shadow-[1px_1px_0px_#000] animate-pulse z-10 font-mono">
           PAUSED
         </span>
       )}
 
       <div
-        className={`font-mono text-4xl sm:text-5xl font-black tabular-nums tracking-tight px-5 py-2 rounded-base border-[3px] border-black bg-white shadow-[4px_4px_0px_#000] select-none transition-colors ${
+        className={`font-mono text-4xl sm:text-5xl font-black tabular-nums tracking-tight px-6 py-2.5 rounded-base border-[3px] border-black select-none transition-all ${
           paused
-            ? "text-gray-400 bg-gray-100"
+            ? "text-ink-muted bg-canvas-fade shadow-none"
             : isCritical
-            ? "text-[#FF4B3E] animate-pulse"
-            : "text-black"
+            ? "text-crimson-shade bg-crimson-fade border-crimson-shade animate-pulse shadow-[4px_4px_0px_#E03A2F]"
+            : "text-ink bg-paper shadow-brutal"
         }`}
       >
         {formatted}

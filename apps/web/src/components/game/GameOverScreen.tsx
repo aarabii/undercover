@@ -34,41 +34,41 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
       {/* 1. Loud Full-Bleed Winner Banner per Design System §5.2 */}
       <div
         className={`w-full py-5 px-4 border-[3px] border-black rounded-none shadow-[6px_6px_0px_#000] space-y-1 ${
-          civiliansWon ? "bg-lime-400" : "bg-sky-300"
+          civiliansWon ? "bg-lime-base" : "bg-sky-base"
         }`}
       >
         <div className="flex items-center justify-center gap-2">
-          <Trophy className="size-8 text-black fill-yellow-300" />
-          <h1 className="font-heading font-black text-3xl sm:text-4xl uppercase tracking-wider text-black">
+          <Trophy className="size-8 text-ink fill-amber-base" />
+          <h1 className="font-heading font-black text-3xl sm:text-4xl uppercase tracking-wider text-ink">
             {civiliansWon ? "Civilians Win" : "Infiltrators Win"}
           </h1>
         </div>
-        <p className="font-bold text-sm text-black max-w-md mx-auto">
+        <p className="font-bold text-sm text-ink max-w-md mx-auto">
           {winReasonText}
         </p>
       </div>
 
       {/* 2. Word Pair Comparison Reveal */}
-      <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-3">
-        <span className="block text-xs font-black uppercase tracking-wider text-black">
-          The Evidence
+      <div className="bg-paper border-[3px] border-black rounded-base p-5 shadow-brutal space-y-3">
+        <span className="block text-xs font-black uppercase tracking-wider text-ink font-mono">
+          THE EVIDENCE
         </span>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 bg-lime-100 border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
-            <span className="block text-[11px] font-black uppercase text-black">
+          <div className="p-3 bg-lime-fade border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
+            <span className="block text-[11px] font-black uppercase text-ink font-mono">
               Civilian Word
             </span>
-            <span className="font-heading font-black text-xl text-black select-all">
+            <span className="font-heading font-black text-xl text-ink select-all">
               {summary.civilianWord}
             </span>
           </div>
 
-          <div className="p-3 bg-sky-100 border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
-            <span className="block text-[11px] font-black uppercase text-black">
+          <div className="p-3 bg-sky-fade border-2 border-black rounded-base shadow-[2px_2px_0px_#000]">
+            <span className="block text-[11px] font-black uppercase text-ink font-mono">
               Undercover Word
             </span>
-            <span className="font-heading font-black text-xl text-black select-all">
+            <span className="font-heading font-black text-xl text-ink select-all">
               {summary.undercoverWord}
             </span>
           </div>
@@ -76,9 +76,9 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
       </div>
 
       {/* 3. Everyone's Revealed Role and Word */}
-      <div className="bg-white border-[3px] border-black rounded-base p-5 shadow-[4px_4px_0px_#000] space-y-4">
-        <span className="block text-xs font-black uppercase tracking-wider text-black text-left">
-          Roster & True Roles
+      <div className="bg-paper border-[3px] border-black rounded-base p-5 shadow-brutal space-y-4">
+        <span className="block text-xs font-black uppercase tracking-wider text-ink text-left font-mono">
+          ROSTER & TRUE ROLES
         </span>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -91,7 +91,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
             return (
               <div
                 key={player.id}
-                className="flex flex-col items-center p-3 bg-[#fdfbf7] border-2 border-black rounded-base shadow-[2px_2px_0px_#000] space-y-1.5"
+                className="flex flex-col items-center p-3 bg-canvas border-2 border-black rounded-base shadow-[2px_2px_0px_#000] space-y-1.5"
               >
                 <AvatarTile
                   avatar={player.avatar}
@@ -103,16 +103,16 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
                 <span
                   className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-tight border border-black ${
                     isCivilian
-                      ? "bg-lime-300"
+                      ? "bg-lime-base text-ink"
                       : isUndercover
-                      ? "bg-sky-300"
-                      : "bg-white border-dashed"
+                      ? "bg-sky-base text-ink"
+                      : "bg-paper text-ink border-dashed"
                   }`}
                 >
                   {isMrWhite ? "Mr. White" : roleInfo?.role}
                 </span>
                 {roleInfo?.word && (
-                  <span className="text-xs font-mono font-bold text-gray-700">
+                  <span className="text-xs font-mono font-bold text-ink-muted">
                     "{roleInfo.word}"
                   </span>
                 )}
@@ -129,13 +129,13 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
             type="button"
             size="lg"
             onClick={() => connection.hostPlayAgain()}
-            className="w-full h-14 text-lg font-black tracking-wide bg-yellow-400 hover:bg-yellow-300 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-14 text-lg font-black tracking-wide bg-amber-base hover:bg-amber-tint text-ink border-[3px] border-black shadow-brutal active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 cursor-pointer"
           >
             <RotateCcw className="size-5" />
             <span>Play Again</span>
           </Button>
         ) : (
-          <div className="p-4 bg-yellow-100 border-[3px] border-black rounded-base font-bold text-sm text-black">
+          <div className="p-4 bg-amber-fade border-[3px] border-black rounded-base font-bold text-sm text-ink">
             Waiting for the host to hit rematch and ruin more friendships.
           </div>
         )}
@@ -143,7 +143,7 @@ export default function GameOverScreen({ roomView }: GameOverScreenProps) {
         <button
           type="button"
           onClick={() => connection.leave()}
-          className="text-xs font-black uppercase tracking-wider text-red-600 hover:text-red-700 flex items-center justify-center gap-1.5 mx-auto cursor-pointer"
+          className="text-xs font-black uppercase tracking-wider text-crimson-shade hover:underline flex items-center justify-center gap-1.5 mx-auto cursor-pointer font-mono"
         >
           <LogOut className="size-3.5" /> Exit to Main Menu
         </button>
