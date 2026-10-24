@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { env, SELF, runInDurableObject, runDurableObjectAlarm, evictDurableObject } from "cloudflare:test";
 import type { Room } from "../../apps/server/src/index";
+import { nextAlarm, getNextAlarmTime } from "@game/engine";
 import { RoomStorage } from "../../apps/server/src/storage";
 import { MAX_MESSAGE_BYTES } from "../../apps/server/src/constants";
 import { hashToken } from "../../apps/server/src/utils";
@@ -631,13 +632,37 @@ describe("Undercover Server Shell (apps/server)", () => {
           expect(typeof player.lastActiveAt).toBe("number");
           expect(player.lastSeenAt).toBe(player.lastActiveAt);
 
-          // Verify marked dirty
-          expect(room.storage.isDirty()).toBe(true);
+          // Verify storage remains clean when player was already online
+          expect(room.storage.isDirty()).toBe(false);
+
+          // Verify flushIfDirty does not trigger an unnecessary write
+          await room.flushIfDirty();
+          expect(saveCalls).toBe(0);
 
           // Verify zero broadcast views sent
           expect(sentMessages).toHaveLength(0);
 
           // Verify saveRoom was not called on fast-path
+          expect(saveCalls).toBe(0);
+
+          // Test reconnecting an away player via heartbeat
+          player.presence = "away";
+          player.disconnectedAt = Date.now() - 5000;
+          expect(room.storage.isDirty()).toBe(false);
+
+          // Send heartbeat from away player
+          await room.onMessage(
+            conn,
+            JSON.stringify({
+              type: "heartbeat",
+            }),
+          );
+
+          // Transitions back to online, clears disconnectedAt, and marks storage dirty
+          expect(player.presence).toBe("online");
+          expect(player.disconnectedAt).toBeUndefined();
+          expect(room.storage.isDirty()).toBe(true);
+          expect(sentMessages).toHaveLength(0);
           expect(saveCalls).toBe(0);
         });
       });
@@ -675,6 +700,234 @@ describe("Undercover Server Shell (apps/server)", () => {
           await room.syncAlarm(baseTime + 1500);
           expect(setAlarmCalls).toBe(2);
           expect(lastSetTime).toBe(baseTime + 1500);
+
+          // 5. Idle LOBBY room with all connected players having live WebSockets attached
+          // Verify nextAlarm(room.roomState) is null and syncAlarm(null) does not schedule any alarm
+          const dummyPlayer = {
+            id: "p-host",
+            name: "Host",
+            tokenHash: "hash-host",
+            avatar: avatarFixture,
+            status: "active" as const,
+            presence: "online" as const,
+            joinedAt: Date.now(),
+            lastSeenAt: Date.now(),
+          };
+          room.roomState = {
+            code: "ALARM_CACHE",
+            phase: "LOBBY",
+            hostId: "p-host",
+            players: [dummyPlayer],
+            settings: {} as any,
+            usedPairIds: [],
+            paused: null,
+            endsAt: null,
+            createdAt: Date.now(),
+          } as any;
+
+          const conn: any = {
+            id: "conn-alarm",
+            state: { playerId: "p-host" },
+            send() {},
+            close() {},
+          };
+          room.getConnections = function* () {
+            yield conn;
+          };
+
+          expect(nextAlarm(room.roomState!)).toBeNull();
+          expect(getNextAlarmTime(room.roomState!)).toBeNull();
+
+          const alarmCallsBefore = setAlarmCalls;
+          await room.syncAlarm(null);
+          expect(setAlarmCalls).toBe(alarmCallsBefore);
+        });
+      });
+    });
+
+    describe("WebSocket Hibernation Survival", () => {
+      it("preserves settings mutations and player votes across DO hibernation eviction and verifies alarm sync recovery", async () => {
+        const stub = env.Room.get(env.Room.idFromName("HIBER1"));
+        let hostConn: any;
+        let pConns: any[] = [];
+
+        // 1. Host creates room and updates lobby settings (e.g. discussionSeconds: 120)
+        await runInDurableObject(stub, async (room: Room) => {
+          await room.onStart();
+          hostConn = {
+            id: "host-conn",
+            state: null,
+            setState(s: any) { this.state = s; },
+            send() {},
+            close() {},
+          };
+          room.getConnections = function* () { yield hostConn; };
+
+          await room.onMessage(
+            hostConn,
+            JSON.stringify({
+              type: "hello",
+              payload: { code: "HIBER1", profile: { name: "Host", avatar: avatarFixture } },
+            }),
+          );
+
+          expect(room.roomState).not.toBeNull();
+          expect(room.roomState!.settings.discussionSeconds).toBe(180); // default
+
+          // Host updates settings
+          await room.onMessage(
+            hostConn,
+            JSON.stringify({
+              type: "host.settings.update",
+              payload: { discussionSeconds: 120 },
+            }),
+          );
+          expect(room.roomState!.settings.discussionSeconds).toBe(120);
+        });
+
+        // 2. Simulate DO hibernation/eviction
+        await evictDurableObject(stub);
+
+        // 3. Wake DO and verify settings survived hibernation
+        await runInDurableObject(stub, async (room: Room) => {
+          await room.onStart();
+          expect(room.roomState).not.toBeNull();
+          expect(room.roomState!.settings.discussionSeconds).toBe(120);
+
+          hostConn = {
+            id: "host-conn",
+            state: { playerId: room.roomState!.hostId },
+            setState(s: any) { this.state = s; },
+            send() {},
+            close() {},
+          };
+
+          // Add 3 more players, approve them
+          pConns = [];
+          for (let i = 1; i <= 3; i++) {
+            const pConn: any = {
+              id: `p-conn-${i}`,
+              state: null,
+              setState(s: any) { this.state = s; },
+              send() {},
+              close() {},
+            };
+            pConns.push(pConn);
+            room.getConnections = function* () {
+              yield hostConn;
+              for (const pc of pConns) yield pc;
+            };
+
+            await room.onMessage(
+              pConn,
+              JSON.stringify({
+                type: "hello",
+                payload: { code: "HIBER1", profile: { name: `Player${i}`, avatar: avatarFixture } },
+              }),
+            );
+            const p = room.roomState!.players.find((pl) => pl.name === `Player${i}`)!;
+            await room.onMessage(
+              hostConn,
+              JSON.stringify({
+                type: "host.approve",
+                payload: { playerId: p.id },
+              }),
+            );
+          }
+
+          expect(room.roomState!.players.filter((p) => p.status === "active")).toHaveLength(4);
+
+          // Start game -> ROLE_REVEAL
+          await room.onMessage(hostConn, JSON.stringify({ type: "host.start" }));
+          expect(room.roomState!.phase).toBe("ROLE_REVEAL");
+        });
+
+        // 4. Fast-forward alarm to transition ROLE_REVEAL -> DISCUSSION
+        const ranAlarm = await runDurableObjectAlarm(stub);
+        expect(ranAlarm).toBe(true);
+
+        // 5. Wake DO, skip to VOTING, and have a player cast a vote
+        let votedPlayerId = "";
+        let targetPlayerId = "";
+        await runInDurableObject(stub, async (room: Room) => {
+          await room.onStart();
+          expect(room.roomState!.phase).toBe("DISCUSSION");
+
+          hostConn = {
+            id: "host-conn",
+            state: { playerId: room.roomState!.hostId },
+            setState(s: any) { this.state = s; },
+            send() {},
+            close() {},
+          };
+          const voter = room.roomState!.players[1];
+          const target = room.roomState!.players[2];
+          votedPlayerId = voter.id;
+          targetPlayerId = target.id;
+
+          const voterConn: any = {
+            id: "voter-conn",
+            state: { playerId: voter.id },
+            setState(s: any) { this.state = s; },
+            send() {},
+            close() {},
+          };
+
+          room.getConnections = function* () {
+            yield hostConn;
+            yield voterConn;
+          };
+
+          // Skip to VOTING
+          await room.onMessage(hostConn, JSON.stringify({ type: "host.skip" }));
+          expect(room.roomState!.phase).toBe("VOTING");
+
+          // Player casts a vote
+          await room.onMessage(
+            voterConn,
+            JSON.stringify({
+              type: "vote.cast",
+              payload: { targetId: targetPlayerId },
+            }),
+          );
+          expect(room.roomState!.game?.votes[votedPlayerId]).toBe(targetPlayerId);
+        });
+
+        // 6. Simulate DO hibernation/eviction again
+        await evictDurableObject(stub);
+
+        // 7. Wake DO, verify vote preserved across hibernation, and test alarm fallback
+        await runInDurableObject(stub, async (room: Room) => {
+          await room.onStart();
+          expect(room.roomState).not.toBeNull();
+          expect(room.roomState!.phase).toBe("VOTING");
+          expect(room.roomState!.game?.votes[votedPlayerId]).toBe(targetPlayerId);
+
+          // Verify that after hibernation, currentAlarmTime is initially null and alarmSynced is false
+          expect(room["currentAlarmTime"]).toBeNull();
+          expect(room["alarmSynced"]).toBe(false);
+
+          // Spy on setAlarm
+          let setAlarmCalls = 0;
+          const origSetAlarm = room.ctx.storage.setAlarm.bind(room.ctx.storage);
+          room.ctx.storage.setAlarm = async (time: number) => {
+            setAlarmCalls++;
+            return origSetAlarm(time);
+          };
+
+          const persistedAlarm = await room.ctx.storage.getAlarm();
+          expect(persistedAlarm).toBe(room.roomState!.endsAt);
+
+          // Calling syncAlarm with delta < 1000ms falls back to getAlarm and skips calling setAlarm
+          await room.syncAlarm(persistedAlarm! + 200);
+          expect(room["alarmSynced"]).toBe(true);
+          expect(room["currentAlarmTime"]).toBe(persistedAlarm);
+          expect(setAlarmCalls).toBe(0);
+
+          // Calling syncAlarm with delta >= 1000ms updates the alarm
+          await room.syncAlarm(persistedAlarm! + 2000);
+          expect(setAlarmCalls).toBe(1);
+          expect(room["currentAlarmTime"]).toBe(persistedAlarm! + 2000);
         });
       });
     });

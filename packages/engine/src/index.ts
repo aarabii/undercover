@@ -3,7 +3,7 @@ export * from "./types";
 export { reduce } from "./reduce";
 export { viewFor } from "./view/view-for";
 export { createRoom, createDefaultSettings } from "./state/create-room";
-export { nextAlarm } from "./rules/alarm";
+export { nextAlarm, nextAlarm as getNextAlarmTime } from "./rules/alarm";
 export {
   evaluateMrWhiteGuess,
   normalizeText,

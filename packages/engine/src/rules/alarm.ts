@@ -1,7 +1,7 @@
 import type { Room } from "@game/types";
 import { LOBBY_DISCONNECT_GRACE_SECONDS, HOST_DISCONNECT_GRACE_SECONDS } from "../constants";
 
-export function nextAlarm(room: Room): number | null {
+function nextAlarm(room: Room): number | null {
   const candidates: number[] = [];
 
   // 1. Current active phase timer (only if not paused and not in LOBBY or GAME_OVER)
@@ -35,3 +35,5 @@ export function nextAlarm(room: Room): number | null {
 
   return Math.min(...candidates);
 }
+
+export { nextAlarm, nextAlarm as getNextAlarmTime };

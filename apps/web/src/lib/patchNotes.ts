@@ -19,7 +19,7 @@ export const PATCH_NOTES: PatchRelease[] = [
     title: "Classified Dossier UI & Edge Architecture",
     isLatest: true,
     summary:
-      "A massive visual, tactical, and infrastructure overhaul: full Classified Dossier Neo-Brutalist design system, universal navigation headers & footers, interactive secret dossier flip cards, edge WebSocket heartbeat offloading, and high-performance SQLite write coalescing.",
+      "A massive visual, tactical, and infrastructure overhaul: full Classified Dossier Neo-Brutalist design system, universal navigation headers & footers, interactive secret dossier flip cards, edge WebSocket heartbeat offloading, lazy SQLite writes, and 10-second hibernation resilience.",
     items: [
       {
         type: "new",
@@ -63,23 +63,31 @@ export const PATCH_NOTES: PatchRelease[] = [
       },
       {
         type: "improved",
-        text: "Edge WebSocket Heartbeat Offloading via Cloudflare's WebSocketRequestResponsePair, responding at edge infrastructure without waking hibernated Durable Objects.",
+        text: "Edge WebSocket Heartbeat Offloading via Cloudflare's WebSocketRequestResponsePair, automatically answering client heartbeats at the edge without waking hibernated Durable Objects.",
       },
       {
         type: "improved",
-        text: "High-Performance SQLite Write Coalescing in RoomStorage, skipping redundant database writes during steady states to slash DO I/O and CPU overhead.",
+        text: "High-Performance Lazy & Dirty SQLite Writes in RoomStorage, tracking structural mutations and skipping redundant disk writes on in-phase votes, settings updates, and heartbeats.",
       },
       {
         type: "improved",
-        text: "Smart Alarm Synchronization with deduplication logic, preventing redundant alarm scheduling and execution churn.",
+        text: "Zero-Write Fast-Path Heartbeats in memory for active online players, updating activity timestamps without marking storage dirty, broadcasting views, or consuming database quotas.",
+      },
+      {
+        type: "improved",
+        text: "10-Second WebSocket Hibernation Resilience, ensuring genuine state mutations (such as votes and lobby settings) are immediately persisted before DO hibernation eviction.",
+      },
+      {
+        type: "improved",
+        text: "Smart Alarm Synchronization with 1,000ms delta thresholding and cold-wake getAlarm() hydration, eliminating continuous polling alarms in idle rooms.",
+      },
+      {
+        type: "improved",
+        text: "Extended Client Connection Keepalive loop to 25s (HEARTBEAT_INTERVAL_MS) with graceful edge heartbeat_ack handling to prevent stale socket disconnects and schema parse errors.",
       },
       {
         type: "improved",
         text: "Selective Broadcast Projections caching player view projections and filtering recipients during engine state transitions.",
-      },
-      {
-        type: "improved",
-        text: "Client-side ConnectionManager 25s ping-pong keepalive loop with graceful heartbeat_ack consumption to prevent stale disconnections.",
       },
       {
         type: "improved",

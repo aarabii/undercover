@@ -13,6 +13,7 @@ import {
   reduce,
   viewFor,
   nextAlarm,
+  getNextAlarmTime,
   type Room as RoomState,
   type EngineContext,
   type EngineEffect,
@@ -47,6 +48,7 @@ export class Room extends Server<Env> {
 
   storage: RoomStorage;
   private currentAlarmTime: number | null = null;
+  private alarmSynced = false;
 
   roomState: RoomState | null = null;
   rngSeed: number = 0;
@@ -91,6 +93,7 @@ export class Room extends Server<Env> {
       this.roomState = null;
     }
     this.currentAlarmTime = null;
+    this.alarmSynced = false;
   }
 
   /**
@@ -139,8 +142,12 @@ export class Room extends Server<Env> {
     freshTokenRecipient?: { playerId: string; token: string },
     excludeConnId?: string,
   ): Promise<void> {
+    const stateChanged = this.roomState !== result.state;
     this.roomState = result.state;
     await this.persistState(force);
+    if (stateChanged && this.storage.isDirty()) {
+      await this.flushIfDirty();
+    }
     await this.syncAlarm(result.alarmAt);
     const closedIds = this.executeEffects(result.effects, excludeConnId);
     this.broadcastViews(freshTokenRecipient, closedIds);
@@ -166,6 +173,13 @@ export class Room extends Server<Env> {
         } else if (this.reservedUntil && !this.roomState) {
           targetTime = this.reservedUntil;
         }
+      }
+    }
+
+    if (!this.alarmSynced) {
+      this.alarmSynced = true;
+      if (this.currentAlarmTime === null && typeof this.ctx.storage.getAlarm === "function") {
+        this.currentAlarmTime = await this.ctx.storage.getAlarm();
       }
     }
 
@@ -260,6 +274,7 @@ export class Room extends Server<Env> {
    */
   async onAlarm(): Promise<void> {
     this.currentAlarmTime = null;
+    this.alarmSynced = true;
     let now = Date.now();
 
     // 1. Reserved code expiry (host never connected within 10 min)
@@ -390,7 +405,14 @@ export class Room extends Server<Env> {
           const now = Date.now();
           player.lastActiveAt = now;
           player.lastSeenAt = now;
-          this.storage.markDirty();
+          if (player.presence === "away" || (player as any).connected === false) {
+            player.presence = "online";
+            player.disconnectedAt = undefined;
+            if ((player as any).connected === false) {
+              (player as any).connected = true;
+            }
+            this.storage.markDirty();
+          }
         }
       }
       return;
@@ -644,4 +666,4 @@ export class Room extends Server<Env> {
   }
 }
 
-export { Room as RoomServer };
+export { Room as RoomServer, nextAlarm, getNextAlarmTime };

@@ -1,12 +1,12 @@
 import { routePartykitRequest } from "partyserver";
-import { Room, type Env, type ConnectionState } from "./room/room-server";
+import { Room, nextAlarm, getNextAlarmTime, type Env, type ConnectionState } from "./room/room-server";
 import {
   getCorsHeaders,
   handleCreateRoom,
   handleGetRoomStatus,
 } from "./routes/rooms";
 
-export { Room, Room as RoomServer, type Env, type ConnectionState };
+export { Room, Room as RoomServer, nextAlarm, getNextAlarmTime, type Env, type ConnectionState };
 
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
