@@ -1,0 +1,68 @@
+name: Suggest Word Pairs
+description: Propose new word pairs or a language pack for @game/words.
+title: "[Words]: "
+labels: ["word-pack", "enhancement"]
+body:
+  - type: input
+    id: language
+    attributes:
+      label: Target Language or Pack
+      description: Specify the target language or word pack for these pairs.
+      placeholder: "English (default), Hindi, Hinglish, etc."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Select one of the existing categories or propose a new category / language pack.
+      options:
+        - Food
+        - Animals
+        - Objects
+        - Places
+        - Entertainment
+        - Companies
+        - Technology
+        - Sports
+        - PopCulture
+        - TravelAndNature
+        - JobsAndRoles
+        - Funny
+        - New Category / Language Pack
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      description: Select the difficulty tier for the proposed word pairs.
+      options:
+        - easy
+        - medium
+        - hard
+        - fan_fav
+    validations:
+      required: true
+
+  - type: textarea
+    id: pairs
+    attributes:
+      label: Proposed Word Pairs
+      description: Provide the proposed pairs in { word1: "...", word2: "..." } format (and optional accept aliases for Mr. White guess matching).
+      placeholder: |
+        { word1: "Coffee", word2: "Tea" }
+        { word1: "Subway", word2: "Train", accept: ["metro"] }
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Optional - explain why these pairs work well in spoken clue rounds (related enough to blend in, distinct enough to deduce).
+      placeholder: Explain how the words relate and what makes them balanced for Undercover gameplay.
+    validations:
+      required: false

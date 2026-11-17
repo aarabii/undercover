@@ -28,7 +28,10 @@ export default function RoomCodeShare({
     if (typeof window !== "undefined") {
       return `${window.location.origin}/r/${code}`;
     }
-    return `https://undercover.aarab.me/r/${code}`;
+    const siteUrl =
+      (import.meta.env.PUBLIC_SITE_URL as string | undefined)?.trim()?.replace(/\/+$/, "") ||
+      "http://localhost:4321";
+    return `${siteUrl}/r/${code}`;
   };
 
   const inviteUrl = getInviteUrl();

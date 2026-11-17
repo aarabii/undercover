@@ -1,27 +1,41 @@
-name: ✨ Request a Feature
+name: Request a Feature
 description: Suggest a new feature or improvement for Undercover.
 title: "[Feature]: "
-labels:
-  - enhancement
+labels: ["enhancement"]
 body:
   - type: textarea
     id: feature
     attributes:
       label: Feature Request
-      description: Describe the feature or improvement you'd like to see in Undercover.
+      description: Describe the problem or use case and the proposed feature.
       placeholder: |
-        What feature would you like to see?
+        What problem or use case does this address?
 
-        How would it improve the game?
+        What feature or improvement would you like to see?
     validations:
       required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of the Codebase
+      description: Optional - select the part of the project this feature relates to.
+      options:
+        - Web Client (apps/web)
+        - Game Server (apps/server)
+        - Game Engine (packages/engine)
+        - Word Bank (packages/words)
+        - Documentation / DX
+        - Other
+    validations:
+      required: false
 
   - type: textarea
     id: additional
     attributes:
       label: Additional Details
-      description: Optional — provide examples, screenshots, mockups, or any other details.
-      placeholder: Add any additional information here.
+      description: Optional - provide examples, mockups, or protocol/engine considerations.
+      placeholder: Add any additional context, protocol messages, or UI mockups here.
     validations:
       required: false
 
@@ -29,7 +43,7 @@ body:
     id: contact
     attributes:
       label: Contact
-      description: Optional — provide an email, Discord username, or other way to contact you.
+      description: Optional - provide an email, Discord username, or other way to contact you.
       placeholder: "example@email.com"
     validations:
       required: false

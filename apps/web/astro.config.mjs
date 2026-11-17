@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 const rawSiteUrl = process.env.PUBLIC_SITE_URL?.trim();
-let siteUrl = 'https://undercover.aarab.me';
+let siteUrl = 'http://localhost:4321';
 
 if (rawSiteUrl) {
   try {
@@ -14,7 +14,7 @@ if (rawSiteUrl) {
     const parsed = new URL(formatted);
     siteUrl = parsed.origin;
   } catch {
-    siteUrl = 'https://undercover.aarab.me';
+    siteUrl = 'http://localhost:4321';
   }
 }
 

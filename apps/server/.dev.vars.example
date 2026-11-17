@@ -1,2 +1,5 @@
-ALLOWED_ORIGINS=https://undercover.aarab.me,http://localhost:4321
-TURNSTILE_SECRET=
+# Comma-separated list of allowed web client origins for CORS and WebSocket upgrades
+ALLOWED_ORIGINS=http://localhost:4321
+
+# Cloudflare Turnstile secret key (below is Cloudflare's always-pass test secret for local dev)
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA

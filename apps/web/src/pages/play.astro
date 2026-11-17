@@ -4,6 +4,8 @@ import Container from "../components/common/Container";
 import AppHeader from "../components/common/AppHeader";
 import AppFooter from "../components/common/AppFooter";
 import GameApp from "../components/GameApp";
+
+const ogImageUrl = new URL("/og-image.png", Astro.site ?? "http://localhost:4321").toString();
 ---
 
 <html lang="en">
@@ -18,12 +20,12 @@ import GameApp from "../components/GameApp";
     <title>Play Undercover — Real-Time Deduction</title>
     <meta property="og:title" content="Join Undercover — Real-Time Word Deduction" />
     <meta property="og:description" content="Enter room to play Undercover with your group in real-time. No sign-up required." />
-    <meta property="og:image" content="https://undercover.aarab.me/og-image.png" />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Join Undercover — Real-Time Word Deduction" />
     <meta name="twitter:description" content="Enter room to play Undercover with your group in real-time. No sign-up required." />
-    <meta name="twitter:image" content="https://undercover.aarab.me/og-image.png" />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Google Fonts: Archivo Black, Public Sans, IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

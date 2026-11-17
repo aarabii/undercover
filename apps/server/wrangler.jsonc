@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
-  "routes": [{ "pattern": "ws.aarab.me", "custom_domain": true }],
+  // Optional: configure a custom domain route here or in the Cloudflare dashboard
+  // "routes": [{ "pattern": "ws.example.com", "custom_domain": true }],
   "durable_objects": {
     "bindings": [{ "name": "Room", "class_name": "Room" }],
   },
@@ -25,7 +26,8 @@
     }
   ],
   "vars": {
-    "ALLOWED_ORIGINS": "https://undercover.aarab.me,http://localhost:4321",
+    // Override in Cloudflare dashboard (Workers & Pages -> Settings -> Variables) or .dev.vars
+    "ALLOWED_ORIGINS": "http://localhost:4321",
   },
   "observability": { "enabled": true },
 }

@@ -1,0 +1,28 @@
+{
+  "name": "Undercover Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers-extra/features/bun:1": {}
+  },
+  "forwardPorts": [4321, 8787],
+  "portsAttributes": {
+    "4321": {
+      "label": "Web Client (Astro)",
+      "onAutoForward": "notify"
+    },
+    "8787": {
+      "label": "Game Server (Wrangler)",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "[ -f apps/web/.env ] || cp apps/web/.env.example apps/web/.env; [ -f apps/server/.dev.vars ] || cp apps/server/.dev.vars.example apps/server/.dev.vars; bun install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "bradlc.vscode-tailwindcss",
+        "EditorConfig.EditorConfig"
+      ]
+    }
+  }
+}

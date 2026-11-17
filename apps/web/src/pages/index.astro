@@ -7,6 +7,8 @@ import LandingActions from "../components/landing/LandingActions";
 import RolesSection from "../components/landing/RolesSection";
 import { Badge } from "../components/ui/badge";
 import { Shield } from "lucide-react";
+
+const ogImageUrl = new URL("/og-image.png", Astro.site ?? "http://localhost:4321").toString();
 ---
 
 <html lang="en">
@@ -25,12 +27,12 @@ import { Shield } from "lucide-react";
     />
     <meta property="og:title" content="Undercover — Social Deduction Word Game" />
     <meta property="og:description" content="Find the impostor before they find you. Instant browser play for 4–20 players." />
-    <meta property="og:image" content="https://undercover.aarab.me/og-image.png" />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Undercover | Social Deduction Word Game" />
     <meta name="twitter:description" content="Find the impostor before they find you. Instant browser play for 4–20 players." />
-    <meta name="twitter:image" content="https://undercover.aarab.me/og-image.png" />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Google Fonts: Archivo Black, Public Sans, IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

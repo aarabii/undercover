@@ -1,6 +1,15 @@
 {
   "name": "undercover",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://undercover.aarab.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aarabii/undercover.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aarabii/undercover/issues"
+  },
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "bun run --parallel --filter './apps/*' dev",
@@ -9,6 +18,7 @@
     "typecheck": "bun run --filter '*' typecheck",
     "build": "bun run --filter @game/web build",
     "check:boundaries": "bun run scripts/check-boundaries.ts",
+    "validate:words": "bun run scripts/validate-words.ts",
     "test:e2e": "playwright test",
     "test:all": "bun run test && bun run test:server && bun run test:e2e"
   },

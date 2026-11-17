@@ -6,6 +6,11 @@ import { Newspaper, Heart } from "lucide-react";
 
 export const AppFooter: React.FC = () => {
   const [patchNotesOpen, setPatchNotesOpen] = useState(false);
+  const privacyUrl = (import.meta.env.PUBLIC_PRIVACY_URL as string | undefined)?.trim();
+  const termsUrl = (import.meta.env.PUBLIC_TERMS_URL as string | undefined)?.trim();
+  const authorUrl =
+    (import.meta.env.PUBLIC_AUTHOR_URL as string | undefined)?.trim() ||
+    "https://github.com/aarabii";
 
   return (
     <footer className="border-t-[3px] border-black bg-paper py-6 mt-12 select-none">
@@ -41,23 +46,27 @@ export const AppFooter: React.FC = () => {
             Report Bug
           </a>
 
-          <a
-            href="https://www.aarab.me/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-2.5 py-1 rounded-base border-2 border-black bg-sky-tint shadow-brutal-sm no-underline text-ink hover:bg-sky-base transition-colors"
-          >
-            Privacy
-          </a>
+          {privacyUrl && (
+            <a
+              href={privacyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1 rounded-base border-2 border-black bg-sky-tint shadow-brutal-sm no-underline text-ink hover:bg-sky-base transition-colors"
+            >
+              Privacy
+            </a>
+          )}
 
-          <a
-            href="https://www.aarab.me/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-2.5 py-1 rounded-base border-2 border-black bg-lime-tint shadow-brutal-sm no-underline text-ink hover:bg-lime-base transition-colors"
-          >
-            Terms
-          </a>
+          {termsUrl && (
+            <a
+              href={termsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1 rounded-base border-2 border-black bg-lime-tint shadow-brutal-sm no-underline text-ink hover:bg-lime-base transition-colors"
+            >
+              Terms
+            </a>
+          )}
         </div>
 
         <div className="text-xs font-black uppercase tracking-wider text-ink-muted font-mono flex items-center gap-1">
@@ -65,7 +74,7 @@ export const AppFooter: React.FC = () => {
           <Heart className="size-3.5 text-crimson-shade fill-crimson-shade inline" />
           <span>by</span>
           <a
-            href="https://aarab.me"
+            href={authorUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="no-underline text-ink hover:underline font-bold"

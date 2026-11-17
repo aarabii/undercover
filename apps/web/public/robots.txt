@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://undercover.aarab.me/sitemap-index.xml
+# Uncomment and set your public site domain if hosting publicly:
+# Sitemap: https://your-domain.example.com/sitemap-index.xml
