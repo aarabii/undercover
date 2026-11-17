@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aarabii/undercover/packages/words/word-pack.schema.json",
+  "title": "Undercover Word Pack Tier Map",
+  "description": "Schema for an Undercover difficulty tier word map (category -> array of word pairs).",
+  "type": "object",
+  "propertyNames": {
+    "enum": [
+      "Food",
+      "Animals",
+      "Objects",
+      "Places",
+      "Entertainment",
+      "Companies",
+      "Technology",
+      "Sports",
+      "PopCulture",
+      "TravelAndNature",
+      "JobsAndRoles",
+      "Funny"
+    ]
+  },
+  "additionalProperties": {
+    "type": "array",
+    "minItems": 1,
+    "items": {
+      "$ref": "#/$defs/rawWordPair"
+    }
+  },
+  "$defs": {
+    "rawWordPair": {
+      "type": "object",
+      "required": ["word1", "word2"],
+      "additionalProperties": false,
+      "properties": {
+        "word1": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^\\S(.*\\S)?$",
+          "description": "First word in the pair (randomly assigned to Civilian or Undercover each round)."
+        },
+        "word2": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^\\S(.*\\S)?$",
+          "description": "Second word in the pair (randomly assigned to the opposing role each round)."
+        },
+        "accept": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ],
+          "description": "Optional accepted synonyms or aliases for Mr. White's final word guess."
+        }
+      }
+    }
+  }
+}
