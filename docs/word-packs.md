@@ -16,6 +16,8 @@ Word pairs are organized by difficulty tier under `packages/words/src/data/`:
 | `packages/words/src/data/easy.ts`         | `EASY_WORDS`         | `easy`          | Selected when room difficulty is `easy` or `mixed`.         |
 | `packages/words/src/data/medium.ts`       | `MEDIUM_WORDS`       | `medium`        | Selected when room difficulty is `medium` or `mixed`.       |
 | `packages/words/src/data/hard.ts`         | `HARD_WORDS`         | `hard`          | Selected when room difficulty is `hard` or `mixed`.         |
+| `packages/words/src/data/expert.ts`       | `EXPERT_WORDS`       | `expert`        | Selected when room difficulty is `expert` or `mixed`.       |
+| `packages/words/src/data/party.ts`        | `PARTY_WORDS`        | `party`         | Selected when room difficulty is `party` or `mixed`.        |
 | `packages/words/src/data/fan_fav.ts`      | `FAN_FAVORITE_WORDS` | `fan_fav`       | Included in `medium`, `hard`, and `mixed` difficulty pools. |
 
 Each file exports an object keyed by category name, mapping to an array of `{ word1, word2 }` pairs:
@@ -37,7 +39,7 @@ A machine-readable JSON Schema for this structure is available at [`packages/wor
 
 ### Compiled `WordPair` Model
 
-At load time, `packages/words/src/data/words.ts` compiles the raw tier maps into `WordPair` objects (`EASY_PAIRS`, `MEDIUM_PAIRS`, `HARD_PAIRS`, `FAN_FAV_PAIRS`, and `WORD_PAIRS`) with auto-generated IDs (`<prefix>-<category-slug>-<index>`).
+At load time, `packages/words/src/data/words.ts` compiles the raw tier maps into `WordPair` objects (`EASY_PAIRS`, `MEDIUM_PAIRS`, `HARD_PAIRS`, `EXPERT_PAIRS`, `PARTY_PAIRS`, `FAN_FAV_PAIRS`, and `WORD_PAIRS`) with auto-generated IDs (`<prefix>-<category-slug>-<index>`).
 
 When a round starts, the engine flips a fair 50/50 coin using its seeded PRNG:
 - Heads: Civilians receive `a` (`word1`) and Undercovers receive `b` (`word2`).
@@ -47,7 +49,7 @@ Because `word1` and `word2` are swapped randomly every round, the order of `word
 
 ### Recognized Categories
 
-Every category key must match one of the 12 `Category` identifiers defined in [`packages/words/src/constants/categories.ts`](../packages/words/src/constants/categories.ts):
+Every category key must match one of the 15 `Category` identifiers defined in [`packages/words/src/constants/categories.ts`](../packages/words/src/constants/categories.ts):
 
 - `Food`
 - `Animals`
@@ -61,6 +63,9 @@ Every category key must match one of the 12 `Category` identifiers defined in [`
 - `TravelAndNature`
 - `JobsAndRoles`
 - `Funny`
+- `Gaming`
+- `MoviesAndSeries`
+- `FamousPersons`
 
 ---
 
@@ -82,13 +87,15 @@ A strong Undercover word pair makes spoken clue rounds tense without feeling unf
 - **`easy`**: Distinct physical or functional differences once players narrow down the topic (e.g. `Umbrella` / `Raincoat`).
 - **`medium`**: Close siblings that share many everyday clues (e.g. `Burger` / `Sandwich`, `Wolf` / `Fox`).
 - **`hard`**: Subtle distinctions that require careful, precise clues to tell apart (e.g. `Broth` / `Stock`, `Encryption` / `Hashing`).
-- **`fan_fav`**: Crowd-pleasing pairs across `Sports`, `PopCulture`, `TravelAndNature`, `JobsAndRoles`, and `Funny` that appear in both `medium` and `hard` games.
+- **`expert`**: Ultra-close semantic twins and brain-teasing distinctions for veteran groups (e.g. `Macaron` / `Macaroon`, `Authentication` / `Authorization`).
+- **`party`**: High-energy, relatable, and chaotic game-night pairs for loud group rounds (e.g. `Truth or Dare` / `Never Have I Ever`, `Blue Shell` / `Draw Four Card`).
+- **`fan_fav`**: Crowd-pleasing pairs across `Sports`, `PopCulture`, `TravelAndNature`, `JobsAndRoles`, `Funny`, `Gaming`, `MoviesAndSeries`, and `FamousPersons` that appear in both `medium` and `hard` games.
 
 ---
 
 ## 3. Adding a New Word Pair
 
-1. Open the appropriate tier file in `packages/words/src/data/` (`easy.ts`, `medium.ts`, `hard.ts`, or `fan_fav.ts`).
+1. Open the appropriate tier file in `packages/words/src/data/` (`easy.ts`, `medium.ts`, `hard.ts`, `expert.ts`, `party.ts`, or `fan_fav.ts`).
 2. Append your `{ word1: "...", word2: "..." }` object to the matching category array. Do not remove or reorder existing pairs so existing IDs and tests stay stable.
 3. Run the word validator and unit tests:
    ```bash

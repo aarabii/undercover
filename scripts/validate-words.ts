@@ -3,12 +3,16 @@ import {
   EASY_PAIRS,
   MEDIUM_PAIRS,
   HARD_PAIRS,
+  EXPERT_PAIRS,
+  PARTY_PAIRS,
   FAN_FAV_PAIRS,
   WORD_PAIRS,
 } from "../packages/words/src/index";
 import { EASY_WORDS } from "../packages/words/src/data/easy";
 import { MEDIUM_WORDS } from "../packages/words/src/data/medium";
 import { HARD_WORDS } from "../packages/words/src/data/hard";
+import { EXPERT_WORDS } from "../packages/words/src/data/expert";
+import { PARTY_WORDS } from "../packages/words/src/data/party";
 import { FAN_FAVORITE_WORDS } from "../packages/words/src/data/fan_fav";
 
 type RawEntry = {
@@ -31,28 +35,42 @@ const TIERS: TierSpec[] = [
     name: "easy",
     file: "packages/words/src/data/easy.ts",
     raw: EASY_WORDS as Record<string, unknown>,
-    minTotal: 70,
+    minTotal: 150,
     minPerCategory: 10,
   },
   {
     name: "medium",
     file: "packages/words/src/data/medium.ts",
     raw: MEDIUM_WORDS as Record<string, unknown>,
-    minTotal: 70,
+    minTotal: 150,
     minPerCategory: 10,
   },
   {
     name: "hard",
     file: "packages/words/src/data/hard.ts",
     raw: HARD_WORDS as Record<string, unknown>,
-    minTotal: 70,
+    minTotal: 150,
+    minPerCategory: 10,
+  },
+  {
+    name: "expert",
+    file: "packages/words/src/data/expert.ts",
+    raw: EXPERT_WORDS as Record<string, unknown>,
+    minTotal: 150,
+    minPerCategory: 10,
+  },
+  {
+    name: "party",
+    file: "packages/words/src/data/party.ts",
+    raw: PARTY_WORDS as Record<string, unknown>,
+    minTotal: 150,
     minPerCategory: 10,
   },
   {
     name: "fan_fav",
     file: "packages/words/src/data/fan_fav.ts",
     raw: FAN_FAVORITE_WORDS as Record<string, unknown>,
-    minTotal: 50,
+    minTotal: 80,
     minPerCategory: 10,
   },
 ];
@@ -214,5 +232,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `✅ Word pack validation passed: ${WORD_PAIRS.length} pairs across ${populatedCategories.size} categories (easy: ${EASY_PAIRS.length}, medium: ${MEDIUM_PAIRS.length}, hard: ${HARD_PAIRS.length}, fan_fav: ${FAN_FAV_PAIRS.length}).`
+  `✅ Word pack validation passed: ${WORD_PAIRS.length} pairs across ${populatedCategories.size} categories (easy: ${EASY_PAIRS.length}, medium: ${MEDIUM_PAIRS.length}, hard: ${HARD_PAIRS.length}, expert: ${EXPERT_PAIRS.length}, party: ${PARTY_PAIRS.length}, fan_fav: ${FAN_FAV_PAIRS.length}).`
 );

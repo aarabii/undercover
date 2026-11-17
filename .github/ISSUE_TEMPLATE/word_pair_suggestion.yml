@@ -30,6 +30,9 @@ body:
         - TravelAndNature
         - JobsAndRoles
         - Funny
+        - Gaming
+        - MoviesAndSeries
+        - FamousPersons
         - New Category / Language Pack
     validations:
       required: true
@@ -43,6 +46,8 @@ body:
         - easy
         - medium
         - hard
+        - expert
+        - party
         - fan_fav
     validations:
       required: true

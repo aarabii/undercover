@@ -26,4 +26,4 @@ export const CardVariantSchema = z.enum([
   "UNDERCOVER",
   "WORD_ONLY",
 ]);
-export const DifficultySchema = z.enum(["easy", "medium", "hard", "mixed"]);
+export const DifficultySchema = z.enum(["easy", "medium", "hard", "expert", "party", "mixed"]);
