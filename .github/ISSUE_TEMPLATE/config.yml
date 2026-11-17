@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/aarabii/undercover/discussions
+    about: Ask questions, discuss game variants, or propose larger architectural changes
+  - name: Security Advisories
+    url: https://github.com/aarabii/undercover/security/advisories/new
+    about: Report security or anti-cheat vulnerabilities privately
