@@ -3,7 +3,7 @@
 // Runtime types generated with workerd@1.20260921.1 2026-08-15 nodejs_compat
 interface __BaseEnv_Env {
 	RATE_LIMITER: RateLimit;
-	ALLOWED_ORIGINS: "https://undercover.aarab.me,http://localhost:4321";
+	ALLOWED_ORIGINS: string;
 	TURNSTILE_SECRET: string;
 	CLOUDFLARE_ACCOUNT_ID: string;
 	CLOUDFLARE_API_TOKEN: string;
