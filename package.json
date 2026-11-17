@@ -1,6 +1,15 @@
 {
   "name": "undercover",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://undercover.aarab.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aarabii/undercover.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aarabii/undercover/issues"
+  },
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "bun run --parallel --filter './apps/*' dev",
