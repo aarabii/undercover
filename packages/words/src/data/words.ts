@@ -2,6 +2,8 @@ import type { WordPair, Difficulty } from "@game/types";
 import { EASY_WORDS } from "./easy";
 import { MEDIUM_WORDS } from "./medium";
 import { HARD_WORDS } from "./hard";
+import { EXPERT_WORDS } from "./expert";
+import { PARTY_WORDS } from "./party";
 import { FAN_FAVORITE_WORDS } from "./fan_fav";
 
 type RawCategoryMap = Record<string, Array<{ word1: string; word2: string }>>;
@@ -36,6 +38,8 @@ function processPairs(
 export const EASY_PAIRS = processPairs(EASY_WORDS, "easy", "easy");
 export const MEDIUM_PAIRS = processPairs(MEDIUM_WORDS, "med", "medium");
 export const HARD_PAIRS = processPairs(HARD_WORDS, "hard", "hard");
+export const EXPERT_PAIRS = processPairs(EXPERT_WORDS, "expert", "expert");
+export const PARTY_PAIRS = processPairs(PARTY_WORDS, "party", "party");
 // Words in fan favorite belong to both medium and hard difficulties
 export const FAN_FAV_PAIRS = processPairs(
   FAN_FAVORITE_WORDS,
@@ -46,12 +50,14 @@ export const FAN_FAV_PAIRS = processPairs(
 
 /**
  * All unique word pairs across all difficulty tiers.
- * For 'mixed' difficulty, all 260 pairs are available without duplicates.
+ * For 'mixed' difficulty, all 830 pairs are available without duplicates.
  */
 export const WORD_PAIRS: WordPair[] = [
   ...EASY_PAIRS,
   ...MEDIUM_PAIRS,
   ...HARD_PAIRS,
+  ...EXPERT_PAIRS,
+  ...PARTY_PAIRS,
   ...FAN_FAV_PAIRS,
 ];
 

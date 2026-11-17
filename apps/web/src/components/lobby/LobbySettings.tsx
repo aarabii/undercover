@@ -243,8 +243,8 @@ export default function LobbySettings({
           <span className="block text-xs font-black uppercase tracking-wider text-ink font-mono">
             Word Difficulty
           </span>
-          <div className="grid grid-cols-4 gap-1.5">
-            {(["easy", "medium", "hard", "mixed"] as Difficulty[]).map((d) => {
+          <div className="grid grid-cols-3 gap-1.5">
+            {(["easy", "medium", "hard", "expert", "party", "mixed"] as Difficulty[]).map((d) => {
               const active = settings.difficulty === d;
               return (
                 <button

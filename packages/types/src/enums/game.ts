@@ -26,6 +26,8 @@ export const Difficulty = {
   EASY: "easy",
   MEDIUM: "medium",
   HARD: "hard",
+  EXPERT: "expert",
+  PARTY: "party",
   MIXED: "mixed",
 } as const;
 

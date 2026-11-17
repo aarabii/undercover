@@ -11,6 +11,9 @@ export const CATEGORIES = [
   "TravelAndNature",
   "JobsAndRoles",
   "Funny",
+  "Gaming",
+  "MoviesAndSeries",
+  "FamousPersons",
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
 

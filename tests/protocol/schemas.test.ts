@@ -13,6 +13,7 @@ import {
   WinnerSchema,
   WinReasonSchema,
   CardVariantSchema,
+  DifficultySchema,
 } from "@game/protocol";
 
 describe("Enum Schemas", () => {
@@ -73,6 +74,14 @@ describe("Enum Schemas", () => {
     expect(CardVariantSchema.parse("UNDERCOVER")).toBe("UNDERCOVER");
     expect(CardVariantSchema.parse("WORD_ONLY")).toBe("WORD_ONLY");
     expect(() => CardVariantSchema.parse("CUSTOM")).toThrow();
+  });
+
+  test("DifficultySchema validates all difficulty tiers including expert and party", () => {
+    const difficulties = ["easy", "medium", "hard", "expert", "party", "mixed"] as const;
+    for (const diff of difficulties) {
+      expect(DifficultySchema.parse(diff)).toBe(diff);
+    }
+    expect(() => DifficultySchema.parse("impossible")).toThrow();
   });
 });
 
